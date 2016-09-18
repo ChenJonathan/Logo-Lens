@@ -8,20 +8,22 @@ public class GetTicker : MonoBehaviour
 
     public void Start()
     {
-        TextAsset reader = Resources.Load("companylist.csv") as TextAsset;
+        TextAsset reader = Resources.Load("companylist") as TextAsset;
         string raw = reader.text;
         string[] lines = raw.Split('\n');
         for (int i = 0; i < lines.Length; i++)
         {
             var values = lines[i].Split(',');
-            
             string[] info = new string[values.Length - 2];
             info[0] = values[0];
             for (int j = 2; j < values.Length - 1; j++)
             {
                 info[j - 1] = values[j];
             }
-            stocks.Add(values[1].ToLower().Replace(' ', '-'), info);
+            if (!stocks.ContainsKey(values[1].ToLower().Replace(' ', '-')))
+            {
+                stocks.Add(values[1].ToLower().Replace(' ', '-'), info);
+            }
         }
     }
 
