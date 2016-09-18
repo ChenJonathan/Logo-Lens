@@ -1,2 +1,2 @@
-# Heads-Up-Display
+# Logo-Locator
 Microsoft HoloLens application for HackMIT.
