@@ -3,7 +3,7 @@
 --- !u!29 &1
 SceneSettings:
   m_ObjectHideFlags: 0
-  m_PVSData:
+  m_PVSData: 
   m_PVSObjectsArray: []
   m_PVSPortalsArray: []
   m_OcclusionBakeSettings:
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.5750856, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -147,7 +147,7 @@ GameObject:
   - 114: {fileID: 1333931792}
   - 114: {fileID: 1333931791}
   - 114: {fileID: 1333931790}
-  - 114: {fileID: 1333931791}
+  - 114: {fileID: 1333931793}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -232,21 +232,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 192d4f7c623182f47ace27c46c6a2a3c, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  signPrefab: {fileID: 102000010788899180, guid: 6ac0ffdb85c048848a16e9a0488b7a70,
-    type: 2}
---- !u!114 &1333931791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1333931784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c7d013208f6a834fb2c6c6ff1b18738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  signPrefab: {fileID: 102000010788899180, guid: 6ac0ffdb85c048848a16e9a0488b7a70,
+    type: 2}
 --- !u!114 &1333931791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,8 +256,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3576e241f8553ac44a85d99f7530d675, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1333931793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1333931784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c7d013208f6a834fb2c6c6ff1b18738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1758827483
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,5 +345,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2182027720de0e14ba22eb91ce5a719c, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
