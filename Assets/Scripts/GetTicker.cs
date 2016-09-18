@@ -1,40 +1,50 @@
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 
-public class Program {
-    private static List<string> namesList = new List<string>();
-    private static List<string[]> infoList = new List<string[]>();
+public class GetTicker : MonoBehaviour
+{
+    private List<string> namesList = new List<string>();
+    private List<string[]> infoList = new List<string[]>();
 
-    static void Main(string[] args) {
-        var reader = new StreamReader(File.OpenRead("companylist.csv"));
-        while (!reader.EndOfStream) {
+    void Start()
+    {
+        var reader = new StreamReader(File.OpenRead("Assets/companylist.csv"));
+        while (!reader.EndOfStream)
+        {
             var line = reader.ReadLine();
             var values = line.Split(',');
 
             namesList.Add(values[1].ToLower().Replace(" ", "-"));
             string[] info = new string[values.Length - 2];
             info[0] = values[0];
-            for (int i = 2; i < values.Length - 1; i++) {
+            for (int i = 2; i < values.Length - 1; i++)
+            {
                 info[i - 1] = values[i];
             }
             infoList.Add(info);
         }
+
+        getTicker("Microsoft");
     }
 
-    // Returns the ticker of the company that is named "name"
-    static string getTicker(string name) {
+    // Does the ticker thingy of the company that is named "name"
+    public void getTicker(string name) {
         name = name.ToLower().Replace(" ", "-");
         for (int i = 0; i < namesList.Count; i++) {
             if (namesList[i].Contains(name)) {
-                return infoList[i][0];
+                string ticker = infoList[i][0];
+                ticker = ticker.Replace("\"", "");
+                Debug.Log(ticker);
+                Nasdaq anotherScript = GetComponent<Nasdaq>();
+                anotherScript.callNasdaqAPI("09/16/2016", "09/16/2016", ticker);
             }
         }
-        return "";
     }
 
     // Returns the info of the company that is named "name" where infoPositions
     // contains the positions in the infoList of the company that is desired
-    static string[] getInfo(string name, int[] infoPositions) {
+    string[] getInfo(string name, int[] infoPositions) {
         name = name.ToLower().Replace(" ", "-");
         for (int i = 0; i < namesList.Count; i++) {
             if (namesList[i].Contains(name)) {

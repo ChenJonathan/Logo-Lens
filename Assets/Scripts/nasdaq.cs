@@ -3,22 +3,12 @@ using System.Collections;
 using System.Xml;
 using System.Collections.Generic;
 
-public class nasdaq : MonoBehaviour {
+public class Nasdaq : MonoBehaviour {
 
     private string test = "";
     private int layer = 0;
 
-	// Use this for initialization
-	void Start () {
-        callNasdaqAPI("09/16/2016", "09/16/2016", "AAPL,MSFT,GOOG");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    void callNasdaqAPI(string startDate, string endDate, string tickers)
+    public void callNasdaqAPI(string startDate, string endDate, string tickers)
     {
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
@@ -31,7 +21,7 @@ public class nasdaq : MonoBehaviour {
         StartCoroutine(WaitForRequest(www));
     }
 
-    public IEnumerator WaitForRequest(WWW www)
+    IEnumerator WaitForRequest(WWW www)
     {
         yield return www;
 
