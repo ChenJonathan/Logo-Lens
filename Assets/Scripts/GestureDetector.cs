@@ -6,6 +6,8 @@ public class GestureDetector : MonoBehaviour
     public static GestureDetector Instance { get; private set; }
 
     GestureRecognizer recognizer;
+
+    int num = 0;
     
     void Awake()
     {
@@ -36,8 +38,19 @@ public class GestureDetector : MonoBehaviour
             }
   
             //GetComponent<CameraCapture>().CaptureImage();
-            GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
-            //GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "MSFT");
+            if (num == 0)
+            {
+                GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
+            }
+            else if (num == 1)
+            {
+                GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "MSFT");
+            }
+            else if (num == 2)
+            {
+                GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "GOOG");
+            }
+            num++;
         };
         recognizer.StartCapturingGestures();
     }
