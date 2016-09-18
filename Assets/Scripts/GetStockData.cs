@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class GetStockData : MonoBehaviour {
 
-    public void callNasdaqAPI(string startDate, string endDate, string tickers)
+    public void callNasdaqAPI(string startDate, string endDate, string ticker)
     {
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
         form.AddField("_Token", "247F80E1279F451499B6D68857FA0A93");
-        form.AddField("Symbols", tickers);
+        form.AddField("Symbols", ticker);
         form.AddField("StartDate", startDate);
         form.AddField("EndDate", endDate);
         form.AddField("MarketCenters", "");
@@ -36,8 +36,8 @@ public class GetStockData : MonoBehaviour {
                 XmlNode EndOfDayPrice = Prices.ChildNodes[0];
                 string open = EndOfDayPrice.ChildNodes[2].InnerText;
                 string close = EndOfDayPrice.ChildNodes[5].InnerText;
-
-                Debug.Log(symbol + ": " + open + " to " + close);
+                
+                GetComponent<DataVisualization>().DisplayCard(symbol, float.Parse(open), float.Parse(close));
 
                 if (isFirstTime == 0)
                 {

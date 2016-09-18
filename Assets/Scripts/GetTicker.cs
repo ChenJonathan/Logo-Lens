@@ -33,7 +33,8 @@ public class GetTicker : MonoBehaviour
             if (namesList[i].Contains(name)) {
                 string ticker = infoList[i][0];
                 ticker = ticker.Replace("\"", "");
-                return ticker;
+                GetStockData anotherScript = GetComponent<GetStockData>();
+                anotherScript.callNasdaqAPI("09/16/2016", "09/16/2016", ticker);
             }
         }
 
