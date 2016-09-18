@@ -6,8 +6,7 @@ public class GestureDetector : MonoBehaviour
     public static GestureDetector Instance { get; private set; }
 
     GestureRecognizer recognizer;
-
-    // Use this for initialization
+    
     void Awake()
     {
         Instance = this;
