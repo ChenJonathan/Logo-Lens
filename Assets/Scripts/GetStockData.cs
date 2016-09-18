@@ -36,8 +36,7 @@ public class GetStockData : MonoBehaviour {
                 XmlNode EndOfDayPrice = Prices.ChildNodes[0];
                 string open = EndOfDayPrice.ChildNodes[2].InnerText;
                 string close = EndOfDayPrice.ChildNodes[5].InnerText;
-
-                Debug.Log(symbol + ": " + open + " to " + close);
+                
                 GetComponent<DataVisualization>().DisplayCard(symbol, float.Parse(open), float.Parse(close));
 
                 if (isFirstTime == 0)
