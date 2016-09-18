@@ -7,7 +7,7 @@ public class GetTicker : MonoBehaviour
     private List<string> namesList = new List<string>();
     private List<string[]> infoList = new List<string[]>();
 
-    void Start()
+    public void Start()
     {
         var reader = new StreamReader(File.OpenRead("Assets/companylist.csv"));
         while (!reader.EndOfStream)
@@ -24,21 +24,20 @@ public class GetTicker : MonoBehaviour
             }
             infoList.Add(info);
         }
-
-        getTicker("Microsoft");
     }
 
     // Does the ticker thingy of the company that is named "name"
-    public void getTicker(string name) {
+    public string getTicker(string name) {
         name = name.ToLower().Replace(" ", "-");
         for (int i = 0; i < namesList.Count; i++) {
             if (namesList[i].Contains(name)) {
                 string ticker = infoList[i][0];
                 ticker = ticker.Replace("\"", "");
-                GetStockData anotherScript = GetComponent<GetStockData>();
-                anotherScript.callNasdaqAPI("09/16/2016", "09/16/2016", ticker);
+                return ticker;
             }
         }
+
+        return "";
     }
 
     // Returns the info of the company that is named "name" where infoPositions
