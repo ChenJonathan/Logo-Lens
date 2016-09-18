@@ -4,7 +4,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-public class PhotoCaptureTest : MonoBehaviour {
+public class CameraCapture : MonoBehaviour {
     PhotoCapture pc = null;
     public string result { get; set; }
 
