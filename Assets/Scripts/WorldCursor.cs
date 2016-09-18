@@ -30,10 +30,6 @@ public class WorldCursor:MonoBehaviour
 
             // Cursor hugging object
             this.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-
-            // Close signs if clicking
-            if(Input.GetMouseButtonDown(0) && hitInfo.collider.gameObject.tag == "Card")
-                Destroy(hitInfo.collider.gameObject);
         }
         else
         {
