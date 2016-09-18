@@ -346,11 +346,11 @@ PlayerSettings:
   scriptingDefineSymbols: {}
   metroPackageName: Heads Up Display
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 8028ae421630d301
   metroApplicationDescription: Heads Up Display
   wsaImages: {}
   metroTileShortName: 
