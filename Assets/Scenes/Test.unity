@@ -145,7 +145,7 @@ GameObject:
   - 124: {fileID: 1333931786}
   - 81: {fileID: 1333931785}
   - 114: {fileID: 1333931792}
-  - 114: {fileID: 1333931791}
+  - 114: {fileID: 1333931790}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -221,7 +221,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &1333931791
+--- !u!114 &1333931790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}

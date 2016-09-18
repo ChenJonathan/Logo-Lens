@@ -36,7 +36,7 @@ public class GetTicker : MonoBehaviour
                 string ticker = infoList[i][0];
                 ticker = ticker.Replace("\"", "");
                 Debug.Log(ticker);
-                Nasdaq anotherScript = GetComponent<Nasdaq>();
+                GetStockData anotherScript = GetComponent<GetStockData>();
                 anotherScript.callNasdaqAPI("09/16/2016", "09/16/2016", ticker);
             }
         }
