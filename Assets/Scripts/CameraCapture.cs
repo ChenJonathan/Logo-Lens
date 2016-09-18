@@ -19,6 +19,7 @@ public class CameraCapture : MonoBehaviour {
     {
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = new Vector3(0, 0, 10);
+
         Debug.LogError("OnPhotoCaptureCreated");
         pc = captureObject;
 
@@ -40,6 +41,21 @@ public class CameraCapture : MonoBehaviour {
         pc = null;
     }
 
+    /*private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
+    {
+        if (result.success)
+        {
+            string filename = string.Format(@"CapturedImage{0}_n.jpg", Time.time);
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, filename);
+
+            pc.TakePhotoAsync(filePath, PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
+        }
+        else
+        {
+            Debug.LogError("Unable to start photo mode!");
+        }
+    }*/
+
     private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
     {
         Debug.LogError("OnPhotoModeStarted");
@@ -50,6 +66,19 @@ public class CameraCapture : MonoBehaviour {
         else
         {
             Debug.LogError("Unable to start photo mode!");
+        }
+    }
+
+    void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
+    {
+        if (result.success)
+        {
+            Debug.Log("Saved Photo to disk!");
+            pc.StopPhotoModeAsync(OnStoppedPhotoMode);
+        }
+        else
+        {
+            Debug.Log("Failed to save Photo to disk");
         }
     }
 
