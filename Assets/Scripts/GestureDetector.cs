@@ -32,7 +32,7 @@ public class GestureDetector : MonoBehaviour
                 // Close card if in line of sight
                 if (hitInfo.collider.gameObject.tag == "Card")
                 {
-                    Destroy(hitInfo.collider.gameObject);
+                    //Destroy(hitInfo.collider.gameObject);
                     return;
                 }
             }
