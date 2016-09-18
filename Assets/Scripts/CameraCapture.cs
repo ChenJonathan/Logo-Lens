@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class CameraCapture : MonoBehaviour {
 
     public string image { get; set; }
+    public TextMesh prefab;
     private PhotoCapture pc = null;
 
     public void CaptureImage()
@@ -17,9 +18,6 @@ public class CameraCapture : MonoBehaviour {
 
     void OnPhotoCaptureCreated(PhotoCapture captureObject)
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0, 0, 10);
-
         Debug.LogError("OnPhotoCaptureCreated");
         pc = captureObject;
 
@@ -30,7 +28,10 @@ public class CameraCapture : MonoBehaviour {
         c.cameraResolutionWidth = cameraResolution.width;
         c.cameraResolutionHeight = cameraResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
-        
+
+        TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 100, Quaternion.identity);
+        temp.text = "Doing phot mode";
+
         captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
@@ -40,21 +41,6 @@ public class CameraCapture : MonoBehaviour {
         pc.Dispose();
         pc = null;
     }
-
-    /*private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
-    {
-        if (result.success)
-        {
-            string filename = string.Format(@"CapturedImage{0}_n.jpg", Time.time);
-            string filePath = System.IO.Path.Combine(Application.persistentDataPath, filename);
-
-            pc.TakePhotoAsync(filePath, PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
-        }
-        else
-        {
-            Debug.LogError("Unable to start photo mode!");
-        }
-    }*/
 
     private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
     {
@@ -66,19 +52,6 @@ public class CameraCapture : MonoBehaviour {
         else
         {
             Debug.LogError("Unable to start photo mode!");
-        }
-    }
-
-    void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
-    {
-        if (result.success)
-        {
-            Debug.Log("Saved Photo to disk!");
-            pc.StopPhotoModeAsync(OnStoppedPhotoMode);
-        }
-        else
-        {
-            Debug.Log("Failed to save Photo to disk");
         }
     }
 
@@ -110,9 +83,7 @@ public class CameraCapture : MonoBehaviour {
             }
             convertArray(colorArray);
 
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(0, 0, 2);
-            cube.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            
             GetComponent<Vision>().DetectImage(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);

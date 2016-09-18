@@ -34,9 +34,10 @@ public class GestureDetector : MonoBehaviour
                     return;
                 }
             }
-            // Capture image if there is no card in line of sight
-            Debug.Log("Capturing image!");
-            GetComponent<CameraCapture>().CaptureImage();
+  
+            //GetComponent<CameraCapture>().CaptureImage();
+            GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
+            //GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "MSFT");
         };
         recognizer.StartCapturingGestures();
     }
