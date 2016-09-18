@@ -7,7 +7,7 @@ public class GetStockData : MonoBehaviour
 {
     public void Start()
     {
-
+        //CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
     }
 
     public void CallNasdaqAPI(string startDate, string endDate, string ticker)
