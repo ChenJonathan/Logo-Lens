@@ -20,20 +20,24 @@ public class WorldCursor:MonoBehaviour
 
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
+        if(Physics.Raycast(headPosition, gazeDirection, out hitInfo))
         {
             // If the raycast hit a hologram, display mesh
             meshRenderer.enabled = true;
 
-            //Display cursor to point where raycast hit
+            // Display cursor to point where raycast hit
             this.transform.position = hitInfo.point;
 
-            //Cursor hugging object
+            // Cursor hugging object
             this.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+
+            // Close signs if clicking
+            if(Input.GetMouseButtonDown(0) && hitInfo.collider.gameObject.tag == "Card")
+                Destroy(hitInfo.collider.gameObject);
         }
         else
         {
-            //don't display mesh 
+            // Don't display mesh 
             meshRenderer.enabled = false;
         }
     }
