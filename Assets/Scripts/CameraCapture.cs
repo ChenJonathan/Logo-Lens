@@ -28,7 +28,10 @@ public class CameraCapture : MonoBehaviour {
         c.cameraResolutionWidth = cameraResolution.width;
         c.cameraResolutionHeight = cameraResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
-        
+
+        TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 100, Quaternion.identity);
+        temp.text = "Doing phot mode";
+
         captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
@@ -80,8 +83,7 @@ public class CameraCapture : MonoBehaviour {
             }
             convertArray(colorArray);
 
-            TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 10, Quaternion.identity);
-            temp.text = image;
+            
             GetComponent<Vision>().DetectImage(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
