@@ -6,9 +6,13 @@ using System.Collections.Generic;
 
 public class CameraCapture : MonoBehaviour {
 
-    public string Result { get; set; }
-
+    public string image { get; set; }
     private PhotoCapture pc = null;
+
+    public void CaptureImage()
+    {
+        PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
+    }
 
     void OnPhotoCaptureCreated(PhotoCapture captureObject)
     {
@@ -63,7 +67,7 @@ public class CameraCapture : MonoBehaviour {
             List<byte> imageBufferList = new List<byte>();;
             // Copy the raw IMFMediaBuffer data into our empty byte list.
             photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
-            this.Result = Convert.ToBase64String(imageBufferList.ToArray());
+            image = Convert.ToBase64String(imageBufferList.ToArray());
 
             // In this example, we captured the image using the BGRA32 format.
             // So our stride will be 4 since we have a byte for each rgba channel.
@@ -82,6 +86,8 @@ public class CameraCapture : MonoBehaviour {
                 colorArray.Add(new Color(r, g, b, a));
             }
             convertArray(colorArray);*/
+
+            GetComponent<Vision>().DetectImage(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
     }
@@ -100,6 +106,6 @@ public class CameraCapture : MonoBehaviour {
                 }
             }
         }
-        result = Convert.ToBase64String(output);
+        image = Convert.ToBase64String(output);
     }*/
 }
