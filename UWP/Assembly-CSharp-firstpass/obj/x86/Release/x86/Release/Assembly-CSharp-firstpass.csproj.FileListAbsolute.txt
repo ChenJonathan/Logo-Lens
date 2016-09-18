@@ -15,3 +15,20 @@ C:\Users\Jonathan Chen\Documents\Workspace\Unity\Heads-Up-Display\UWP\Assembly-C
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\qualifiers.txt
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\qualifiers.txt.intermediate
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\MultipleQualifiersPerDimensionFound.txt
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\bin\x86\Release\Assembly-CSharp-firstpass.dll
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\bin\x86\Release\Assembly-CSharp-firstpass.pdb
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\bin\x86\Release\Assembly-CSharp-firstpass.pri
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\Assembly-CSharp-firstpass.dll
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\Assembly-CSharp-firstpass.pdb
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\priconfig.xml
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\priconfig.xml.intermediate
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\layout.resfiles
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\layout.resfiles.intermediate
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\resources.resfiles
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\resources.resfiles.intermediate
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\pri.resfiles
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\pri.resfiles.intermediate
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\qualifiers.txt
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\qualifiers.txt.intermediate
+D:\tejun\GitHub\HackMIT\Heads-Up-Display\UWP\Assembly-CSharp-firstpass\obj\x86\Release\x86\Release\MultipleQualifiersPerDimensionFound.txt
