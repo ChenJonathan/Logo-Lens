@@ -42,13 +42,25 @@ public class GestureDetector : MonoBehaviour
             {
                 GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
             }
-            else if (num == 1)
+            if (num == 1)
+            {
+                Destroy(GameObject.Find("DNKN"));
+            }
+            if (num == 2)
             {
                 GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "MSFT");
             }
-            else if (num == 2)
+            if (num == 3)
+            {
+                Destroy(GameObject.Find("MSFT"));
+            }
+            if (num == 4)
             {
                 GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "GOOG");
+            }
+            if (num == 5)
+            {
+                Destroy(GameObject.Find("GOOG"));
             }
             num++;
         };

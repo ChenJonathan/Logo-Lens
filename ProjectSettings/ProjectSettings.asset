@@ -374,14 +374,14 @@ PlayerSettings:
       CodeGeneration: False
       EnterpriseAuthentication: False
       HumanInterfaceDevice: False
-      InternetClient: False
+      InternetClient: True
       InternetClientServer: False
       Location: False
       Microphone: False
       MusicLibrary: False
       Objects3D: False
       PhoneCall: False
-      PicturesLibrary: False
+      PicturesLibrary: True
       PrivateNetworkClientServer: False
       Proximity: False
       RemovableStorage: False
@@ -390,7 +390,7 @@ PlayerSettings:
       UserAccountInformation: False
       VideosLibrary: False
       VoipCall: False
-      WebCam: False
+      WebCam: True
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 
@@ -469,7 +469,7 @@ PlayerSettings:
   PSM::VR::enable: 0
   PSP2::VR::enable: 0
   SamsungTV::VR::enable: 0
-  Standalone::VR::enable: 0
+  Standalone::VR::enable: 1
   Tizen::VR::enable: 0
   WebGL::VR::enable: 0
   WebPlayer::VR::enable: 0

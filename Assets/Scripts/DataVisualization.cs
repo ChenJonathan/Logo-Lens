@@ -7,7 +7,8 @@ public class DataVisualization : MonoBehaviour
 
     public void DisplayCard(string ticker, double start, double end)
     {
-        GameObject temp = (GameObject)Instantiate(signPrefab, transform.position + transform.forward * 1, Quaternion.identity);
+        GameObject temp = (GameObject)Instantiate(signPrefab, transform.position + transform.forward * 20, Quaternion.identity);
+        temp.name = ticker;
         (temp.transform.FindChild("Ticker").GetComponent<TextMesh>()).text = ticker;
         (temp.transform.FindChild("Date").GetComponent<TextMesh>()).text = "9/16/2016";
         (temp.transform.FindChild("Open Price").GetComponent<TextMesh>()).text = "$" + start.ToString("F2");
