@@ -5,9 +5,6 @@ using System.Collections.Generic;
 
 public class Nasdaq : MonoBehaviour {
 
-    private string test = "";
-    private int layer = 0;
-
     public void callNasdaqAPI(string startDate, string endDate, string tickers)
     {
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
