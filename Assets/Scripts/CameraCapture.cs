@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class CameraCapture : MonoBehaviour {
 
     public string image { get; set; }
+    public TextMesh prefab;
     private PhotoCapture pc = null;
 
     public void CaptureImage()
@@ -17,9 +18,6 @@ public class CameraCapture : MonoBehaviour {
 
     void OnPhotoCaptureCreated(PhotoCapture captureObject)
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0, 0, 10);
-
         Debug.LogError("OnPhotoCaptureCreated");
         pc = captureObject;
 
@@ -82,9 +80,8 @@ public class CameraCapture : MonoBehaviour {
             }
             convertArray(colorArray);
 
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(0, 0, 2);
-            cube.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 10, Quaternion.identity);
+            temp.text = image;
             GetComponent<Vision>().DetectImage(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
