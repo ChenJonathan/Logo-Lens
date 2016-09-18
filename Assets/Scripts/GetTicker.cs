@@ -4,34 +4,33 @@ using System.IO;
 
 public class GetTicker : MonoBehaviour
 {
-    private List<string> namesList = new List<string>();
-    private List<string[]> infoList = new List<string[]>();
+    private Dictionary<string, string[]> stocks = new Dictionary<string, string[]>();
 
     public void Start()
     {
-        var reader = new StreamReader(File.OpenRead("Assets/companylist.csv"));
-        while (!reader.EndOfStream)
+        TextAsset reader = Resources.Load("companylist.csv") as TextAsset;
+        string raw = reader.text;
+        string[] lines = raw.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
         {
-            var line = reader.ReadLine();
-            var values = line.Split(',');
-
-            namesList.Add(values[1].ToLower().Replace(" ", "-"));
+            var values = lines[i].Split(',');
+            
             string[] info = new string[values.Length - 2];
             info[0] = values[0];
-            for (int i = 2; i < values.Length - 1; i++)
+            for (int j = 2; j < values.Length - 1; j++)
             {
-                info[i - 1] = values[i];
+                info[j - 1] = values[j];
             }
-            infoList.Add(info);
+            stocks.Add(values[1].ToLower().Replace(' ', '-'), info);
         }
     }
 
     // Does the ticker thingy of the company that is named "name"
     public string getTicker(string name) {
         name = name.ToLower().Replace(" ", "-");
-        for (int i = 0; i < namesList.Count; i++) {
-            if (namesList[i].Contains(name)) {
-                string ticker = infoList[i][0];
+        foreach (KeyValuePair<string, string[]> entry in stocks) {
+            if (entry.Key.Contains(name)) {
+                string ticker = entry.Value[0];
                 ticker = ticker.Replace("\"", "");
                 return ticker;
             }
@@ -44,11 +43,11 @@ public class GetTicker : MonoBehaviour
     // contains the positions in the infoList of the company that is desired
     string[] getInfo(string name, int[] infoPositions) {
         name = name.ToLower().Replace(" ", "-");
-        for (int i = 0; i < namesList.Count; i++) {
-            if (namesList[i].Contains(name)) {
+        foreach (KeyValuePair<string, string[]> entry in stocks) {
+            if (entry.Key.Contains(name)) {
                 string[] info = new string[infoPositions.Length];
                 for (int j = 0; j < info.Length; j++) {
-                    info[j] = infoList[i][infoPositions[j]];
+                    info[j] = entry.Value[infoPositions[j]];
                 }
             }
         }
