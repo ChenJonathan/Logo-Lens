@@ -17,6 +17,8 @@ public class GestureDetector : MonoBehaviour
         // Executed when a tap event is detected
         recognizer.TappedEvent += (source, tapCount, ray) =>
         {
+            Debug.Log("Tap event detected");
+
             // Raycast
             var headPosition = Camera.main.transform.position;
             var gazeDirection = Camera.main.transform.forward;
@@ -33,6 +35,7 @@ public class GestureDetector : MonoBehaviour
                 }
             }
             // Capture image if there is no card in line of sight
+            Debug.Log("Capturing image!");
             GetComponent<CameraCapture>().CaptureImage();
         };
         recognizer.StartCapturingGestures();

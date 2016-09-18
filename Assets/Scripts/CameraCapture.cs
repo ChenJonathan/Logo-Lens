@@ -12,10 +12,14 @@ public class CameraCapture : MonoBehaviour {
     public void CaptureImage()
     {
         PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
+        Debug.LogError("Created async capture task");
     }
 
     void OnPhotoCaptureCreated(PhotoCapture captureObject)
     {
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.transform.position = new Vector3(0, 0, 10);
+        Debug.LogError("OnPhotoCaptureCreated");
         pc = captureObject;
 
         Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
@@ -25,18 +29,20 @@ public class CameraCapture : MonoBehaviour {
         c.cameraResolutionWidth = cameraResolution.width;
         c.cameraResolutionHeight = cameraResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
-
+        
         captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
     void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
     {
+        Debug.LogError("OnStopedPhotoMode");
         pc.Dispose();
         pc = null;
     }
 
     private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
     {
+        Debug.LogError("OnPhotoModeStarted");
         if (result.success)
         {
             pc.TakePhotoAsync(OnCapturedPhotoToMemory);
@@ -47,33 +53,21 @@ public class CameraCapture : MonoBehaviour {
         }
     }
 
-    void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
-    {
-        if (result.success)
-        {
-            Debug.Log("Saved Photo to disk!");
-            pc.StopPhotoModeAsync(OnStoppedPhotoMode);
-        }
-        else
-        {
-            Debug.Log("Failed to save Photo to disk");
-        }
-    }
-
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
     {
+        Debug.LogError("OnCapturedPhotoToMemory");
         if (result.success)
         {
             List<byte> imageBufferList = new List<byte>();;
             // Copy the raw IMFMediaBuffer data into our empty byte list.
             photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
-            image = Convert.ToBase64String(imageBufferList.ToArray());
+            //image = Convert.ToBase64String(imageBufferList.ToArray());
 
             // In this example, we captured the image using the BGRA32 format.
             // So our stride will be 4 since we have a byte for each rgba channel.
             // The raw image data will also be flipped so we access our pixel data
             // in the reverse order.
-            /*int stride = 4;
+            int stride = 4;
             float denominator = 1.0f / 255.0f;
             List<Color> colorArray = new List<Color>();
             for (int i = imageBufferList.Count - 1; i >= 0; i -= stride)
@@ -85,15 +79,19 @@ public class CameraCapture : MonoBehaviour {
 
                 colorArray.Add(new Color(r, g, b, a));
             }
-            convertArray(colorArray);*/
+            convertArray(colorArray);
 
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.position = new Vector3(0, 0, 2);
+            cube.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             GetComponent<Vision>().DetectImage(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
     }
 
-    /*public void convertArray(List<Color> anArray)
+    public void convertArray(List<Color> anArray)
     {
+        Debug.LogError("ConvertArray");
         byte[] output = new byte[anArray.Count*16];
         int pos = 0;
         for (int i = anArray.Count - 1; i>=0; i -= 4)
@@ -107,5 +105,5 @@ public class CameraCapture : MonoBehaviour {
             }
         }
         image = Convert.ToBase64String(output);
-    }*/
+    }
 }
