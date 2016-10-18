@@ -78,9 +78,8 @@ public class CameraCapture : MonoBehaviour {
                 colorArray.Add(new Color(r, g, b, a));
             }
             convertArray(colorArray);
-
             
-            GetComponent<Vision>().DetectImage(image);
+            GetComponent<Controller>().AddCard(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
     }

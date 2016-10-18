@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RotatingSign : MonoBehaviour
+public class Card : MonoBehaviour
 {
     private Camera mainCamera;
 

@@ -30,21 +30,14 @@ public class GestureDetector : MonoBehaviour
                 // Close card if in line of sight
                 if (hitInfo.collider.gameObject.tag == "Card")
                 {
-                    Destroy(hitInfo.collider.gameObject);
+                    GetComponent<Controller>().RemoveCard(hitInfo.collider.GetComponent<Card>());
                     return;
                 }
             }
-  
-            //GetComponent<CameraCapture>().CaptureImage();
-            GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
-            //GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "MSFT");
+            
+            // TODO Call photo capture instead
+            GetComponent<Controller>().AddCard(Controller.Image64);
         };
         recognizer.StartCapturingGestures();
-    }
-
-    public void Update()
-    {
-        if(Input.GetMouseButtonDown(0))
-            GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
     }
 }

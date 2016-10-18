@@ -1,10 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
-public class GetTicker : MonoBehaviour
+
+public static class TickerMap
 {
-    private Dictionary<string, string[]> stocks = new Dictionary<string, string[]>();
-    public void Start()
+    private static Dictionary<string, string[]> stocks = new Dictionary<string, string[]>();
+
+    static TickerMap()
     {
         TextAsset reader = Resources.Load("companylist") as TextAsset;
         string raw = reader.text;
@@ -27,8 +28,9 @@ public class GetTicker : MonoBehaviour
             }
         }
     }
+
     // Does the ticker thingy of the company that is named "name"
-    public string getTicker(string name)
+    public static string getTicker(string name)
     {
         name = name.ToLower().Replace(" ", "-");
         foreach(KeyValuePair<string, string[]> entry in stocks)
@@ -42,9 +44,10 @@ public class GetTicker : MonoBehaviour
         }
         return "";
     }
+
     // Returns the info of the company that is named "name" where infoPositions
     // contains the positions in the infoList of the company that is desired
-    string[] getInfo(string name, int[] infoPositions)
+    public static string[] getInfo(string name, int[] infoPositions)
     {
         name = name.ToLower().Replace(" ", "-");
         foreach(KeyValuePair<string, string[]> entry in stocks)
