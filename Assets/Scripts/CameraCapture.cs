@@ -15,7 +15,7 @@ public class CameraCapture : MonoBehaviour {
         Debug.LogError("Created async capture task");
     }
 
-    void OnPhotoCaptureCreated(PhotoCapture captureObject)
+    public void OnPhotoCaptureCreated(PhotoCapture captureObject)
     {
         Debug.LogError("OnPhotoCaptureCreated");
         pc = captureObject;
@@ -31,7 +31,7 @@ public class CameraCapture : MonoBehaviour {
         captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
-    void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
+    public void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
     {
         Debug.LogError("OnStopedPhotoMode");
         pc.Dispose();
@@ -51,7 +51,7 @@ public class CameraCapture : MonoBehaviour {
         }
     }
 
-    void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
+    public void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
     {
         Debug.LogError("OnCapturedPhotoToMemory");
         if (result.success)
@@ -77,14 +77,14 @@ public class CameraCapture : MonoBehaviour {
 
                 colorArray.Add(new Color(r, g, b, a));
             }
-            convertArray(colorArray);
+            ConvertArray(colorArray);
             
-            GetComponent<Controller>().AddCard(image);
+            GetComponent<CardController>().AddCard(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
     }
 
-    public void convertArray(List<Color> anArray)
+    private void ConvertArray(List<Color> anArray)
     {
         Debug.LogError("ConvertArray");
         byte[] output = new byte[anArray.Count*16];

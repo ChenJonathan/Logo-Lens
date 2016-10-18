@@ -6,8 +6,6 @@ public class GestureDetector : MonoBehaviour
     public static GestureDetector Instance { get; private set; }
 
     GestureRecognizer recognizer;
-
-    int num = 0;
     
     public void Awake()
     {
@@ -19,26 +17,26 @@ public class GestureDetector : MonoBehaviour
         // Executed when a tap event is detected
         recognizer.TappedEvent += (source, tapCount, ray) =>
         {
-            Debug.Log("Tap event detected");
-
-            // Raycast
+            // Raycast calculations
             var headPosition = Camera.main.transform.position;
             var gazeDirection = Camera.main.transform.forward;
 
             RaycastHit hitInfo;
-
             if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
             {
                 // Close card if in line of sight
-                if (hitInfo.collider.gameObject.tag == "Card")
+                Collider col = hitInfo.collider;
+                if (col.tag == "Card")
                 {
-                    GetComponent<Controller>().RemoveCard(hitInfo.collider.GetComponent<Card>());
+                    GetComponent<CardController>().RemoveCard(col.GetComponent<Card>());
                     return;
                 }
             }
-            
-            // TODO Call photo capture instead
-            GetComponent<Controller>().AddCard(Controller.Image64);
+            else
+            {
+                // TODO Call photo capture instead
+                GetComponent<CardController>().AddCard(CardController.Image64);
+            }
         };
         recognizer.StartCapturingGestures();
     }

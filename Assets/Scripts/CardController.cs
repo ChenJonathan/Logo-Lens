@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using UnityEngine;
 
-public class Controller : MonoBehaviour
+public class CardController : MonoBehaviour
 {
     [SerializeField]
     private GameObject signPrefab;
