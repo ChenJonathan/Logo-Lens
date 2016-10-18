@@ -9,7 +9,7 @@ public class GetStockData : MonoBehaviour
     {
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
-        form.AddField("_Token", "247F80E1279F451499B6D68857FA0A93");
+        form.AddField("_Token", "BC2B181CF93B441D8C6342120EB0C971");
         form.AddField("Symbols", ticker);
         form.AddField("StartDate", startDate);
         form.AddField("EndDate", endDate);
