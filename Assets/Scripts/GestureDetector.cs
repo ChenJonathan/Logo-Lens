@@ -37,7 +37,8 @@ public class GestureDetector : MonoBehaviour
                 }
             }
   
-            //GetComponent<CameraCapture>().CaptureImage();
+            GetComponent<CameraCapture>().CaptureImage();
+            /*
             if (num == 0)
             {
                 GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
@@ -63,6 +64,7 @@ public class GestureDetector : MonoBehaviour
                 Destroy(GameObject.Find("GOOG"));
             }
             num++;
+            */
         };
         recognizer.StartCapturingGestures();
     }
