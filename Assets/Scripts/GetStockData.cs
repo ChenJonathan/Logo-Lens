@@ -15,7 +15,8 @@ public class GetStockData : MonoBehaviour
         form.AddField("EndDate", endDate);
         form.AddField("MarketCenters", "");
         WWW www = new WWW(url, form);
-        StartCoroutine(WaitForRequest(www));
+        GetComponent<DataVisualization>().DisplayCard("MSFT", 1, 2);
+        // StartCoroutine(WaitForRequest(www));
     }
 
     IEnumerator WaitForRequest(WWW www)
@@ -26,7 +27,7 @@ public class GetStockData : MonoBehaviour
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(www.text);
-
+            Debug.Log(www.text);
             int isFirstTime = 0;
             XmlNode ArrayOfEndOfDayPriceCollection = doc.LastChild;
             foreach (XmlNode EndOfDayPriceCollection in ArrayOfEndOfDayPriceCollection.ChildNodes)

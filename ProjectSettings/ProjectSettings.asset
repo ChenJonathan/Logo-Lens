@@ -11,7 +11,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: Heads-Up-Display
+  productName: Logo-Lens
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenStyle: 0
@@ -177,7 +177,13 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 128
+      m_Height: 128
   m_BuildTargetBatching: []
   m_BuildTargetGraphicsAPIs: []
   webPlayerTemplate: APPLICATION:Default
@@ -340,11 +346,11 @@ PlayerSettings:
   scriptingDefineSymbols: {}
   metroPackageName: Heads-Up-Display
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 8028ae421630d301
   metroApplicationDescription: Heads-Up-Display
   wsaImages: {}
   metroTileShortName: 
@@ -431,7 +437,7 @@ PlayerSettings:
   - iOS::VR::enable
   - tvOS::VR::enable
   Android::VR::enable: 0
-  Metro::VR::enable: 0
+  Metro::VR::enable: 1
   N3DS::VR::enable: 0
   PS3::VR::enable: 0
   PS4::VR::enable: 0

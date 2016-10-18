@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class CameraCapture : MonoBehaviour {
 
     public string image { get; set; }
-    public TextMesh prefab;
     private PhotoCapture pc = null;
 
     public void CaptureImage()
@@ -28,9 +27,6 @@ public class CameraCapture : MonoBehaviour {
         c.cameraResolutionWidth = cameraResolution.width;
         c.cameraResolutionHeight = cameraResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
-
-        TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 100, Quaternion.identity);
-        temp.text = "Doing phot mode";
 
         captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
