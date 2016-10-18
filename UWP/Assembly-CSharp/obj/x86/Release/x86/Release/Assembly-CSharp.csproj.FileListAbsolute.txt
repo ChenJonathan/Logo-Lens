@@ -58,6 +58,7 @@ C:\Users\Sana\Desktop\Code\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\
 C:\Users\Sana\Desktop\Code\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\qualifiers.txt
 C:\Users\Sana\Desktop\Code\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\qualifiers.txt.intermediate
 C:\Users\Sana\Desktop\Code\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\MultipleQualifiersPerDimensionFound.txt
+<<<<<<< HEAD
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp.dll
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp.pdb
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp.pri
@@ -78,3 +79,25 @@ C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\o
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\qualifiers.txt
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\qualifiers.txt.intermediate
 C:\Users\Jonathan Chen\Documents\Workspace\Unity\Logo-Lens\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\MultipleQualifiersPerDimensionFound.txt
+=======
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp.dll
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp.pdb
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp.pri
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp-firstpass.dll
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp-firstpass.pdb
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\bin\x86\Release\Assembly-CSharp-firstpass.pri
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\Assembly-CSharp.csprojResolveAssemblyReference.cache
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\Assembly-CSharp.dll
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\Assembly-CSharp.pdb
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\priconfig.xml
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\priconfig.xml.intermediate
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\layout.resfiles
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\layout.resfiles.intermediate
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\resources.resfiles
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\resources.resfiles.intermediate
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\pri.resfiles
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\pri.resfiles.intermediate
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\qualifiers.txt
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\qualifiers.txt.intermediate
+D:\tejun\Documents\GitHub\Logo-Locator\UWP\Assembly-CSharp\obj\x86\Release\x86\Release\MultipleQualifiersPerDimensionFound.txt
+>>>>>>> origin/master
