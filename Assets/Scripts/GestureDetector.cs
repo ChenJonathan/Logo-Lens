@@ -6,10 +6,8 @@ public class GestureDetector : MonoBehaviour
     public static GestureDetector Instance { get; private set; }
 
     GestureRecognizer recognizer;
-
-    int num = 0;
     
-    void Awake()
+    public void Awake()
     {
         Instance = this;
 
@@ -19,52 +17,26 @@ public class GestureDetector : MonoBehaviour
         // Executed when a tap event is detected
         recognizer.TappedEvent += (source, tapCount, ray) =>
         {
-            Debug.Log("Tap event detected");
-
-            // Raycast
+            // Raycast calculations
             var headPosition = Camera.main.transform.position;
             var gazeDirection = Camera.main.transform.forward;
 
             RaycastHit hitInfo;
-
             if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
             {
                 // Close card if in line of sight
-                if (hitInfo.collider.gameObject.tag == "Card")
+                Collider col = hitInfo.collider;
+                if (col.tag == "Card")
                 {
-                    //Destroy(hitInfo.collider.gameObject);
+                    GetComponent<CardController>().RemoveCard(col.GetComponent<Card>());
                     return;
                 }
             }
-  
-            GetComponent<CameraCapture>().CaptureImage();
-            /*
-            if (num == 0)
+            else
             {
-                GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "DNKN");
+                // TODO Call photo capture instead
+                GetComponent<CardController>().AddCard(CardController.Image64);
             }
-            if (num == 1)
-            {
-                Destroy(GameObject.Find("DNKN"));
-            }
-            if (num == 2)
-            {
-                GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "MSFT");
-            }
-            if (num == 3)
-            {
-                Destroy(GameObject.Find("MSFT"));
-            }
-            if (num == 4)
-            {
-                GetComponent<GetStockData>().CallNasdaqAPI("09/16/2016", "09/16/2016", "GOOG");
-            }
-            if (num == 5)
-            {
-                Destroy(GameObject.Find("GOOG"));
-            }
-            num++;
-            */
         };
         recognizer.StartCapturingGestures();
     }

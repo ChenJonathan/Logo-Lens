@@ -142,7 +142,7 @@ GameObject:
   - 65: {fileID: 65000010318615406}
   - 114: {fileID: 114000014104935324}
   m_Layer: 0
-  m_Name: Sign
+  m_Name: Card
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,7 +221,7 @@ Transform:
   m_GameObject: {fileID: 1000014163193700}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 0.1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011171700610}
@@ -618,7 +618,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 2588311e5e6915044b4d37aa8f8381a7, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4289374890
 --- !u!114 &114000014104935324
 MonoBehaviour:
   m_ObjectHideFlags: 1
