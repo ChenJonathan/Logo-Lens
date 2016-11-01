@@ -11,6 +11,8 @@ public class CameraCapture : MonoBehaviour {
 
     public void CaptureImage()
     {
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere.transform.position = new Vector3(1, 1, 5);
         PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
         Debug.LogError("Created async capture task");
     }
@@ -20,15 +22,16 @@ public class CameraCapture : MonoBehaviour {
         Debug.LogError("OnPhotoCaptureCreated");
         pc = captureObject;
 
-        Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
+        List<Resolution> resolutions = new List<Resolution>(PhotoCapture.SupportedResolutions);
+        Resolution selectedResolution = resolutions[0];
 
         CameraParameters c = new CameraParameters();
         c.hologramOpacity = 0.0f;
-        c.cameraResolutionWidth = cameraResolution.width;
-        c.cameraResolutionHeight = cameraResolution.height;
+        c.cameraResolutionWidth = selectedResolution.width;
+        c.cameraResolutionHeight = selectedResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
 
-        captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
+        pc.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
     public void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
@@ -48,6 +51,8 @@ public class CameraCapture : MonoBehaviour {
         else
         {
             Debug.LogError("Unable to start photo mode!");
+            //TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 10, Quaternion.identity);
+            //temp.text = "FAILURE";
         }
     }
 
