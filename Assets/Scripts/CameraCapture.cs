@@ -31,9 +31,6 @@ public class CameraCapture : MonoBehaviour {
         c.cameraResolutionHeight = selectedResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
 
-        TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 10, Quaternion.identity);
-        temp.text = "Doing phot mode";
-
         pc.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
