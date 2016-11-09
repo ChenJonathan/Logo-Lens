@@ -3,14 +3,10 @@ using UnityEngine.VR.WSA.Input;
 
 public class GestureDetector : MonoBehaviour
 {
-    public static GestureDetector Instance { get; private set; }
-
     GestureRecognizer recognizer;
     
     public void Awake()
     {
-        Instance = this;
-
         // Set up a GestureRecognizer to detect Select gestures.
         recognizer = new GestureRecognizer();
 
