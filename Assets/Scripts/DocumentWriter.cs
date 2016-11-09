@@ -3,7 +3,7 @@ using Windows.Storage;
 
 public class DocumentWriter
 {
-	public static void writeToFile(string filename, string message)
+	public static void WriteToFile(string filename, string message)
 	{
         StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
         StorageFile file =
