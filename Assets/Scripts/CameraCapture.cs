@@ -11,8 +11,6 @@ public class CameraCapture : MonoBehaviour {
 
     public void CaptureImage()
     {
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.position = new Vector3(1, 1, 5);
         PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
         Debug.LogError("Created async capture task");
     }
@@ -61,49 +59,62 @@ public class CameraCapture : MonoBehaviour {
         Debug.LogError("OnCapturedPhotoToMemory");
         if (result.success)
         {
-            List<byte> imageBufferList = new List<byte>();;
-            // Copy the raw IMFMediaBuffer data into our empty byte list.
+
+            ////image = Convert.ToBase64String(imageBufferList.ToArray());
+
+            //// In this example, we captured the image using the BGRA32 format.
+            //// So our stride will be 4 since we have a byte for each rgba channel.
+            //// The raw image data will also be flipped so we access our pixel data
+            //// in the reverse order.
+            //int stride = 4;
+            //float denominator = 1.0f / 255.0f;
+            //List<Color> colorArray = new List<Color>();
+            //for (int i = imageBufferList.Count - 1; i >= 0; i -= stride)
+            //{
+            //    float a = (int)(imageBufferList[i - 0]) * denominator;
+            //    float r = (int)(imageBufferList[i - 1]) * denominator;
+            //    float g = (int)(imageBufferList[i - 2]) * denominator;
+            //    float b = (int)(imageBufferList[i - 3]) * denominator;
+
+            //    colorArray.Add(new Color(r, g, b, a));
+            //}
+            //ConvertArray(colorArray);
+
+            //// Copy the raw IMFMediaBuffer data into our empty byte list.
+            List<byte> imageBufferList = new List<byte>();
             photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
-            //image = Convert.ToBase64String(imageBufferList.ToArray());
 
-            // In this example, we captured the image using the BGRA32 format.
-            // So our stride will be 4 since we have a byte for each rgba channel.
-            // The raw image data will also be flipped so we access our pixel data
-            // in the reverse order.
-            int stride = 4;
-            float denominator = 1.0f / 255.0f;
-            List<Color> colorArray = new List<Color>();
-            for (int i = imageBufferList.Count - 1; i >= 0; i -= stride)
-            {
-                float a = (int)(imageBufferList[i - 0]) * denominator;
-                float r = (int)(imageBufferList[i - 1]) * denominator;
-                float g = (int)(imageBufferList[i - 2]) * denominator;
-                float b = (int)(imageBufferList[i - 3]) * denominator;
+            String image = Convert.ToBase64String(imageBufferList.ToArray());
+            image = CardController.Image64;
 
-                colorArray.Add(new Color(r, g, b, a));
-            }
-            ConvertArray(colorArray);
-            
+            Texture2D text = new Texture2D(1, 1);
+            text.LoadImage(imageBufferList.ToArray());
+            text.Apply();
+
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.position = new Vector3(1, 1, 5);
+            cube.GetComponent<Renderer>().material.mainTexture = text;
+
             GetComponent<CardController>().AddCard(image);
         }
         pc.StopPhotoModeAsync(OnStoppedPhotoMode);
     }
 
-    private void ConvertArray(List<Color> anArray)
-    {
-        Debug.LogError("ConvertArray");
-        byte[] output = new byte[anArray.Count*16];
-        int pos = 0;
-        for (int i = anArray.Count - 1; i>=0; i -= 4)
-        {
-            foreach (float value in new float[] { anArray[i].a, anArray[i].r, anArray[i].g, anArray[i].b })
-            {
-                foreach (byte newByte in BitConverter.GetBytes(value))
-                {
-                    output[pos++] = newByte;
-                }
-            }
-        }
-        image = Convert.ToBase64String(output);
-    }
+    //private void ConvertArray(List<Color> anArray)
+    //{
+    //    Debug.LogError("ConvertArray");
+    //    byte[] output = new byte[anArray.Count*16];
+    //    int pos = 0;
+    //    for (int i = anArray.Count - 1; i>=0; i -= 4)
+    //    {
+    //        foreach (float value in new float[] { anArray[i].a, anArray[i].r, anArray[i].g, anArray[i].b })
+    //        {
+    //            foreach (byte newByte in BitConverter.GetBytes(value))
+    //            {
+    //                output[pos++] = newByte;
+    //            }
+    //        }
+    //    }
+    //    image = Convert.ToBase64String(output);
+    //}
 }
