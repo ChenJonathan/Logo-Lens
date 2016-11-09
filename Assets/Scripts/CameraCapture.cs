@@ -85,6 +85,8 @@ public class CameraCapture : MonoBehaviour {
             photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
 
             String image = Convert.ToBase64String(imageBufferList.ToArray());
+            DocumentWriter.writeToFile("string.txt", image);
+
             image = CardController.Image64;
 
             Texture2D text = new Texture2D(1, 1);
