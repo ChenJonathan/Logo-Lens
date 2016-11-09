@@ -87,7 +87,10 @@ public class CardController : MonoBehaviour
         
         if(!ticker.Equals(""))
         {
-            UpdateCard(card, ticker, "10/08/2016", "10/17/2016");
+            DateTime start = DateTime.Now.AddDays(-8);
+            DateTime end = DateTime.Now.AddDays(-1);
+            UpdateCard(card, ticker, (start.Month + "").PadLeft(2, '0') + "/" + (start.Day + "").PadLeft(2, '0') + "/" + start.Year,
+                                     (end.Month + "").PadLeft(2, '0') + "/" + (end.Day + "").PadLeft(2, '0') + "/" + end.Year);
         }
         else
         {

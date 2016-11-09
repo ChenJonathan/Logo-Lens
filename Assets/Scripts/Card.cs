@@ -44,7 +44,7 @@ public class Card : MonoBehaviour
             Destroy(graphLine.gameObject);
         }
 
-        // TODO Calculate scale
+        // TODO Calculate scale and add some constant y-value so that the graph is on top of the card
         for(int i = 0; i < points.Count; i++)
         {
             points[i] = new Vector2(points[i].x, points[i].y - 775);
