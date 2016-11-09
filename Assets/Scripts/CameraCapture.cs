@@ -8,6 +8,7 @@ public class CameraCapture : MonoBehaviour {
 
     public string image { get; set; }
     private PhotoCapture pc = null;
+    public TextMesh textMesh;
 
     public void CaptureImage()
     {
@@ -83,13 +84,12 @@ public class CameraCapture : MonoBehaviour {
             //// Copy the raw IMFMediaBuffer data into our empty byte list.
             List<byte> imageBufferList = new List<byte>();
             photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
-
             String image = Convert.ToBase64String(imageBufferList.ToArray());
-            image = CardController.Image64;
 
             Texture2D text = new Texture2D(1, 1);
-            text.LoadImage(imageBufferList.ToArray());
+            photoCaptureFrame.UploadImageDataToTexture(text);
             text.Apply();
+            image = Convert.ToBase64String(text.GetRawTextureData());
 
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = new Vector3(1, 1, 5);
