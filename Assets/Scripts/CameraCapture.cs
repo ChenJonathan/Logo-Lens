@@ -89,7 +89,7 @@ public class CameraCapture : MonoBehaviour {
             Texture2D text = new Texture2D(1, 1);
             photoCaptureFrame.UploadImageDataToTexture(text);
             text.Apply();
-            image = Convert.ToBase64String(text.GetRawTextureData());
+            //image = Convert.ToBase64String(text.GetRawTextureData());
 
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = new Vector3(1, 1, 5);

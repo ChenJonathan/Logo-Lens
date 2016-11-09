@@ -95,6 +95,11 @@ TextMesh:
   m_PrefabParentObject: {fileID: 102000012597001386, guid: 723022384e0cc9d4f95489111e15f55e,
     type: 2}
   m_PrefabInternal: {fileID: 2047782081}
+--- !u!4 &164529367 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4000013563380548, guid: 723022384e0cc9d4f95489111e15f55e,
+    type: 2}
+  m_PrefabInternal: {fileID: 2047782081}
 --- !u!1001 &208385484
 Prefab:
   m_ObjectHideFlags: 0
@@ -226,6 +231,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1758827485}
+  - {fileID: 164529367}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!114 &1333931790
@@ -240,6 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   signPrefab: {fileID: 1000014163193700, guid: 6ac0ffdb85c048848a16e9a0488b7a70, type: 2}
+  textMesh: {fileID: 164529366}
 --- !u!114 &1333931794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,7 +415,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1333931789}
     m_Modifications:
     - target: {fileID: 4000013563380548, guid: 723022384e0cc9d4f95489111e15f55e, type: 2}
       propertyPath: m_LocalPosition.x
@@ -440,11 +447,16 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013563380548, guid: 723022384e0cc9d4f95489111e15f55e, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4000013563380548, guid: 723022384e0cc9d4f95489111e15f55e, type: 2}
       propertyPath: m_LocalScale.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 102000012597001386, guid: 723022384e0cc9d4f95489111e15f55e,
+        type: 2}
+      propertyPath: m_Text
+      value: Test
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 723022384e0cc9d4f95489111e15f55e, type: 2}
