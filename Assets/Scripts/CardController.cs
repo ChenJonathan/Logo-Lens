@@ -41,11 +41,11 @@ public class CardController : MonoBehaviour
         Card card = ((GameObject)Instantiate(signPrefab, transform.position + transform.forward * 20, Quaternion.identity)).GetComponent<Card>();
 
         // Google Vision API request
-        string url = "https://test-api-1234.herokuapp.com/" + image;
-        string json = "{}";
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("Content-Type", "application/json");
-        WWW www = new WWW(url, Encoding.ASCII.GetBytes(json.ToCharArray()), headers);
+        string url = "https://test-api-1234.herokuapp.com/";
+        WWWForm form = new WWWForm();
+        form.AddField("image", image.Length + " " + image.Substring(0, 1000));
+
+        WWW www = new WWW(url, form);
 
         StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
     }
