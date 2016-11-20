@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class CameraCapture : MonoBehaviour {
 
     public string image { get; set; }
-
     private PhotoCapture pc = null;
     public TextMesh textMesh;
 
