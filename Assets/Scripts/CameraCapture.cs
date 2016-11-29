@@ -110,12 +110,22 @@ public class CameraCapture : MonoBehaviour
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = new Vector3(1, 1, 5);
 
+            WriteToFile("image.txt", image);
             GetComponent<CardController>().AddCard(image);
         }
         else
         {
             Debug.Log("Failed to save Photo to disk " +result.hResult+" "+result.resultType.ToString());
         }
+    }
+
+    public static void WriteToFile(string filename, string message)
+    {
+        StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
+        StorageFile file =
+            await storageFolder.CreateFileAsync(filename,
+                CreationCollisionOption.ReplaceExisting);
+        await FileIO.WriteTextAsync(file, message);
     }
 #endif
 }
