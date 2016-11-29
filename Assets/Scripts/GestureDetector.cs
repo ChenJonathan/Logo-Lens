@@ -35,7 +35,7 @@ public class GestureDetector : MonoBehaviour
             else
             {
                 // TODO Call photo capture instead
-                GetComponent<CameraCapture>().CaptureImage();
+                gameObject.AddComponent<CameraCapture>();
             }
         };
         recognizer.StartCapturingGestures();
