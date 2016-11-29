@@ -376,14 +376,14 @@ PlayerSettings:
       HumanInterfaceDevice: True
       InternetClient: True
       InternetClientServer: True
-      Location: False
+      Location: True
       Microphone: True
-      MusicLibrary: False
+      MusicLibrary: True
       Objects3D: True
       PhoneCall: False
       PicturesLibrary: True
-      PrivateNetworkClientServer: False
-      Proximity: False
+      PrivateNetworkClientServer: True
+      Proximity: True
       RemovableStorage: True
       SharedUserCertificates: False
       SpatialPerception: True

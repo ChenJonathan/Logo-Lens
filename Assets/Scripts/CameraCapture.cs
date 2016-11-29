@@ -1,27 +1,59 @@
 ﻿using UnityEngine;
+using System.Collections;
+
 using UnityEngine.VR.WSA.WebCam;
 using System.Linq;
-using System;
+#if !UNITY_EDITOR
+using Windows.Storage;
+using Windows.System;
 using System.Collections.Generic;
+using System;
+using System.IO;
+#endif
 
-public class CameraCapture : MonoBehaviour {
+public class CameraCapture : MonoBehaviour
+{
 
-    public string image { get; set; }
-    private PhotoCapture pc = null;
-    public TextMesh textMesh;
+#if !UNITY_EDITOR
+    PhotoCapture photoCaptureObject = null;
+    bool haveFolderPath = false;
+    StorageFolder picturesFolder;
+    string tempFilePathAndName;
+    string tempFileName;
 
-    public void CaptureImage()
+    // Use this for initialization
+    void Start()
     {
+        getFolderPath();
+        while (!haveFolderPath)
+        {
+            Debug.Log("Waiting for folder path...");
+        }
+        Debug.Log("About to call CreateAsync");
         PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
-        Debug.LogError("Created async capture task");
+        Debug.Log("Called CreateAsync");
     }
 
-    public void OnPhotoCaptureCreated(PhotoCapture captureObject)
+    async void getFolderPath()
     {
-        Debug.LogError("OnPhotoCaptureCreated");
-        pc = captureObject;
+        StorageLibrary myPictures = await Windows.Storage.StorageLibrary.GetLibraryAsync(Windows.Storage.KnownLibraryId.Pictures);
+        picturesFolder = myPictures.SaveFolder;
 
-        Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).Last();
+        foreach(StorageFolder fodler in myPictures.Folders)
+        {
+            Debug.Log(fodler.Name);
+
+        }
+
+        Debug.Log("savePicturesFolder.Path is " + picturesFolder.Path);
+        haveFolderPath = true;
+    }
+
+    void OnPhotoCaptureCreated(PhotoCapture captureObject)
+    {
+        photoCaptureObject = captureObject;
+
+        Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
 
         CameraParameters c = new CameraParameters();
         c.hologramOpacity = 0.0f;
@@ -29,46 +61,55 @@ public class CameraCapture : MonoBehaviour {
         c.cameraResolutionHeight = cameraResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
 
-        pc.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
+        captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
     }
 
-    public void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
+    void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
     {
-        Debug.LogError("OnStopedPhotoMode");
-        pc.Dispose();
-        pc = null;
+        photoCaptureObject.Dispose();
+        photoCaptureObject = null;
     }
+
+
 
     private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
     {
-        Debug.LogError("OnPhotoModeStarted");
         if (result.success)
         {
-            pc.TakePhotoAsync(OnCapturedPhotoToMemory);
+            tempFileName = string.Format(@"CapturedImage{0}_n.jpg", Time.time);
+
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, tempFileName);
+            tempFilePathAndName = filePath;
+            Debug.Log("Saving photo to " + filePath);
+
+            try
+            {
+                photoCaptureObject.TakePhotoAsync(filePath, PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
+            }
+            catch (System.ArgumentException e)
+            {
+                Debug.LogError("System.ArgumentException:\n" + e.Message);
+            }
         }
         else
         {
             Debug.LogError("Unable to start photo mode!");
-            //TextMesh temp = (TextMesh)Instantiate(prefab, transform.position + transform.forward * 10, Quaternion.identity);
-            //temp.text = "FAILURE";
         }
     }
 
-    public void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
+    void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
     {
-        Debug.LogError("OnCapturedPhotoToMemory");
         if (result.success)
-        { 
-            //// Copy the raw IMFMediaBuffer data into our empty byte list.
-            List<byte> imageBufferList = new List<byte>();
-            photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
-            String image = Convert.ToBase64String(imageBufferList.ToArray());
-
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(1, 1, 5);
-
-            GetComponent<CardController>().AddCard(image);
+        {
+            Debug.Log("Saved Photo to disk!");
+            photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
+            Debug.Log("moving "+tempFilePathAndName+" to " + picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
+            File.Move(tempFilePathAndName, picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
         }
-        pc.StopPhotoModeAsync(OnStoppedPhotoMode);
+        else
+        {
+            Debug.Log("Failed to save Photo to disk " +result.hResult+" "+result.resultType.ToString());
+        }
     }
+#endif
 }
