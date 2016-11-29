@@ -40,12 +40,18 @@ public class CardController : MonoBehaviour
     {
         Card card = ((GameObject)Instantiate(signPrefab, transform.position + transform.forward * 20, Quaternion.identity)).GetComponent<Card>();
 
+        string url = "https://tejasvi-nareddy-teju.herokuapp.com/";
+        WWWForm form = new WWWForm();
+        form.AddField("image", image.Length + " " + image.Substring(0, 1000));
+
+        WWW www = new WWW(url, form);
+
         // Google Vision API request
-        string url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDNiOUrvRHj0anRBsC1NrrU7v8wwA90v8E";
+        /*string url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDNiOUrvRHj0anRBsC1NrrU7v8wwA90v8E";
         string json = "{\"requests\": [ { \"image\" : {\"content\":\"" + image + "\"},\"features\":[{\"type\":\"LOGO_DETECTION\",\"maxResults\":20}]}]}";
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("Content-Type", "application/json");
-        WWW www = new WWW(url, Encoding.ASCII.GetBytes(json.ToCharArray()), headers);
+        WWW www = new WWW(url, Encoding.ASCII.GetBytes(json.ToCharArray()), headers);*/
 
         StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
     }
