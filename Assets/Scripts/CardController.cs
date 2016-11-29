@@ -43,7 +43,7 @@ public class CardController : MonoBehaviour
         // Teju Heroku API request
         string url = "https://tejasvi-nareddy-teju.herokuapp.com/";
         WWWForm form = new WWWForm();
-        form.AddField("image", image.Length + " " + image.Substring(0, 1000));
+        form.AddField("image", image.Length + " " + image);
 
         WWW www = new WWW(url, form);
 
