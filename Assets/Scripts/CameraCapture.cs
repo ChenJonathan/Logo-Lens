@@ -119,7 +119,7 @@ public class CameraCapture : MonoBehaviour
         }
     }
 
-    public static void WriteToFile(string filename, string message)
+    async public static void WriteToFile(string filename, string message)
     {
         StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
         StorageFile file =
