@@ -70,8 +70,6 @@ public class CameraCapture : MonoBehaviour
         photoCaptureObject = null;
     }
 
-
-
     private void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result)
     {
         if (result.success)
@@ -105,6 +103,14 @@ public class CameraCapture : MonoBehaviour
             photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
             Debug.Log("moving "+tempFilePathAndName+" to " + picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
             File.Move(tempFilePathAndName, picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
+            
+            byte[] fileData = File.ReadAllBytes(picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
+            String image = Convert.ToBase64String(fileData);
+
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.position = new Vector3(1, 1, 5);
+
+            GetComponent<CardController>().AddCard(image);
         }
         else
         {
