@@ -41,10 +41,15 @@ public class CardController : MonoBehaviour
         Card card = ((GameObject)Instantiate(signPrefab, transform.position + transform.forward * 20, Quaternion.identity)).GetComponent<Card>();
 
         // Teju Heroku API request
-        string url = "https://tejasvi-nareddy-teju.herokuapp.com/";
+        /*string url = "https://tejasvi-nareddy-teju.herokuapp.com/";
         WWWForm form = new WWWForm();
         form.AddField("image", image.Length + " " + image);
+        WWW www = new WWW(url, form);*/
 
+        // Jonathan Heroku API request
+        string url = "https://test-api-1234.herokuapp.com/";
+        WWWForm form = new WWWForm();
+        form.AddField("image", image.Length + " " + image.Substring(0, 1000));
         WWW www = new WWW(url, form);
 
         // Google Vision API request
