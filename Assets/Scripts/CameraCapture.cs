@@ -3,6 +3,7 @@ using System.Collections;
 
 using UnityEngine.VR.WSA.WebCam;
 using System.Linq;
+using System;
 #if !UNITY_EDITOR
 using Windows.Storage;
 using Windows.System;
@@ -13,7 +14,6 @@ using System.IO;
 
 public class CameraCapture : MonoBehaviour
 {
-
 #if !UNITY_EDITOR
     PhotoCapture photoCaptureObject = null;
     bool haveFolderPath = false;
@@ -105,8 +105,7 @@ public class CameraCapture : MonoBehaviour
             File.Move(tempFilePathAndName, picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
             
             byte[] fileData = File.ReadAllBytes(picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
-            String image = Convert.ToBase64String(fileData);
-            image = "/9j/" + image;
+            string image = Convert.ToBase64String(fileData);
 
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = new Vector3(1, 1, 5);
