@@ -1,9 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Card : MonoBehaviour
 {
     public LineRenderer GraphLinePrefab;
+
+    [HideInInspector]
+    public string Ticker;
+    [HideInInspector]
+    public DateTime StartTime;
+    [HideInInspector]
+    public DateTime EndTime;
 
     private Camera mainCamera;
     private Vector3 offset;
@@ -28,11 +36,20 @@ public class Card : MonoBehaviour
     public void SetElementText(string element, string value)
     {
         transform.FindChild(element).GetComponent<TextMesh>().text = value;
+        if(element.Equals("Ticker"))
+            Ticker = value;
     }
 
     public void SetElementColor(string element, Color value)
     {
         transform.FindChild(element).GetComponent<TextMesh>().color = value;
+    }
+
+    public void SetTimeRange(DateTime start, DateTime end)
+    {
+        // TODO
+        StartTime = start;
+        EndTime = end;
     }
 
     public void SetGraphPoints(List<Vector2> points)

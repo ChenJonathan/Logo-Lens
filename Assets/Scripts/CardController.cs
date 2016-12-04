@@ -35,15 +35,15 @@ public class CardController : MonoBehaviour
         StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
     }
 
-    public void UpdateCard(Card card, string ticker, string startDate, string endDate)
+    public void UpdateCard(Card card, string ticker, DateTime startDate, DateTime endDate)
     {
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
         form.AddField("_Token", "BC2B181CF93B441D8C6342120EB0C971");
         form.AddField("Symbols", ticker);
-        form.AddField("StartDate", startDate);
-        form.AddField("EndDate", endDate);
+        form.AddField("StartDate", (startDate.Month + "").PadLeft(2, '0') + "/" + (startDate.Day + "").PadLeft(2, '0') + "/" + startDate.Year);
+        form.AddField("EndDate", (endDate.Month + "").PadLeft(2, '0') + "/" + (endDate.Day + "").PadLeft(2, '0') + "/" + endDate.Year);
         form.AddField("MarketCenters", "");
         WWW www = new WWW(url, form);
 
@@ -89,8 +89,7 @@ public class CardController : MonoBehaviour
         {
             DateTime start = DateTime.Now.AddDays(-8);
             DateTime end = DateTime.Now.AddDays(-1);
-            UpdateCard(card, ticker, (start.Month + "").PadLeft(2, '0') + "/" + (start.Day + "").PadLeft(2, '0') + "/" + start.Year,
-                                     (end.Month + "").PadLeft(2, '0') + "/" + (end.Day + "").PadLeft(2, '0') + "/" + end.Year);
+            UpdateCard(card, ticker, start, end);
         }
         else
         {
@@ -103,27 +102,16 @@ public class CardController : MonoBehaviour
         // Parse XML
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
+        Debug.Log(xml);
         XmlNamespaceManager manager = new XmlNamespaceManager(doc.NameTable);
         manager.AddNamespace("NASDAQ", "http://ws.nasdaqdod.com/services/v1/");
         string ticker = doc.SelectSingleNode("//NASDAQ:Symbol", manager).InnerText;
         XmlNodeList pricesList = doc.SelectSingleNode("//NASDAQ:Prices", manager).SelectNodes(".//NASDAQ:EndOfDayPrice", manager);
         float positionX = -16f;
         List<Vector2> points = new List<Vector2>();
-        foreach(XmlNode price in pricesList)
+        for(int i = 0; i < 10; i++)
         {
-            if(price.SelectSingleNode(".//NASDAQ:Outcome", manager).InnerText.Equals("Success"))
-            {
-                string open = price.SelectSingleNode(".//NASDAQ:Open", manager).InnerText;
-                string close = price.SelectSingleNode(".//NASDAQ:Close", manager).InnerText;
-
-                points.Add(new Vector2(positionX, float.Parse(open)));
-                positionX += 4;
-                points.Add(new Vector2(positionX, float.Parse(close)));
-            }
-            else
-            {
-                positionX += 4;
-            }
+            points.Add(new Vector2(i, i));
         }
 
         // Update basic card components
@@ -165,7 +153,7 @@ public class CardController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Error: " + www.error);
+            Debug.Log("Error: " + www.error + "\n" + www.text);
         }
     }
 
