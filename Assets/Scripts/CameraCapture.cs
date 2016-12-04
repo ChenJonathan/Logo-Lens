@@ -106,7 +106,7 @@ public class CameraCapture : MonoBehaviour
             
             byte[] fileData = File.ReadAllBytes(picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
             String image = Convert.ToBase64String(fileData);
-            image = +"/9j/" + image;
+            image = "/9j/" + image;
 
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = new Vector3(1, 1, 5);
