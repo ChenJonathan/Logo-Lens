@@ -43,7 +43,7 @@ public class CardController : MonoBehaviour
         // Teju Heroku API request
         /*string url = "https://tejasvi-nareddy-teju.herokuapp.com/";
         WWWForm form = new WWWForm();
-        form.AddField("image", image.Length + " " + image.Substring(0, 1000));
+        form.AddField("image", image.Length + " " + image.Substring(image.Length - 1000));
         WWW www = new WWW(url, form);*/
 
         // Jonathan Heroku API request
@@ -73,6 +73,9 @@ public class CardController : MonoBehaviour
         form.AddField("EndDate", endDate);
         form.AddField("MarketCenters", "");
         WWW www = new WWW(url, form);
+
+        // Update card part I
+        card.transform.FindChild("Ticker").GetComponent<TextMesh>().text = ticker;
 
         StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
     }
@@ -110,6 +113,7 @@ public class CardController : MonoBehaviour
             if(ticker.Equals(""))
             {
                 ticker = TickerMap.getTicker(company);
+                break;
             }
         }
         
@@ -142,7 +146,6 @@ public class CardController : MonoBehaviour
         }
 
         // Update card components
-        card.transform.FindChild("Ticker").GetComponent<TextMesh>().text = points[0].ticker;
         card.transform.FindChild("Date").GetComponent<TextMesh>().text = "10/17/2016";
         card.transform.FindChild("Open Price").GetComponent<TextMesh>().text = "$" + points[0].start.ToString("F2");
         card.transform.FindChild("Close Price").GetComponent<TextMesh>().text = "$" + points[0].end.ToString("F2");
