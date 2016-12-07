@@ -346,7 +346,7 @@ PlayerSettings:
   scriptingDefineSymbols: {}
   metroPackageName: Logo-Lens
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: Assets\WSATestCertificate.pfx
+  metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: DefaultCompany
   metroCertificateIssuer: DefaultCompany

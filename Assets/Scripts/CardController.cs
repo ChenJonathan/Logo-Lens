@@ -39,18 +39,18 @@ public class CardController : MonoBehaviour
         StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
     }
 
-    public void UpdateCard(Card card, string ticker, string startDate, string endDate)
+    public void UpdateCard(Card card, string ticker, DateTime startDate, DateTime endDate)
     {
-        // Update card part I
-        card.transform.FindChild("Ticker").GetComponent<TextMesh>().text = ticker;
+        // Update card: Part I
+        card.SetElementText("Ticker", ticker);
 
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
         form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
         form.AddField("Symbols", ticker);
-        form.AddField("StartDate", startDate);
-        form.AddField("EndDate", endDate);
+        form.AddField("StartDate", (startDate.Month + "").PadLeft(2, '0') + "/" + (startDate.Day + "").PadLeft(2, '0') + "/" + startDate.Year);
+        form.AddField("EndDate", (endDate.Month + "").PadLeft(2, '0') + "/" + (endDate.Day + "").PadLeft(2, '0') + "/" + endDate.Year);
         form.AddField("MarketCenters", "");
         WWW www = new WWW(url, form);
 
@@ -93,55 +93,57 @@ public class CardController : MonoBehaviour
             }
         }
         
-        UpdateCard(card, ticker, "10/17/2016", "10/17/2016");
+        if(!ticker.Equals(""))
+        {
+            DateTime start = DateTime.Now.AddDays(-8);
+            DateTime end = DateTime.Now.AddDays(-1);
+            UpdateCard(card, ticker, start, end);
+        }
+        else
+        {
+            // TODO
+        }
     }
 
     private void HandleNASDAQResponse(Card card, string xml)
     {
-        List<StockDataPoint> points = new List<StockDataPoint>();
-
         // Parse XML
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
-        int isFirstTime = 0;
-        XmlNode ArrayOfEndOfDayPriceCollection = doc.LastChild;
-        foreach(XmlNode EndOfDayPriceCollection in ArrayOfEndOfDayPriceCollection.ChildNodes)
+        Debug.Log(xml);
+        XmlNamespaceManager manager = new XmlNamespaceManager(doc.NameTable);
+        manager.AddNamespace("NASDAQ", "http://ws.nasdaqdod.com/services/v1/");
+        string ticker = doc.SelectSingleNode("//NASDAQ:Symbol", manager).InnerText;
+        XmlNodeList pricesList = doc.SelectSingleNode("//NASDAQ:Prices", manager).SelectNodes(".//NASDAQ:EndOfDayPrice", manager);
+        float positionX = -16f;
+        List<Vector2> points = new List<Vector2>();
+        for(int i = 0; i < 10; i++)
         {
-            string symbol = EndOfDayPriceCollection.ChildNodes[3 - isFirstTime].InnerText;
-            XmlNode Prices = EndOfDayPriceCollection.ChildNodes[4 - isFirstTime];
-            XmlNode EndOfDayPrice = Prices.ChildNodes[0];
-            string open = EndOfDayPrice.ChildNodes[2].InnerText;
-            string close = EndOfDayPrice.ChildNodes[5].InnerText;
-            
-            points.Add(new StockDataPoint(symbol, float.Parse(open), float.Parse(close)));
-
-            if(isFirstTime == 0)
-            {
-                isFirstTime = 1;
-            }
+            points.Add(new Vector2(i, i));
         }
 
-        // Update card components part II
-        card.transform.FindChild("Date").GetComponent<TextMesh>().text = "10/17/2016";
-        card.transform.FindChild("Open Price").GetComponent<TextMesh>().text = "$" + points[0].start.ToString("F2");
-        card.transform.FindChild("Close Price").GetComponent<TextMesh>().text = "$" + points[0].end.ToString("F2");
-        card.transform.FindChild("Percent Change").GetComponent<TextMesh>().text = ((points[0].end - points[0].start) / points[0].start).ToString("F3") + "%";
+        // Update basic card components: Part II
+        card.SetElementText("Date", "12/7/2016");
+        card.SetElementText("Open Price", "$" + points[0].y.ToString("F2"));
+        card.SetElementText("Close Price", "$" + points[points.Count - 1].y.ToString("F2"));
+        card.SetElementText("Percent Change", ((points[points.Count - 1].y - points[0].y) / points[0].y).ToString("F3") + "%");
 
-        // Make the text red if the price went down
-        if(points[0].start > points[0].end)
+        // Set percent change text color
+        if(points[0].y > points[points.Count - 1].y)
         {
-            card.transform.FindChild("Percent Change").GetComponent<TextMesh>().color = Color.red;
+            card.SetElementColor("Percent Change", Color.red);
         }
-        // Make the text green if the price went up
-        else if(points[0].start < points[0].end)
+        else if(points[0].y < points[points.Count - 1].y)
         {
-            card.transform.FindChild("Percent Change").GetComponent<TextMesh>().color = Color.green;
+            card.SetElementColor("Percent Change", Color.green);
         }
-        // Make the text black if the price stayed the same
         else
         {
-            card.transform.FindChild("Percent Change").GetComponent<TextMesh>().color = Color.black;
+            card.SetElementColor("Percent Change", Color.white);
         }
+
+        // Update graph
+        card.SetGraphPoints(points);
     }
 
     #endregion
@@ -158,7 +160,7 @@ public class CardController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Error: " + www.error);
+            Debug.Log("Error: " + www.error + "\n" + www.text);
         }
     }
 
