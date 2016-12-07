@@ -107,9 +107,6 @@ public class CameraCapture : MonoBehaviour
             byte[] fileData = File.ReadAllBytes(picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
             string image = Convert.ToBase64String(fileData);
 
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(1, 1, 5);
-
             GetComponent<CardController>().AddCard(image);
         }
         else
