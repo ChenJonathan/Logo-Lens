@@ -67,7 +67,7 @@ public class CardController : MonoBehaviour
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
-        form.AddField("_Token", "BC2B181CF93B441D8C6342120EB0C971");
+        form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
         form.AddField("Symbols", ticker);
         form.AddField("StartDate", startDate);
         form.AddField("EndDate", endDate);
