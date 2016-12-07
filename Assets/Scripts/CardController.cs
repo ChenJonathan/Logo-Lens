@@ -40,7 +40,7 @@ public class CardController : MonoBehaviour
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
         WWWForm form = new WWWForm();
-        form.AddField("_Token", "BC2B181CF93B441D8C6342120EB0C971");
+        form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
         form.AddField("Symbols", ticker);
         form.AddField("StartDate", (startDate.Month + "").PadLeft(2, '0') + "/" + (startDate.Day + "").PadLeft(2, '0') + "/" + startDate.Year);
         form.AddField("EndDate", (endDate.Month + "").PadLeft(2, '0') + "/" + (endDate.Day + "").PadLeft(2, '0') + "/" + endDate.Year);
@@ -103,11 +103,14 @@ public class CardController : MonoBehaviour
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
         Debug.Log(xml);
+
         XmlNamespaceManager manager = new XmlNamespaceManager(doc.NameTable);
         manager.AddNamespace("NASDAQ", "http://ws.nasdaqdod.com/services/v1/");
+
         string ticker = doc.SelectSingleNode("//NASDAQ:Symbol", manager).InnerText;
         XmlNodeList pricesList = doc.SelectSingleNode("//NASDAQ:Prices", manager).SelectNodes(".//NASDAQ:EndOfDayPrice", manager);
         float positionX = -16f;
+
         List<Vector2> points = new List<Vector2>();
         for(int i = 0; i < 10; i++)
         {
