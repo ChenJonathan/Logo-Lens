@@ -1,62 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    public GameObject Center;
+    public GameObject Left;
+    public GameObject Right;
+    public GameObject Bottom;
+
     public LineRenderer GraphLinePrefab;
+
+    public enum TimeRange { Day = 0, Week = 1, Month = 2, Year = 3 }
 
     [HideInInspector]
     public string Ticker;
     [HideInInspector]
-    public DateTime StartTime;
-    [HideInInspector]
-    public DateTime EndTime;
-
-    private Camera mainCamera;
+    public TimeRange Range;
+    
     private Vector3 offset;
 
-    private readonly float graphMinX = -8f;
-    private readonly float graphMaxX = 8f;
-    private readonly float graphMinY = -4f;
-    private readonly float graphMaxY = 4f;
+    private readonly float graphMinX = -4.565f;
+    private readonly float graphMaxX = 4.565f;
+    private readonly float graphMinY = -2.83f;
+    private readonly float graphMaxY = 2.83f;
 
     public void Start()
     {
-        mainCamera = FindObjectOfType<Camera>();
-        offset = transform.position - mainCamera.transform.position;
-        transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
+        offset = transform.position - Camera.main.transform.position;
+        transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
     }
 
     public void Update()
     {
-        transform.position = mainCamera.transform.position + offset;
+        transform.position = Camera.main.transform.position + offset;
     }
 
     public void SetElementText(string element, string value)
     {
-        transform.FindChild(element).GetComponent<TextMesh>().text = value;
-        if(element.Equals("Ticker"))
-            Ticker = value;
+        Bottom.transform.FindChild(element).GetComponent<Text>().text = value;
     }
 
     public void SetElementColor(string element, Color value)
     {
-        transform.FindChild(element).GetComponent<TextMesh>().color = value;
+        Bottom.transform.FindChild(element).GetComponent<Text>().color = value;
     }
 
-    public void SetTimeRange(DateTime start, DateTime end)
+    public void SetTimeRange(TimeRange range)
     {
-        // TODO
-        StartTime = start;
-        EndTime = end;
+        Range = range;
+        CardController.Instance.UpdateCard(this, Ticker, range);
     }
 
     public void SetGraphPoints(List<Vector2> points)
     {
         // Destroy previous graph
-        GameObject graph = transform.FindChild("Graph").gameObject;
-        foreach(LineRenderer graphLine in graph.GetComponentsInChildren<LineRenderer>())
+        foreach(LineRenderer graphLine in Center.GetComponentsInChildren<LineRenderer>())
         {
             Destroy(graphLine.gameObject);
         }
@@ -64,14 +64,14 @@ public class Card : MonoBehaviour
         // TODO Calculate scale and add some constant y-value so that the graph is on top of the card
         for(int i = 0; i < points.Count; i++)
         {
-            points[i] = new Vector2(points[i].x, points[i].y - 775);
+            points[i] = new Vector2(points[i].x * 3 / 2 + graphMinX, points[i].y % graphMaxY);
         }
         
         // Instantiate lines
         for(int i = 0; i < points.Count - 1; i++)
         {
-            LineRenderer graphLine = GameObject.Instantiate(GraphLinePrefab);
-            graphLine.transform.parent = graph.transform;
+            LineRenderer graphLine = Instantiate(GraphLinePrefab);
+            graphLine.transform.parent = Center.transform;
             graphLine.SetPosition(0, transform.position + (Vector3)points[i]);
             graphLine.SetPosition(1, transform.position + (Vector3)points[i + 1]);
         }
