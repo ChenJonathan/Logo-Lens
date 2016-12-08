@@ -24,7 +24,7 @@ public class CameraCapture : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        getFolderPath();
+        GetFolderPath();
         while (!haveFolderPath)
         {
             Debug.Log("Waiting for folder path...");
@@ -34,7 +34,7 @@ public class CameraCapture : MonoBehaviour
         Debug.Log("Called CreateAsync");
     }
 
-    async void getFolderPath()
+    async void GetFolderPath()
     {
         StorageLibrary myPictures = await Windows.Storage.StorageLibrary.GetLibraryAsync(Windows.Storage.KnownLibraryId.Pictures);
         picturesFolder = myPictures.SaveFolder;
