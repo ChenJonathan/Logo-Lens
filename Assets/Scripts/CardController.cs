@@ -58,7 +58,7 @@ public class CardController : MonoBehaviour
 
     public void AddCard(string image)
     {
-        Card card = ((GameObject)Instantiate(cardPrefab, transform.position + transform.forward * 100, Quaternion.identity)).GetComponent<Card>();
+        Card card = ((GameObject)Instantiate(cardPrefab, transform.position + transform.forward * 60, Quaternion.identity)).GetComponent<Card>();
         card.transform.SetParent(Cards.transform);
 
         // Google Vision API request
