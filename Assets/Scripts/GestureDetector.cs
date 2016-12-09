@@ -4,7 +4,23 @@ using UnityEngine.VR.WSA.Input;
 public class GestureDetector : MonoBehaviour
 {
     GestureRecognizer recognizer;
-    
+
+    void FixedUpdate()
+    {
+        // Raycast calculations
+        var headPosition = Camera.main.transform.position;
+        var gazeDirection = Camera.main.transform.forward;
+        RaycastHit hitInfo;
+        if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
+        {
+            Collider col = hitInfo.collider;
+            if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
+            {
+                col.GetComponent<SmoothHover>().Hover();
+            }
+        }
+    }
+
     public void Awake()
     {
         // Set up a GestureRecognizer to detect Select gestures.
@@ -16,7 +32,6 @@ public class GestureDetector : MonoBehaviour
             // Raycast calculations
             var headPosition = Camera.main.transform.position;
             var gazeDirection = Camera.main.transform.forward;
-
             RaycastHit hitInfo;
             if(Physics.Raycast(headPosition, gazeDirection, out hitInfo))
             {
