@@ -58,7 +58,7 @@ public class CardController : MonoBehaviour
 
     public void AddCard(string image)
     {
-        Card card = ((GameObject)Instantiate(cardPrefab, transform.position + transform.forward * 30, Quaternion.identity)).GetComponent<Card>();
+        Card card = ((GameObject)Instantiate(cardPrefab, transform.position + transform.forward * 100, Quaternion.identity)).GetComponent<Card>();
         card.transform.SetParent(Cards.transform);
 
         // Google Vision API request
@@ -157,29 +157,24 @@ public class CardController : MonoBehaviour
 
     private void HandleNASDAQResponse(Card card, string xml)
     {
+        List<Vector2> points = new List<Vector2>();
+        int positionX = 0;
+
         // Parse XML
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
-        XmlNamespaceManager manager = new XmlNamespaceManager(doc.NameTable);
-        manager.AddNamespace("NASDAQ", "http://ws.nasdaqdod.com/services/v1/");
-        XmlNodeList pricesList = doc.SelectSingleNode("//NASDAQ:Prices", manager).SelectNodes(".//NASDAQ:EndOfDayPrice", manager);
-        float positionX = 0;
-        List<Vector2> points = new List<Vector2>();
-        foreach(XmlNode price in pricesList)
+
+        XmlNode ArrayOfEndOfDayPriceCollection = doc.LastChild;
+        XmlNode EndOfDayPriceCollection = ArrayOfEndOfDayPriceCollection.ChildNodes[0];
+
+        foreach (XmlNode Price in EndOfDayPriceCollection.ChildNodes[4])
         {
-            if(price.SelectSingleNode(".//NASDAQ:Outcome", manager).InnerText.Equals("Success"))
-            {
-                string open = price.SelectSingleNode(".//NASDAQ:Open", manager).InnerText;
-                string close = price.SelectSingleNode(".//NASDAQ:Close", manager).InnerText;
-                
-                points.Add(new Vector2(positionX, float.Parse(open)));
-                positionX ++;
-                points.Add(new Vector2(positionX, float.Parse(close)));
-            }
-            else
-            {
-                positionX ++;
-            }
+            string open = Price.ChildNodes[2].InnerText;
+            string close = Price.ChildNodes[5].InnerText;
+
+            points.Add(new Vector2(positionX, float.Parse(open)));
+            positionX++;
+            points.Add(new Vector2(positionX, float.Parse(close)));
         }
 
         /*
