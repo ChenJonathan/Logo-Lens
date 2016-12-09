@@ -4,16 +4,21 @@ using System.Collections;
 using UnityEngine.VR.WSA.WebCam;
 using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.IO;
 #if !UNITY_EDITOR
 using Windows.Storage;
 using Windows.System;
-using System.Collections.Generic;
-using System;
-using System.IO;
 #endif
 
 public class CameraCapture : MonoBehaviour
 {
+    public void StartCameraCapture()
+    {
+#if !UNITY_EDITOR
+        TakePhoto();
+#endif
+    }
 #if !UNITY_EDITOR
     PhotoCapture photoCaptureObject = null;
     bool haveFolderPath = false;
@@ -21,31 +26,23 @@ public class CameraCapture : MonoBehaviour
     string tempFilePathAndName;
     string tempFileName;
 
-    // Use this for initialization
     void Start()
     {
         GetFolderPath();
-        while (!haveFolderPath)
+    }
+    
+    void TakePhoto()
+    {
+        if (haveFolderPath)
         {
-            Debug.Log("Waiting for folder path...");
+            PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
         }
-        Debug.Log("About to call CreateAsync");
-        PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
-        Debug.Log("Called CreateAsync");
     }
 
     async void GetFolderPath()
     {
         StorageLibrary myPictures = await Windows.Storage.StorageLibrary.GetLibraryAsync(Windows.Storage.KnownLibraryId.Pictures);
         picturesFolder = myPictures.SaveFolder;
-
-        foreach(StorageFolder fodler in myPictures.Folders)
-        {
-            Debug.Log(fodler.Name);
-
-        }
-
-        Debug.Log("savePicturesFolder.Path is " + picturesFolder.Path);
         haveFolderPath = true;
     }
 
@@ -78,7 +75,6 @@ public class CameraCapture : MonoBehaviour
 
             string filePath = System.IO.Path.Combine(Application.persistentDataPath, tempFileName);
             tempFilePathAndName = filePath;
-            Debug.Log("Saving photo to " + filePath);
 
             try
             {
@@ -89,17 +85,12 @@ public class CameraCapture : MonoBehaviour
                 Debug.LogError("System.ArgumentException:\n" + e.Message);
             }
         }
-        else
-        {
-            Debug.LogError("Unable to start photo mode!");
-        }
     }
 
     void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
     {
         if (result.success)
         {
-            Debug.Log("Saved Photo to disk!");
             photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
             Debug.Log("moving "+tempFilePathAndName+" to " + picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
             File.Move(tempFilePathAndName, picturesFolder.Path + "\\Camera Roll\\" + tempFileName);
@@ -108,10 +99,6 @@ public class CameraCapture : MonoBehaviour
             string image = Convert.ToBase64String(fileData);
 
             GetComponent<CardController>().AddCard(image);
-        }
-        else
-        {
-            Debug.Log("Failed to save Photo to disk " +result.hResult+" "+result.resultType.ToString());
         }
     }
 
