@@ -68,6 +68,7 @@ public class CardController : MonoBehaviour
         headers.Add("Content-Type", "application/json");
         WWW www = new WWW(url, Encoding.ASCII.GetBytes(json.ToCharArray()), headers);
 
+        card.Busy++;
         StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
     }
 
@@ -105,6 +106,7 @@ public class CardController : MonoBehaviour
         form.AddField("MarketCenters", "");
         WWW www = new WWW(url, form);
 
+        card.Busy++;
         StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
     }
 
@@ -153,6 +155,8 @@ public class CardController : MonoBehaviour
         {
             card.SetElementText("Ticker", "Error: Could not detect a logo");
         }
+
+        card.Busy--;
     }
 
     private void HandleNASDAQResponse(Card card, string xml)
@@ -195,6 +199,8 @@ public class CardController : MonoBehaviour
 
         // Update graph
         card.SetGraphPoints(points);
+
+        card.Busy--;
     }
 
     #endregion

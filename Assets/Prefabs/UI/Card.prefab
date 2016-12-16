@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card: {fileID: 114000010580583400}
-  Scale: 1
+  Scale: 1.5
 --- !u!114 &114000010580583400
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card: {fileID: 114000010580583400}
-  Scale: 1
+  Scale: 1.5
 --- !u!114 &114000013029017980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -592,7 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card: {fileID: 114000010580583400}
-  Scale: 1
+  Scale: 1.5
 --- !u!114 &114000014273175044
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -605,7 +605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card: {fileID: 114000010580583400}
-  Scale: 1
+  Scale: 1.5
 --- !u!222 &222000011367921990
 CanvasRenderer:
   m_ObjectHideFlags: 1
