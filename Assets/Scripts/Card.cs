@@ -51,7 +51,7 @@ public class Card : MonoBehaviour
 
         Center.transform.localScale = Left.transform.localScale = Right.transform.localScale = Bottom.transform.localScale = Vector3.zero;
 
-        for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.1f))
+        for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.15f))
         {
             tempScale.x = tempScale.y = 0.5f + i / 2;
             tempColor.a = i;
@@ -62,7 +62,7 @@ public class Card : MonoBehaviour
             yield return new WaitForSeconds(0.005f);
         }
         tempScale.y = 1;
-        for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.1f))
+        for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.15f))
         {
             tempScale.x = i;
             tempColor.a = i;
@@ -79,7 +79,7 @@ public class Card : MonoBehaviour
         }
         tempPosition.x = 0;
         tempScale.x = 1;
-        for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.1f))
+        for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.15f))
         {
             tempScale.y = i;
             tempColor.a = i;
@@ -105,7 +105,7 @@ public class Card : MonoBehaviour
         Vector3 tempScale = Vector3.one;
         Color tempColor = Color.white;
         
-        for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.1f))
+        for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.15f))
         {
             tempScale.y = i;
             tempColor.a = i;
@@ -120,7 +120,7 @@ public class Card : MonoBehaviour
         }
         tempPosition.y = 0;
         tempScale.y = 1;
-        for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.1f))
+        for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.15f))
         {
             tempScale.x = i;
             tempColor.a = i;
@@ -135,7 +135,7 @@ public class Card : MonoBehaviour
 
             yield return new WaitForSeconds(0.005f);
         }
-        for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.1f))
+        for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.15f))
         {
             tempScale.x = tempScale.y = 0.5f + i / 2;
             tempColor.a = i;
@@ -161,16 +161,12 @@ public class Card : MonoBehaviour
 
     public void SetTimeRange(TimeRange range)
     {
-        Busy++;
-
         Range = range;
         CardController.Instance.UpdateCard(this, Ticker, range);
     }
 
     public void SetGraphPoints(List<Vector2> points)
     {
-        Busy--;
-
         // Destroy previous graph
         foreach(LineRenderer graphLine in Center.GetComponentsInChildren<LineRenderer>())
         {

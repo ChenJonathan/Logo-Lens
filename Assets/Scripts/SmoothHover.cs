@@ -27,7 +27,7 @@ public class SmoothHover : MonoBehaviour
         if(Card.Busy == 0 && transform.localPosition.z > -0.1f)
         {
             Vector3 localPosition = transform.localPosition;
-            localPosition.z = -Scale * 1.25f;
+            localPosition.z = -Scale * 1.5f;
             transform.localPosition = localPosition;
         }
         
