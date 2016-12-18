@@ -74,21 +74,30 @@ public class CardController : MonoBehaviour
 
     public void UpdateCard(Card card, string ticker, Card.TimeRange range)
     {
-        DateTime startDate = DateTime.Now.AddDays(-1);
-        DateTime endDate = startDate;
-        switch(range)
+        DateTime endDate = DateTime.Now;
+        DateTime startDate = endDate;
+        int hourMultiplier = 1;
+        switch (range)
         {
             case Card.TimeRange.Day:
-                startDate = endDate.AddDays(-1);
+                startDate = endDate;
+                hourMultiplier = 1;
                 break;
             case Card.TimeRange.Week:
                 startDate = endDate.AddDays(-7);
+                hourMultiplier = 24;
                 break;
             case Card.TimeRange.Month:
                 startDate = endDate.AddDays(-30);
+                hourMultiplier = 24;
                 break;
             case Card.TimeRange.Year:
                 startDate = endDate.AddDays(-365);
+                hourMultiplier = 438;
+                break;
+            default:
+                startDate = endDate;
+                hourMultiplier = 1;
                 break;
         }
 
@@ -97,13 +106,15 @@ public class CardController : MonoBehaviour
         card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
 
         // NASDAQ API request
-        string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData";
+        string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
         WWWForm form = new WWWForm();
         form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
         form.AddField("Symbols", ticker);
-        form.AddField("StartDate", Util.FormatDate(startDate));
-        form.AddField("EndDate", Util.FormatDate(endDate));
+        form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
+        form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
         form.AddField("MarketCenters", "");
+        form.AddField("TradePrecision", "Hour");
+        form.AddField("TradePeriod", hourMultiplier);
         WWW www = new WWW(url, form);
 
         card.Busy++;
@@ -161,6 +172,8 @@ public class CardController : MonoBehaviour
 
     private void HandleNASDAQResponse(Card card, string xml)
     {
+        Debug.Log(xml);
+
         List<Vector2> points = new List<Vector2>();
         int positionX = 0;
 
@@ -171,31 +184,15 @@ public class CardController : MonoBehaviour
         XmlNode ArrayOfEndOfDayPriceCollection = doc.LastChild;
         XmlNode EndOfDayPriceCollection = ArrayOfEndOfDayPriceCollection.ChildNodes[0];
 
-        foreach (XmlNode Price in EndOfDayPriceCollection.ChildNodes[4])
+        foreach (XmlNode Price in EndOfDayPriceCollection.LastChild)
         {
-            string open = Price.ChildNodes[2].InnerText;
-            string close = Price.ChildNodes[5].InnerText;
+            string open = Price.ChildNodes[1].InnerText;
+            string close = Price.ChildNodes[2].InnerText;
 
             points.Add(new Vector2(positionX, float.Parse(open)));
             positionX++;
             points.Add(new Vector2(positionX, float.Parse(close)));
         }
-
-        /*
-        // Set percent change text color
-        if(points[0].y > points[points.Count - 1].y)
-        {
-            card.SetElementColor("Percent Change", Color.red);
-        }
-        else if(points[0].y < points[points.Count - 1].y)
-        {
-            card.SetElementColor("Percent Change", Color.green);
-        }
-        else
-        {
-            card.SetElementColor("Percent Change", Color.white);
-        }
-        */
 
         // Update graph
         card.SetGraphPoints(points);
