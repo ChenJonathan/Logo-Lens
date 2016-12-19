@@ -121,9 +121,22 @@ public class CardController : MonoBehaviour
                 break;
         }
 
+        // Error checking on the switch statement
+        if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
+        {
+            Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
+        }
+
         // Set basic card elements
         card.SetElementText("Ticker", ticker);
-        card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+        if (hourMultiplier != -1)
+        {
+            card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+        }
+        else
+        {
+            card.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
+        }
 
         // Check the cache for the data
         if (nasdaqCache.ContainsKey(range))
@@ -151,14 +164,11 @@ public class CardController : MonoBehaviour
             Debug.Log("Collecting data every " + hourMultiplier + " hours.");
             form.AddField("TradePrecision", "Hour");
             form.AddField("TradePeriod", hourMultiplier);
-        } else if (minuteMultiplier != -1)
+        } else
         {
             Debug.Log("Collecting data every " + minuteMultiplier + " minutes.");
             form.AddField("TradePrecision", "Minute");
             form.AddField("TradePeriod", minuteMultiplier);
-        } else
-        {
-            Debug.Log("ERROR: Hour or minute multiplier not set!");
         }
         WWW www = new WWW(url, form);
 
