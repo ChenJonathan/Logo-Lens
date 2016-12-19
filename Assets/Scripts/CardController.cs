@@ -16,6 +16,9 @@ public class CardController : MonoBehaviour
 
     [SerializeField]
     private GameObject cardPrefab;
+
+    private Dictionary<Card.TimeRange, List<GraphPoint>> nasdaqCache = new Dictionary<Card.TimeRange, List<GraphPoint>>();
+    private Card.TimeRange currentRange;
     
     public void Awake()
     {
@@ -74,37 +77,80 @@ public class CardController : MonoBehaviour
 
     public void UpdateCard(Card card, string ticker, Card.TimeRange range)
     {
+        // Set card to busy
+        card.Busy++;
+
+        // Set up variables for the card       
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
-        int hourMultiplier = 1;
+        int hourMultiplier = -1;
+        int minuteMultiplier = -1;
+
+        // Determine values for important variables based on the passed in time range
+        Debug.Log("Calling API for TimeRange = " + range);
         switch (range)
         {
-            case Card.TimeRange.Day:
+            case Card.TimeRange.Today:
                 startDate = endDate;
+                minuteMultiplier = 15;
+                break;
+            case Card.TimeRange.Day:
+                startDate = endDate.AddDays(-1);
                 hourMultiplier = 1;
+                break;
+            case Card.TimeRange.ThreeDay:
+                startDate = endDate.AddDays(-3);
+                hourMultiplier = 3;
                 break;
             case Card.TimeRange.Week:
                 startDate = endDate.AddDays(-7);
+                hourMultiplier = 12;
+                break;
+            case Card.TimeRange.TwoWeek:
+                startDate = endDate.AddDays(-14);
                 hourMultiplier = 24;
                 break;
             case Card.TimeRange.Month:
                 startDate = endDate.AddDays(-30);
                 hourMultiplier = 24;
                 break;
-            case Card.TimeRange.Year:
-                startDate = endDate.AddDays(-365);
-                hourMultiplier = 438;
-                break;
             default:
+                Debug.Log("WARNING: Defualt TimeRange");
                 startDate = endDate;
-                hourMultiplier = 1;
+                minuteMultiplier = 15;
                 break;
+        }
+
+        // Error checking on the switch statement
+        if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
+        {
+            Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
         }
 
         // Set basic card elements
         card.SetElementText("Ticker", ticker);
-        card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+        if (hourMultiplier != -1)
+        {
+            card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+        }
+        else
+        {
+            card.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
+        }
 
+        // Check the cache for the data
+        if (nasdaqCache.ContainsKey(range))
+        {
+            // Update data from the cache :)
+            Debug.Log("Updating the card for timerange " + range + " from the cache!");
+            card.SetGraphPoints(nasdaqCache[range]);
+
+            // Card is done working
+            card.Busy--;
+            return;
+        }
+
+        // If the data is not cached, we have to call the NASDAQ API
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
         WWWForm form = new WWWForm();
@@ -113,11 +159,23 @@ public class CardController : MonoBehaviour
         form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
         form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
         form.AddField("MarketCenters", "");
-        form.AddField("TradePrecision", "Hour");
-        form.AddField("TradePeriod", hourMultiplier);
+        if (hourMultiplier != -1)
+        {
+            Debug.Log("Collecting data every " + hourMultiplier + " hours.");
+            form.AddField("TradePrecision", "Hour");
+            form.AddField("TradePeriod", hourMultiplier);
+        } else
+        {
+            Debug.Log("Collecting data every " + minuteMultiplier + " minutes.");
+            form.AddField("TradePrecision", "Minute");
+            form.AddField("TradePeriod", minuteMultiplier);
+        }
         WWW www = new WWW(url, form);
 
-        card.Busy++;
+        // FIXME: Hacky way to use the range in HandleNASDAQResponse
+        currentRange = range;
+
+        // Make the API request
         StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
     }
 
@@ -172,31 +230,48 @@ public class CardController : MonoBehaviour
 
     private void HandleNASDAQResponse(Card card, string xml)
     {
+        // DEBUG
         Debug.Log(xml);
 
-        List<Vector2> points = new List<Vector2>();
-        int positionX = 0;
+        // New list to store the points in
+        List<GraphPoint> points = new List<GraphPoint>();
 
         // Parse XML
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
+        XmlNode SummarizedTradeCollection = doc.LastChild.ChildNodes[0];
+        string outcome = SummarizedTradeCollection.ChildNodes[1].InnerText;
 
-        XmlNode ArrayOfEndOfDayPriceCollection = doc.LastChild;
-        XmlNode EndOfDayPriceCollection = ArrayOfEndOfDayPriceCollection.ChildNodes[0];
-
-        foreach (XmlNode Price in EndOfDayPriceCollection.LastChild)
+        // Error checking while parsing
+        if (!outcome.Contains("No Trades found for") && !outcome.Contains("Maximum time range"))
         {
-            string open = Price.ChildNodes[1].InnerText;
-            string close = Price.ChildNodes[2].InnerText;
+            // Parse all the trades for the time period
+            foreach (XmlNode SummarizedTrades in SummarizedTradeCollection.LastChild)
+            {
+                // Retrieve the open and close price for each time slice
+                string time = SummarizedTrades.ChildNodes[0].InnerText;
+                time.Substring(0, time.Length - 7);
+                string open = SummarizedTrades.ChildNodes[1].InnerText;
+                string close = SummarizedTrades.ChildNodes[2].InnerText;
 
-            points.Add(new Vector2(positionX, float.Parse(open)));
-            positionX++;
-            points.Add(new Vector2(positionX, float.Parse(close)));
+                // Store the data in the list of points
+                points.Add(new GraphPoint(time, float.Parse(open)));
+                points.Add(new GraphPoint(time, float.Parse(close)));
+            }
         }
+        else
+        {
+            Debug.Log(card.Ticker + " did not trade in this time period or is > 1 month time period!");
+            // TODO error message on card or fix...
+        }
+
+        // Add data to cache
+        nasdaqCache.Add(currentRange, points);
 
         // Update graph
         card.SetGraphPoints(points);
 
+        // Card is done working
         card.Busy--;
     }
 

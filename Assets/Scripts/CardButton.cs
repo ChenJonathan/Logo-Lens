@@ -12,12 +12,12 @@ public class CardButton : MonoBehaviour
         {
             if(IncreaseTimeRange)
             {
-                if(Card.Range != Card.TimeRange.Year)
+                if(Card.Range != Card.TimeRange.Month)
                     Card.SetTimeRange(Card.Range + 1);
             }
             else
             {
-                if(Card.Range != Card.TimeRange.Day)
+                if(Card.Range != Card.TimeRange.Today)
                     Card.SetTimeRange(Card.Range - 1);
             }
         }
