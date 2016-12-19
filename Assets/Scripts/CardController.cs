@@ -16,6 +16,9 @@ public class CardController : MonoBehaviour
 
     [SerializeField]
     private GameObject cardPrefab;
+
+    private Dictionary<Card.TimeRange, List<Vector2>> nasdaqCache = new Dictionary<Card.TimeRange, List<Vector2>>();
+    private Card.TimeRange currentRange;
     
     public void Awake()
     {
@@ -74,12 +77,17 @@ public class CardController : MonoBehaviour
 
     public void UpdateCard(Card card, string ticker, Card.TimeRange range)
     {
+        // Set card to busy
+        card.Busy++;
+
+        // Set up variables for the card       
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
         int hourMultiplier = -1;
         int minuteMultiplier = -1;
 
-        Debug.Log(range + " TimeRange");
+        // Determine values for important variables based on the passed in time range
+        Debug.Log("Calling API for TimeRange = " + range);
         switch (range)
         {
             case Card.TimeRange.Today:
@@ -107,7 +115,7 @@ public class CardController : MonoBehaviour
                 hourMultiplier = 24;
                 break;
             default:
-                Debug.Log("Defualt TimeRange");
+                Debug.Log("WARNING: Defualt TimeRange");
                 startDate = endDate;
                 minuteMultiplier = 15;
                 break;
@@ -117,6 +125,19 @@ public class CardController : MonoBehaviour
         card.SetElementText("Ticker", ticker);
         card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
 
+        // Check the cache for the data
+        if (nasdaqCache.ContainsKey(range))
+        {
+            // Update data from the cache :)
+            Debug.Log("Updating the card for timerange " + range + " from the cache!");
+            card.SetGraphPoints(nasdaqCache[range]);
+
+            // Card is done working
+            card.Busy--;
+            return;
+        }
+
+        // If the data is not cached, we have to call the NASDAQ API
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
         WWWForm form = new WWWForm();
@@ -139,10 +160,12 @@ public class CardController : MonoBehaviour
         {
             Debug.Log("ERROR: Hour or minute multiplier not set!");
         }
-        
         WWW www = new WWW(url, form);
 
-        card.Busy++;
+        // FIXME: Hacky way to use the range in HandleNASDAQResponse
+        currentRange = range;
+
+        // Make the API request
         StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
     }
 
@@ -199,22 +222,26 @@ public class CardController : MonoBehaviour
     {
         Debug.Log(xml);
 
+        // FIXME: Need a better way to store these points
         List<Vector2> points = new List<Vector2>();
         int positionX = 0;
 
         // Parse XML
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
-        
         XmlNode SummarizedTradeCollection = doc.LastChild.ChildNodes[0];
         
+        // Error checking while parsing
         if (!SummarizedTradeCollection.ChildNodes[1].InnerText.Contains("No Trades found for"))
         {
+            // Parse all the trades for the time period
             foreach (XmlNode SummarizedTrades in SummarizedTradeCollection.LastChild)
             {
+                // Retrieve the open and close price for each time slice
                 string open = SummarizedTrades.ChildNodes[1].InnerText;
                 string close = SummarizedTrades.ChildNodes[2].InnerText;
 
+                // FIXME: Need a better way to store the data
                 points.Add(new Vector2(positionX, float.Parse(open)));
                 positionX++;
                 points.Add(new Vector2(positionX, float.Parse(close)));
@@ -226,9 +253,13 @@ public class CardController : MonoBehaviour
             // TODO error message on card
         }
 
+        // Add data to cache
+        nasdaqCache.Add(currentRange, points);
+
         // Update graph
         card.SetGraphPoints(points);
 
+        // Card is done working
         card.Busy--;
     }
 
