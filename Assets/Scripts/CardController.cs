@@ -205,18 +205,25 @@ public class CardController : MonoBehaviour
         // Parse XML
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
-
-        XmlNode ArrayOfEndOfDayPriceCollection = doc.LastChild;
-        XmlNode EndOfDayPriceCollection = ArrayOfEndOfDayPriceCollection.ChildNodes[0];
-
-        foreach (XmlNode Price in EndOfDayPriceCollection.LastChild)
+        
+        XmlNode SummarizedTradeCollection = doc.LastChild.ChildNodes[0];
+        
+        if (!SummarizedTradeCollection.ChildNodes[1].InnerText.Contains("No Trades found for"))
         {
-            string open = Price.ChildNodes[1].InnerText;
-            string close = Price.ChildNodes[2].InnerText;
+            foreach (XmlNode SummarizedTrades in SummarizedTradeCollection.LastChild)
+            {
+                string open = SummarizedTrades.ChildNodes[1].InnerText;
+                string close = SummarizedTrades.ChildNodes[2].InnerText;
 
-            points.Add(new Vector2(positionX, float.Parse(open)));
-            positionX++;
-            points.Add(new Vector2(positionX, float.Parse(close)));
+                points.Add(new Vector2(positionX, float.Parse(open)));
+                positionX++;
+                points.Add(new Vector2(positionX, float.Parse(close)));
+            }
+        }
+        else
+        {
+            Debug.Log(card.Ticker + " did not trade in this time period!");
+            // TODO error message on card
         }
 
         // Update graph
