@@ -12,7 +12,7 @@ public class CardButton : MonoBehaviour
         {
             if(IncreaseTimeRange)
             {
-                if(Card.Range != Card.TimeRange.TwoWeek)
+                if(Card.Range != Card.TimeRange.Month)
                     Card.SetTimeRange(Card.Range + 1);
             }
             else

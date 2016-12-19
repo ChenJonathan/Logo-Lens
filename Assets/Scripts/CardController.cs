@@ -100,11 +100,11 @@ public class CardController : MonoBehaviour
                 break;
             case Card.TimeRange.ThreeDay:
                 startDate = endDate.AddDays(-3);
-                hourMultiplier = 1;
+                hourMultiplier = 3;
                 break;
             case Card.TimeRange.Week:
                 startDate = endDate.AddDays(-7);
-                hourMultiplier = 24;
+                hourMultiplier = 12;
                 break;
             case Card.TimeRange.TwoWeek:
                 startDate = endDate.AddDays(-14);
@@ -230,6 +230,9 @@ public class CardController : MonoBehaviour
 
     private void HandleNASDAQResponse(Card card, string xml)
     {
+        // DEBUG
+        Debug.Log(xml);
+
         // New list to store the points in
         List<GraphPoint> points = new List<GraphPoint>();
 
@@ -237,9 +240,10 @@ public class CardController : MonoBehaviour
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
         XmlNode SummarizedTradeCollection = doc.LastChild.ChildNodes[0];
-        
+        string outcome = SummarizedTradeCollection.ChildNodes[1].InnerText;
+
         // Error checking while parsing
-        if (!SummarizedTradeCollection.ChildNodes[1].InnerText.Contains("No Trades found for"))
+        if (!outcome.Contains("No Trades found for") && !outcome.Contains("Maximum time range"))
         {
             // Parse all the trades for the time period
             foreach (XmlNode SummarizedTrades in SummarizedTradeCollection.LastChild)
@@ -257,8 +261,8 @@ public class CardController : MonoBehaviour
         }
         else
         {
-            Debug.Log(card.Ticker + " did not trade in this time period!");
-            // TODO error message on card
+            Debug.Log(card.Ticker + " did not trade in this time period or is > 1 month time period!");
+            // TODO error message on card or fix...
         }
 
         // Add data to cache

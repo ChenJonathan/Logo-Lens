@@ -168,24 +168,84 @@ public class Card : MonoBehaviour
     public void SetGraphPoints(List<GraphPoint> points)
     {
         // Destroy previous graph
-        foreach(LineRenderer graphLine in Center.GetComponentsInChildren<LineRenderer>())
+        foreach(LineRenderer oldGraphLine in Center.GetComponentsInChildren<LineRenderer>())
         {
-            Destroy(graphLine.gameObject);
+            Destroy(oldGraphLine.gameObject);
         }
 
-        //// TODO Calculate scale and add some constant y-value so that the graph is on top of the card
-        //for(int i = 0; i < points.Count; i++)
-        //{
-        //    points[i] = new Vector2(i * 3 / 2 + graphMinX, points[i].Value % graphMaxY);
-        //}
-        
-        //// Instantiate lines
-        //for(int i = 0; i < points.Count - 1; i++)
-        //{
-        //    LineRenderer graphLine = Instantiate(GraphLinePrefab);
-        //    graphLine.transform.parent = Center.transform;
-        //    graphLine.SetPosition(0, transform.localPosition + (Vector3)points[i]);
-        //    graphLine.SetPosition(1, transform.localPosition + (Vector3)points[i + 1]);
-        //}
+        if (points.Count == 0)
+        {
+            // TODO error message
+            Debug.Log("No points to graph!");
+            return;
+        }
+
+        // Determine min and max value for Y scale
+        float minVal = float.MaxValue;
+        float maxVal = 0;
+        foreach (GraphPoint point in points)
+        {
+            if (point.Value > maxVal)
+            {
+                maxVal = point.Value;
+            }
+            if (point.Value < minVal)
+            {
+                minVal = point.Value;
+            }
+        }
+
+        // Calculate scale multipliers
+        float xScale = (graphMaxX - graphMinX) / (points.Count / 2);
+        float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
+        Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
+
+        // Plot the opening->closing points by instaniating lines
+        int count = 0;
+        int i = 0;
+        while (i < points.Count)
+        {
+            LineRenderer graphLine = Instantiate(GraphLinePrefab);
+            graphLine.transform.parent = Center.transform;
+
+            // Opening point at the initial time slice
+            float x = graphMinX + count * xScale;
+            float y = graphMinY + (points[i].Value - minVal) * yScale;
+            graphLine.SetPosition(0, transform.localPosition + new Vector3(x, y, 0));
+
+            count++;
+            i++;
+
+            // Closing point at the next time slice
+            x = graphMinX + count * xScale;
+            y = graphMinY + (points[i].Value - minVal) * yScale;
+            graphLine.SetPosition(1, transform.localPosition + new Vector3(x, y, 0));
+
+            i++;
+        }
+
+        // Plot the closing->opening points by instaniating lines
+        count = 1;
+        i = 1;
+        while (i < points.Count - 1)
+        {
+            LineRenderer graphLine = Instantiate(GraphLinePrefab);
+            graphLine.transform.parent = Center.transform;
+
+            // Closing point
+            float x = graphMinX + count * xScale;
+            float y = graphMinY + (points[i].Value - minVal) * yScale;
+            graphLine.SetPosition(0, transform.localPosition + new Vector3(x, y, 0));
+
+            i++;
+
+            // Opening point for the next time slice. On the same x position
+            x = graphMinX + count * xScale;
+            y = graphMinY + (points[i].Value - minVal) * yScale;
+            graphLine.SetPosition(1, transform.localPosition + new Vector3(x, y, 0));
+
+            i++;
+            count++;
+        }
     }
 }
