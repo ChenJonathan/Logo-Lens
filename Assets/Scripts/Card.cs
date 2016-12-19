@@ -13,7 +13,7 @@ public class Card : MonoBehaviour
 
     public LineRenderer GraphLinePrefab;
 
-    public enum TimeRange { Day = 0, Week = 1, Month = 2, Year = 3 }
+    public enum TimeRange { Today = 0, Day = 1, ThreeDay = 2, Week = 3, TwoWeek = 4, Month = 5}
 
     [HideInInspector]
     public string Ticker;

@@ -76,28 +76,40 @@ public class CardController : MonoBehaviour
     {
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
-        int hourMultiplier = 1;
+        int hourMultiplier = -1;
+        int minuteMultiplier = -1;
+
+        Debug.Log(range + " TimeRange");
         switch (range)
         {
-            case Card.TimeRange.Day:
+            case Card.TimeRange.Today:
                 startDate = endDate;
+                minuteMultiplier = 15;
+                break;
+            case Card.TimeRange.Day:
+                startDate = endDate.AddDays(-1);
+                hourMultiplier = 1;
+                break;
+            case Card.TimeRange.ThreeDay:
+                startDate = endDate.AddDays(-3);
                 hourMultiplier = 1;
                 break;
             case Card.TimeRange.Week:
                 startDate = endDate.AddDays(-7);
                 hourMultiplier = 24;
                 break;
+            case Card.TimeRange.TwoWeek:
+                startDate = endDate.AddDays(-14);
+                hourMultiplier = 24;
+                break;
             case Card.TimeRange.Month:
                 startDate = endDate.AddDays(-30);
                 hourMultiplier = 24;
                 break;
-            case Card.TimeRange.Year:
-                startDate = endDate.AddDays(-365);
-                hourMultiplier = 438;
-                break;
             default:
+                Debug.Log("Defualt TimeRange");
                 startDate = endDate;
-                hourMultiplier = 1;
+                minuteMultiplier = 15;
                 break;
         }
 
@@ -113,8 +125,21 @@ public class CardController : MonoBehaviour
         form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
         form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
         form.AddField("MarketCenters", "");
-        form.AddField("TradePrecision", "Hour");
-        form.AddField("TradePeriod", hourMultiplier);
+        if (hourMultiplier != -1)
+        {
+            Debug.Log("Collecting data every " + hourMultiplier + " hours.");
+            form.AddField("TradePrecision", "Hour");
+            form.AddField("TradePeriod", hourMultiplier);
+        } else if (minuteMultiplier != -1)
+        {
+            Debug.Log("Collecting data every " + minuteMultiplier + " minutes.");
+            form.AddField("TradePrecision", "Minute");
+            form.AddField("TradePeriod", minuteMultiplier);
+        } else
+        {
+            Debug.Log("ERROR: Hour or minute multiplier not set!");
+        }
+        
         WWW www = new WWW(url, form);
 
         card.Busy++;
