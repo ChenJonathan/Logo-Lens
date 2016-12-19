@@ -165,7 +165,7 @@ public class Card : MonoBehaviour
         CardController.Instance.UpdateCard(this, Ticker, range);
     }
 
-    public void SetGraphPoints(List<Vector2> points)
+    public void SetGraphPoints(List<GraphPoint> points)
     {
         // Destroy previous graph
         foreach(LineRenderer graphLine in Center.GetComponentsInChildren<LineRenderer>())
@@ -173,19 +173,19 @@ public class Card : MonoBehaviour
             Destroy(graphLine.gameObject);
         }
 
-        // TODO Calculate scale and add some constant y-value so that the graph is on top of the card
-        for(int i = 0; i < points.Count; i++)
-        {
-            points[i] = new Vector2(points[i].x * 3 / 2 + graphMinX, points[i].y % graphMaxY);
-        }
+        //// TODO Calculate scale and add some constant y-value so that the graph is on top of the card
+        //for(int i = 0; i < points.Count; i++)
+        //{
+        //    points[i] = new Vector2(i * 3 / 2 + graphMinX, points[i].Value % graphMaxY);
+        //}
         
-        // Instantiate lines
-        for(int i = 0; i < points.Count - 1; i++)
-        {
-            LineRenderer graphLine = Instantiate(GraphLinePrefab);
-            graphLine.transform.parent = Center.transform;
-            graphLine.SetPosition(0, transform.localPosition + (Vector3)points[i]);
-            graphLine.SetPosition(1, transform.localPosition + (Vector3)points[i + 1]);
-        }
+        //// Instantiate lines
+        //for(int i = 0; i < points.Count - 1; i++)
+        //{
+        //    LineRenderer graphLine = Instantiate(GraphLinePrefab);
+        //    graphLine.transform.parent = Center.transform;
+        //    graphLine.SetPosition(0, transform.localPosition + (Vector3)points[i]);
+        //    graphLine.SetPosition(1, transform.localPosition + (Vector3)points[i + 1]);
+        //}
     }
 }

@@ -17,7 +17,7 @@ public class CardController : MonoBehaviour
     [SerializeField]
     private GameObject cardPrefab;
 
-    private Dictionary<Card.TimeRange, List<Vector2>> nasdaqCache = new Dictionary<Card.TimeRange, List<Vector2>>();
+    private Dictionary<Card.TimeRange, List<GraphPoint>> nasdaqCache = new Dictionary<Card.TimeRange, List<GraphPoint>>();
     private Card.TimeRange currentRange;
     
     public void Awake()
@@ -230,11 +230,8 @@ public class CardController : MonoBehaviour
 
     private void HandleNASDAQResponse(Card card, string xml)
     {
-        Debug.Log(xml);
-
-        // FIXME: Need a better way to store these points
-        List<Vector2> points = new List<Vector2>();
-        int positionX = 0;
+        // New list to store the points in
+        List<GraphPoint> points = new List<GraphPoint>();
 
         // Parse XML
         XmlDocument doc = new XmlDocument();
@@ -248,13 +245,14 @@ public class CardController : MonoBehaviour
             foreach (XmlNode SummarizedTrades in SummarizedTradeCollection.LastChild)
             {
                 // Retrieve the open and close price for each time slice
+                string time = SummarizedTrades.ChildNodes[0].InnerText;
+                time.Substring(0, time.Length - 7);
                 string open = SummarizedTrades.ChildNodes[1].InnerText;
                 string close = SummarizedTrades.ChildNodes[2].InnerText;
 
-                // FIXME: Need a better way to store the data
-                points.Add(new Vector2(positionX, float.Parse(open)));
-                positionX++;
-                points.Add(new Vector2(positionX, float.Parse(close)));
+                // Store the data in the list of points
+                points.Add(new GraphPoint(time, float.Parse(open)));
+                points.Add(new GraphPoint(time, float.Parse(close)));
             }
         }
         else
