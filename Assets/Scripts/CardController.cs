@@ -17,8 +17,41 @@ public class CardController : MonoBehaviour
     [SerializeField]
     private GameObject cardPrefab;
 
-    private Dictionary<Card.TimeRange, List<GraphPoint>> nasdaqCache = new Dictionary<Card.TimeRange, List<GraphPoint>>();
-    private Card.TimeRange currentRange;
+    private Dictionary<CacheKey, List<GraphPoint>> nasdaqCache = new Dictionary<CacheKey, List<GraphPoint>>();
+
+    private class CacheKey: object
+    {
+        public string ticker;
+        public Card.TimeRange range;
+
+        public CacheKey(string ticker, Card.TimeRange range)
+        {
+            this.ticker = ticker;
+            this.range = range;
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            if (obj == null)
+                return false;
+            CacheKey c = obj as CacheKey;
+            if ((System.Object)c == null)
+                return false;
+            return c.range.Equals(this.range) && c.ticker.Equals(this.ticker);
+        }
+
+        public bool Equals(CacheKey c)
+        {
+            if ((object)c == null)
+                return false;
+            return c.range.Equals(this.range) && c.ticker.Equals(this.ticker);
+        }
+
+        public override int GetHashCode()
+        {
+            return ticker.GetHashCode() + 5 * range.GetHashCode();
+        }
+    }
     
     public void Awake()
     {
@@ -129,6 +162,7 @@ public class CardController : MonoBehaviour
 
         // Set basic card elements
         card.SetElementText("Ticker", ticker);
+        card.SetTimeRange(range);
         if (hourMultiplier != -1)
         {
             card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
@@ -139,11 +173,12 @@ public class CardController : MonoBehaviour
         }
 
         // Check the cache for the data
-        if (nasdaqCache.ContainsKey(range))
+        CacheKey currKey = new CacheKey(ticker, range);
+        if (nasdaqCache.ContainsKey(currKey))
         {
             // Update data from the cache :)
             Debug.Log("Updating the card for timerange " + range + " from the cache!");
-            card.SetGraphPoints(nasdaqCache[range]);
+            card.SetGraphPoints(nasdaqCache[currKey]);
 
             // Card is done working
             card.Busy--;
@@ -171,9 +206,6 @@ public class CardController : MonoBehaviour
             form.AddField("TradePeriod", minuteMultiplier);
         }
         WWW www = new WWW(url, form);
-
-        // FIXME: Hacky way to use the range in HandleNASDAQResponse
-        currentRange = range;
 
         // Make the API request
         StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
@@ -266,7 +298,8 @@ public class CardController : MonoBehaviour
         }
 
         // Add data to cache
-        nasdaqCache.Add(currentRange, points);
+        CacheKey currKey = new CacheKey(card.Ticker, card.Range);
+        nasdaqCache.Add(currKey, points);
 
         // Update graph
         card.SetGraphPoints(points);
