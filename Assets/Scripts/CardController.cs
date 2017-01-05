@@ -162,7 +162,7 @@ public class CardController : MonoBehaviour
 
         // Set basic card elements
         card.SetElementText("Ticker", ticker);
-        card.SetTimeRange(range);
+        card.Range = range;
         if (hourMultiplier != -1)
         {
             card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
