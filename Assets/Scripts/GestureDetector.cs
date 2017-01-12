@@ -36,15 +36,17 @@ public class GestureDetector : MonoBehaviour
             if(Physics.Raycast(headPosition, gazeDirection, out hitInfo))
             {
                 Collider col = hitInfo.collider;
-                if(col.name == "Center" || col.name == "Bottom")
-                {
-                    // Close card if in line of sight
-                    CardController.Instance.RemoveCard(col.transform.parent.GetComponent<Card>());
-                }
-                else if(col.name == "Left" || col.name == "Right")
-                {
-                    // Change button range if in line of sight
-                    col.GetComponent<CardButton>().ModifyRange();
+                if (col.gameObject.GetComponent<Card>().Busy == 0) {
+                    if (col.name == "Center" || col.name == "Bottom")
+                    {
+                        // Close card if in line of sight
+                        CardController.Instance.RemoveCard(col.transform.parent.GetComponent<Card>());
+                    }
+                    else if (col.name == "Left" || col.name == "Right")
+                    {
+                        // Change button range if in line of sight
+                        col.GetComponent<CardButton>().ModifyRange();
+                    }
                 }
             }
             else
