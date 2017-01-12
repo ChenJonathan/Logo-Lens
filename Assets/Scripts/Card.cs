@@ -201,25 +201,16 @@ public class Card : MonoBehaviour
         Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
 
         // Plot the opening -> closing points by instaniating lines
-        int count = 0;
         int i = 0;
         LineRenderer graphLine = Instantiate(GraphLinePrefab);
         graphLine.transform.parent = Center.transform;
-        graphLine.numPositions = points.Count / 2;
+        graphLine.numPositions = points.Count;
         while(i < points.Count)
         {
             // Opening point at the initial time slice
-            float x = graphMinX + count * xScale;
+            float x = graphMinX + i * xScale;
             float y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(count, transform.localPosition + new Vector3(x, y, 0));
-
-            count++;
-            i++;
-
-            // Closing point at the next time slice
-            x = graphMinX + count * xScale;
-            y = graphMinY + (points[i].Value - minVal) * yScale;
-            // graphLine.SetPosition(i, transform.localPosition + new Vector3(x, y, 0));
+            graphLine.SetPosition(i, transform.localPosition + new Vector3(x, y, 0));
 
             i++;
         }

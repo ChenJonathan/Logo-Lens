@@ -277,18 +277,28 @@ public class CardController : MonoBehaviour
         // Error checking while parsing
         if (!outcome.Contains("No Trades found for") && !outcome.Contains("Maximum time range"))
         {
+            float lastClose = 0f;
+
             // Parse all the trades for the time period
             foreach (XmlNode SummarizedTrades in SummarizedTradeCollection.LastChild)
             {
                 // Retrieve the open and close price for each time slice
                 string time = SummarizedTrades.ChildNodes[0].InnerText;
                 time.Substring(0, time.Length - 7);
-                string open = SummarizedTrades.ChildNodes[1].InnerText;
-                string close = SummarizedTrades.ChildNodes[2].InnerText;
+                float open = float.Parse(SummarizedTrades.ChildNodes[1].InnerText);
 
-                // Store the data in the list of points
-                points.Add(new GraphPoint(time, float.Parse(open)));
-                points.Add(new GraphPoint(time, float.Parse(close)));
+                if (open == 0)
+                {
+                    points.Add(new GraphPoint(time, lastClose));
+                } else if (lastClose == 0)
+                {
+                    points.Add(new GraphPoint(time, open));
+                } else
+                {
+                    points.Add(new GraphPoint(time, (open + lastClose) / 2f));
+                }
+
+                lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }
         }
         else
