@@ -200,18 +200,18 @@ public class Card : MonoBehaviour
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
         Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
 
-        // Plot the opening->closing points by instaniating lines
+        // Plot the opening -> closing points by instaniating lines
         int count = 0;
         int i = 0;
-        while (i < points.Count)
+        LineRenderer graphLine = Instantiate(GraphLinePrefab);
+        graphLine.transform.parent = Center.transform;
+        graphLine.numPositions = points.Count / 2;
+        while(i < points.Count)
         {
-            LineRenderer graphLine = Instantiate(GraphLinePrefab);
-            graphLine.transform.parent = Center.transform;
-
             // Opening point at the initial time slice
             float x = graphMinX + count * xScale;
             float y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(0, transform.localPosition + new Vector3(x, y, 0));
+            graphLine.SetPosition(count, transform.localPosition + new Vector3(x, y, 0));
 
             count++;
             i++;
@@ -219,33 +219,9 @@ public class Card : MonoBehaviour
             // Closing point at the next time slice
             x = graphMinX + count * xScale;
             y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(1, transform.localPosition + new Vector3(x, y, 0));
+            // graphLine.SetPosition(i, transform.localPosition + new Vector3(x, y, 0));
 
             i++;
-        }
-
-        // Plot the closing->opening points by instaniating lines
-        count = 1;
-        i = 1;
-        while (i < points.Count - 1)
-        {
-            LineRenderer graphLine = Instantiate(GraphLinePrefab);
-            graphLine.transform.parent = Center.transform;
-
-            // Closing point
-            float x = graphMinX + count * xScale;
-            float y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(0, transform.localPosition + new Vector3(x, y, 0));
-
-            i++;
-
-            // Opening point for the next time slice. On the same x position
-            x = graphMinX + count * xScale;
-            y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(1, transform.localPosition + new Vector3(x, y, 0));
-
-            i++;
-            count++;
         }
     }
 }
