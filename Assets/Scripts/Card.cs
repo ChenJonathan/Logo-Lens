@@ -24,10 +24,10 @@ public class Card : MonoBehaviour
     
     private Vector3 offset;
 
-    private readonly float graphMinX = -4.4f;
-    private readonly float graphMaxX = 4.4f;
-    private readonly float graphMinY = -2.7f;
-    private readonly float graphMaxY = 2.7f;
+    private readonly float graphMinX = -4.2f;
+    private readonly float graphMaxX = 4.2f;
+    private readonly float graphMinY = -2.6f;
+    private readonly float graphMaxY = 2.6f;
 
     public void Start()
     {
@@ -196,7 +196,7 @@ public class Card : MonoBehaviour
         }
 
         // Calculate scale multipliers
-        float xScale = (graphMaxX - graphMinX) / (points.Count / 2);
+        float xScale = (graphMaxX - graphMinX) / (points.Count - 1);
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
         Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
 
