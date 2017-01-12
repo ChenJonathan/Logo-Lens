@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using UnityEngine;
+using System.Linq;
 
 public class CardController : MonoBehaviour
 {
@@ -162,6 +163,7 @@ public class CardController : MonoBehaviour
 
         // Set basic card elements
         card.SetElementText("Ticker", ticker);
+        card.SetElementColor("Ticker", Color.white);
         card.Range = range;
         if (hourMultiplier != -1)
         {
@@ -178,7 +180,9 @@ public class CardController : MonoBehaviour
         {
             // Update data from the cache :)
             Debug.Log("Updating the card for timerange " + range + " from the cache!");
-            card.SetGraphPoints(nasdaqCache[currKey]);
+            List<GraphPoint> points = nasdaqCache[currKey];
+            setChange(points, card);
+            card.SetGraphPoints(points);
 
             // Card is done working
             card.Busy--;
@@ -307,6 +311,9 @@ public class CardController : MonoBehaviour
             // TODO error message on card or fix...
         }
 
+        // Set the change text
+        setChange(points, card);
+
         // Add data to cache
         CacheKey currKey = new CacheKey(card.Ticker, card.Range);
         if (nasdaqCache.ContainsKey(currKey))
@@ -343,4 +350,28 @@ public class CardController : MonoBehaviour
     }
 
     #endregion
+
+    private void setChange(List<GraphPoint> points, Card card)
+    {
+        // Update the ticket with the change
+        if (points.Count >= 2)
+        {
+            GraphPoint first = points.First();
+            GraphPoint last = points.Last();
+            float change = last.Value - first.Value;
+            string changeStr = change.ToString("0.00");
+            if (change > 0)
+            {
+                card.SetElementText("Ticker", card.Ticker + ": + $" + changeStr);
+                card.SetElementColor("Ticker", Color.green);
+            }
+            else
+            {
+                changeStr = changeStr.Substring(1);
+                card.SetElementText("Ticker", card.Ticker + ": - $" + changeStr);
+                card.SetElementColor("Ticker", Color.red);
+            }
+
+        }
+    }
 }
