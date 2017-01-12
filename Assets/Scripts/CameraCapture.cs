@@ -58,7 +58,7 @@ public class CameraCapture : MonoBehaviour
         c.cameraResolutionHeight = cameraResolution.height;
         c.pixelFormat = CapturePixelFormat.BGRA32;
 
-        captureObject.StartPhotoModeAsync(c, false, OnPhotoModeStarted);
+        captureObject.StartPhotoModeAsync(c, OnPhotoModeStarted);
     }
 
     void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
