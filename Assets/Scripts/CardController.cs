@@ -299,7 +299,13 @@ public class CardController : MonoBehaviour
 
         // Add data to cache
         CacheKey currKey = new CacheKey(card.Ticker, card.Range);
-        nasdaqCache.Add(currKey, points);
+        if (nasdaqCache.ContainsKey(currKey))
+        {
+            nasdaqCache[currKey] = points;
+        } else
+        {
+            nasdaqCache.Add(currKey, points);
+        }
 
         // Update graph
         card.SetGraphPoints(points);

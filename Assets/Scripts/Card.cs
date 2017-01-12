@@ -24,10 +24,10 @@ public class Card : MonoBehaviour
     
     private Vector3 offset;
 
-    private readonly float graphMinX = -4.565f;
-    private readonly float graphMaxX = 4.565f;
-    private readonly float graphMinY = -2.83f;
-    private readonly float graphMaxY = 2.83f;
+    private readonly float graphMinX = -4.4f;
+    private readonly float graphMaxX = 4.4f;
+    private readonly float graphMinY = -2.7f;
+    private readonly float graphMaxY = 2.7f;
 
     public void Start()
     {
