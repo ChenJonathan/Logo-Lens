@@ -5,7 +5,7 @@ public static class Util
 
 	public static string FormatDate(DateTime date)
     {
-        return (date.Month + "").PadLeft(2, '0') + "/" + (date.Day + "").PadLeft(2, '0') + "/" + date.Year.ToString().Substring(2);
+        return (date.Month + "").PadLeft(2, '0') + "/" + (date.Day + "").PadLeft(2, '0') + "/" + (date.Year % 100).ToString();
     }
 
     public static string FormatTime(DateTime time)

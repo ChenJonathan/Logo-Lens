@@ -165,6 +165,23 @@ public class Card : MonoBehaviour
         CardController.Instance.UpdateCard(this, Ticker, range);
     }
 
+    public void SetChange(float change)
+    {
+        // Update the card with the change
+        string changeStr = change.ToString("0.00");
+        if(change > 0)
+        {
+            SetElementText("Ticker", Ticker + ": + $" + changeStr);
+            SetElementColor("Ticker", Color.green);
+        }
+        else
+        {
+            changeStr = changeStr.Substring(1);
+            SetElementText("Ticker", Ticker + ": - $" + changeStr);
+            SetElementColor("Ticker", Color.red);
+        }
+    }
+
     public void SetGraphPoints(List<GraphPoint> points)
     {
         // Destroy previous graph
