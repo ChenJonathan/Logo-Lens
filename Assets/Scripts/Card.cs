@@ -180,76 +180,80 @@ public class Card : MonoBehaviour
 
     public void viewTimeRange(TimeRange range)
     {
-        if (nasdaqData.ContainsKey(range))
+        if (!nasdaqData.ContainsKey(range))
         {
-            Center.transform.FindChild("Loading").gameObject.SetActive(false);
+            Center.transform.FindChild("Loading").gameObject.SetActive(true);
+            new WaitForSeconds(5);
+        }
 
-            // Set up all the text   
-            DateTime endDate = DateTime.Now;
-            DateTime startDate = endDate;
-            int hourMultiplier = -1;
-            int minuteMultiplier = -1;
 
-            // Determine values for display variables based on the passed in time range
-            Debug.Log("Calling API for TimeRange = " + range);
-            switch (range)
-            {
-                case Card.TimeRange.Day:
-                    startDate = endDate.AddDays(-1);
-                    hourMultiplier = 1;
-                    break;
-                case Card.TimeRange.ThreeDay:
-                    startDate = endDate.AddDays(-3);
-                    hourMultiplier = 3;
-                    break;
-                case Card.TimeRange.Week:
-                    startDate = endDate.AddDays(-7);
-                    hourMultiplier = 12;
-                    break;
-                case Card.TimeRange.TwoWeek:
-                    startDate = endDate.AddDays(-14);
-                    hourMultiplier = 24;
-                    break;
-                case Card.TimeRange.Month:
-                    startDate = endDate.AddDays(-30);
-                    hourMultiplier = 24;
-                    break;
-                default:
-                    Debug.Log("WARNING: Default TimeRange");
-                    startDate = endDate;
-                    minuteMultiplier = 15;
-                    break;
-            }
+        Center.transform.FindChild("Loading").gameObject.SetActive(false);
 
-            // Error checking on the switch statement
-            if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
-            {
-                Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
-            }
+        // Set up all the text   
+        DateTime endDate = DateTime.Now;
+        DateTime startDate = endDate;
+        int hourMultiplier = -1;
+        int minuteMultiplier = -1;
 
-            // Set basic card elements
-            this.SetElementColor("Ticker", Color.white);
-            if (hourMultiplier != -1)
-            {
-                this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
-            }
-            else
-            {
-                this.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
-            }
+        // Determine values for display variables based on the passed in time range
+        Debug.Log("Calling API for TimeRange = " + range);
+        switch (range)
+        {
+            case Card.TimeRange.Day:
+                startDate = endDate.AddDays(-1);
+                hourMultiplier = 1;
+                break;
+            case Card.TimeRange.ThreeDay:
+                startDate = endDate.AddDays(-3);
+                hourMultiplier = 3;
+                break;
+            case Card.TimeRange.Week:
+                startDate = endDate.AddDays(-7);
+                hourMultiplier = 12;
+                break;
+            case Card.TimeRange.TwoWeek:
+                startDate = endDate.AddDays(-14);
+                hourMultiplier = 24;
+                break;
+            case Card.TimeRange.Month:
+                startDate = endDate.AddDays(-30);
+                hourMultiplier = 24;
+                break;
+            default:
+                Debug.Log("WARNING: Default TimeRange");
+                startDate = endDate;
+                minuteMultiplier = 15;
+                break;
+        }
 
-            List<GraphPoint> points = nasdaqData[range];
+        // Error checking on the switch statement
+        if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
+        {
+            Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
+        }
 
-            // Set the change text
-            this.SetChange(points.Last().Value - points.First().Value);
-
-            this.SetGraphPoints(points);
+        // Set basic card elements
+        this.SetElementColor("Ticker", Color.white);
+        if (hourMultiplier != -1)
+        {
+            this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
         }
         else
         {
-            // TODO
-            Center.transform.FindChild("Loading").gameObject.SetActive(true);
+            this.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
         }
+
+        List<GraphPoint> points = nasdaqData[range];
+
+        // Set the change text
+        this.SetChange(points.Last().Value - points.First().Value);
+
+        this.SetGraphPoints(points);
+    }
+
+    public void updateNasdaqData(List<GraphPoint> points, TimeRange range)
+    {
+        nasdaqData.Add(range, points);
     }
 
     public void SetGraphPoints(List<GraphPoint> points)

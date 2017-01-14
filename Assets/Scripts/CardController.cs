@@ -73,14 +73,14 @@ public class CardController : MonoBehaviour
         WWW www = new WWW(url, Encoding.ASCII.GetBytes(json.ToCharArray()), headers);
 
         card.Busy++;
-        StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
+        StartCoroutine(WaitForRequest(www, card, Card.TimeRange.Day, HandleGoogleVisionResponse));
     }
 
-    public void UpdateCard(Card card, string ticker)
+    public void UpdateCard(Card card, Card.TimeRange range)
     {
         // Set card to busy
         card.Busy++;
-
+        
         // Set up variables for the card       
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
@@ -124,25 +124,12 @@ public class CardController : MonoBehaviour
             Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
         }
 
-        // Set basic card elements
-        card.SetElementText("Ticker", ticker);
-        card.SetElementColor("Ticker", Color.white);
-        card.Range = range;
-        if (hourMultiplier != -1)
-        {
-            card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
-        }
-        else
-        {
-            card.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
-        }
-
         // Call the NASDAQ API
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
         WWWForm form = new WWWForm();
         form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
-        form.AddField("Symbols", ticker);
+        form.AddField("Symbols", card.Ticker);
         form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
         form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
         form.AddField("MarketCenters", "");
@@ -161,7 +148,7 @@ public class CardController : MonoBehaviour
         WWW www = new WWW(url, form);
 
         // Make the API request
-        StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
+        StartCoroutine(WaitForRequest(www, card, range, HandleNASDAQResponse));
     }
 
     public void RemoveCard(Card card)
@@ -171,7 +158,7 @@ public class CardController : MonoBehaviour
 
     #region API response handlers
 
-    private void HandleGoogleVisionResponse(Card card, string json)
+    private void HandleGoogleVisionResponse(Card card, Card.TimeRange noUseRange, string json)
     {
         List<string> possibleCompanies = new List<string>();
 
@@ -199,10 +186,16 @@ public class CardController : MonoBehaviour
                 break;
             }
         }
-        
-        if(!ticker.Equals(""))
+
+        if (!ticker.Equals(""))
         {
             card.Ticker = ticker;
+
+            for (Card.TimeRange range = Card.TimeRange.Day; range != Card.TimeRange.Month; range++)
+            {
+                StartCoroutine(WaitForData(card, range));
+            }
+
             card.viewTimeRange(Card.TimeRange.Day);
         }
         else
@@ -212,11 +205,9 @@ public class CardController : MonoBehaviour
         }
 
         card.Busy--;
-
-        this.UpdateCard(card, ticker);
     }
 
-    private void HandleNASDAQResponse(Card card, string xml)
+    private void HandleNASDAQResponse(Card card, Card.TimeRange range, string xml)
     {
         // DEBUG
         Debug.Log(xml);
@@ -271,11 +262,8 @@ public class CardController : MonoBehaviour
                 lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }
 
-            // Set the change text
-            card.SetChange(points.Last().Value - points.First().Value);
-
-            // Update graph
-            card.SetGraphPoints(points);
+            // Update the data in the card
+            card.updateNasdaqData(points, range);
         }
 
         // Card is done working
@@ -286,18 +274,24 @@ public class CardController : MonoBehaviour
 
     #region API request coroutine
 
-    private IEnumerator WaitForRequest(WWW www, Card card, Action<Card, string> callback)
+    private IEnumerator WaitForRequest(WWW www, Card card, Card.TimeRange range, Action<Card, Card.TimeRange, string> callback)
     {
         yield return www;
 
         if(www.error == null)
         {
-            callback(card, www.text);
+            callback(card, range, www.text);
         }
         else
         {
             Debug.Log("ERROR: " + www.error + "\n" + www.text);
         }
+    }
+
+    private IEnumerator WaitForData(Card card, Card.TimeRange range)
+    {
+        yield return new WaitForSeconds(0);
+        UpdateCard(card, range);
     }
 
     #endregion
