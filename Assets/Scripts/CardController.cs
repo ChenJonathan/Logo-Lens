@@ -73,7 +73,7 @@ public class CardController : MonoBehaviour
         StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
     }
 
-    public void UpdateCard(Card card, string ticker, Card.TimeRange range)
+    public void UpdateCard(Card card, string ticker)
     {
         // Set card to busy
         card.Busy++;
@@ -209,6 +209,8 @@ public class CardController : MonoBehaviour
         }
 
         card.Busy--;
+
+        this.UpdateCard(card, ticker);
     }
 
     private void HandleNASDAQResponse(Card card, string xml)
