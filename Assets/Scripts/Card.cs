@@ -178,70 +178,65 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void viewTimeRange(TimeRange range)
+    public void ViewTimeRange(TimeRange range)
     {
+        Debug.Log("Viewing timerange " + range);
+
         if (!nasdaqData.ContainsKey(range))
         {
             Center.transform.FindChild("Loading").gameObject.SetActive(true);
-            new WaitForSeconds(5);
+            StartCoroutine(WaitForData(range));
         }
+        else
+        {
+            DisplayData(range);
+        }
+    }
 
+    private IEnumerator WaitForData(TimeRange range)
+    {
+        Busy++;
+        yield return new WaitUntil(() => nasdaqData.ContainsKey(range));
+        Busy--;
+        DisplayData(range);
+    }
 
+    private void DisplayData(TimeRange range)
+    {
+        Debug.Log("Got data for timerange " + range);
         Center.transform.FindChild("Loading").gameObject.SetActive(false);
 
         // Set up all the text   
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
-        int hourMultiplier = -1;
-        int minuteMultiplier = -1;
 
         // Determine values for display variables based on the passed in time range
-        Debug.Log("Calling API for TimeRange = " + range);
         switch (range)
         {
             case Card.TimeRange.Day:
                 startDate = endDate.AddDays(-1);
-                hourMultiplier = 1;
                 break;
             case Card.TimeRange.ThreeDay:
                 startDate = endDate.AddDays(-3);
-                hourMultiplier = 3;
                 break;
             case Card.TimeRange.Week:
                 startDate = endDate.AddDays(-7);
-                hourMultiplier = 12;
                 break;
             case Card.TimeRange.TwoWeek:
                 startDate = endDate.AddDays(-14);
-                hourMultiplier = 24;
                 break;
             case Card.TimeRange.Month:
                 startDate = endDate.AddDays(-30);
-                hourMultiplier = 24;
                 break;
             default:
                 Debug.Log("WARNING: Default TimeRange");
                 startDate = endDate;
-                minuteMultiplier = 15;
                 break;
-        }
-
-        // Error checking on the switch statement
-        if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
-        {
-            Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
         }
 
         // Set basic card elements
         this.SetElementColor("Ticker", Color.white);
-        if (hourMultiplier != -1)
-        {
-            this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
-        }
-        else
-        {
-            this.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
-        }
+        this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
 
         List<GraphPoint> points = nasdaqData[range];
 
@@ -251,7 +246,7 @@ public class Card : MonoBehaviour
         this.SetGraphPoints(points);
     }
 
-    public void updateNasdaqData(List<GraphPoint> points, TimeRange range)
+    public void UpdateNasdaqData(List<GraphPoint> points, TimeRange range)
     {
         nasdaqData.Add(range, points);
     }
@@ -289,7 +284,7 @@ public class Card : MonoBehaviour
         // Calculate scale multipliers
         float xScale = (graphMaxX - graphMinX) / (points.Count - 1);
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
-        Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
+        //Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
 
         // Plot the opening -> closing points by instaniating lines
         int i = 0;

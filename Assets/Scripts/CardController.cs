@@ -76,7 +76,7 @@ public class CardController : MonoBehaviour
         StartCoroutine(WaitForRequest(www, card, Card.TimeRange.Day, HandleGoogleVisionResponse));
     }
 
-    public void UpdateCard(Card card, Card.TimeRange range)
+    public void UpdateData(Card card, Card.TimeRange range)
     {
         // Set card to busy
         card.Busy++;
@@ -85,7 +85,6 @@ public class CardController : MonoBehaviour
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
         int hourMultiplier = -1;
-        int minuteMultiplier = -1;
 
         // Determine values for important variables based on the passed in time range
         Debug.Log("Calling API for TimeRange = " + range);
@@ -114,14 +113,7 @@ public class CardController : MonoBehaviour
             default:
                 Debug.Log("WARNING: Default TimeRange");
                 startDate = endDate;
-                minuteMultiplier = 15;
                 break;
-        }
-
-        // Error checking on the switch statement
-        if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
-        {
-            Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
         }
 
         // Call the NASDAQ API
@@ -133,18 +125,9 @@ public class CardController : MonoBehaviour
         form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
         form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
         form.AddField("MarketCenters", "");
-        if (hourMultiplier != -1)
-        {
-            Debug.Log("Collecting data every " + hourMultiplier + " hours.");
-            form.AddField("TradePrecision", "Hour");
-            form.AddField("TradePeriod", hourMultiplier);
-        }
-        else
-        {
-            Debug.Log("Collecting data every " + minuteMultiplier + " minutes.");
-            form.AddField("TradePrecision", "Minute");
-            form.AddField("TradePeriod", minuteMultiplier);
-        }
+        form.AddField("TradePrecision", "Hour");
+        form.AddField("TradePeriod", hourMultiplier);
+
         WWW www = new WWW(url, form);
 
         // Make the API request
@@ -191,12 +174,12 @@ public class CardController : MonoBehaviour
         {
             card.Ticker = ticker;
 
-            for (Card.TimeRange range = Card.TimeRange.Day; range != Card.TimeRange.Month; range++)
+            for (Card.TimeRange range = Card.TimeRange.Day; range != Card.TimeRange.Month + 1; range++)
             {
                 StartCoroutine(WaitForData(card, range));
             }
 
-            card.viewTimeRange(Card.TimeRange.Day);
+            card.ViewTimeRange(Card.TimeRange.Day);
         }
         else
         {
@@ -210,7 +193,7 @@ public class CardController : MonoBehaviour
     private void HandleNASDAQResponse(Card card, Card.TimeRange range, string xml)
     {
         // DEBUG
-        Debug.Log(xml);
+        //Debug.Log(xml);
 
         // New list to store the points in
         List<GraphPoint> points = new List<GraphPoint>();
@@ -263,7 +246,7 @@ public class CardController : MonoBehaviour
             }
 
             // Update the data in the card
-            card.updateNasdaqData(points, range);
+            card.UpdateNasdaqData(points, range);
         }
 
         // Card is done working
@@ -290,8 +273,8 @@ public class CardController : MonoBehaviour
 
     private IEnumerator WaitForData(Card card, Card.TimeRange range)
     {
-        yield return new WaitForSeconds(0);
-        UpdateCard(card, range);
+        UpdateData(card, range);
+        yield return null;
     }
 
     #endregion
