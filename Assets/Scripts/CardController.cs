@@ -77,17 +77,13 @@ public class CardController : MonoBehaviour
     }
 
     public void UpdateData(Card card, Card.TimeRange range)
-    {
-        // Set card to busy
-        card.Busy++;
-        
+    {     
         // Set up variables for the card       
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
         int hourMultiplier = -1;
 
         // Determine values for important variables based on the passed in time range
-        Debug.Log("Calling API for TimeRange = " + range);
         switch (range)
         {
             case Card.TimeRange.Day:
@@ -248,9 +244,6 @@ public class CardController : MonoBehaviour
             // Update the data in the card
             card.UpdateNasdaqData(points, range);
         }
-
-        // Card is done working
-        card.Busy--;
     }
 
     #endregion

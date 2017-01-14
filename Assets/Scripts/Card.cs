@@ -181,6 +181,7 @@ public class Card : MonoBehaviour
     public void ViewTimeRange(TimeRange range)
     {
         Debug.Log("Viewing timerange " + range);
+        this.Range = range;
 
         if (!nasdaqData.ContainsKey(range))
         {
@@ -203,7 +204,6 @@ public class Card : MonoBehaviour
 
     private void DisplayData(TimeRange range)
     {
-        Debug.Log("Got data for timerange " + range);
         Center.transform.FindChild("Loading").gameObject.SetActive(false);
 
         // Set up all the text   

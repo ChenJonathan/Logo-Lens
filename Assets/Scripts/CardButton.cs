@@ -17,7 +17,7 @@ public class CardButton : MonoBehaviour
             }
             else
             {
-                if(Card.Range != Card.TimeRange.Day)
+                if (Card.Range != Card.TimeRange.Day)
                     Card.ViewTimeRange(Card.Range - 1);
             }
         }
