@@ -149,7 +149,7 @@ public class CardController : MonoBehaviour
                 hourMultiplier = 24;
                 break;
             default:
-                Debug.Log("WARNING: Defualt TimeRange");
+                Debug.Log("WARNING: Default TimeRange");
                 startDate = endDate;
                 minuteMultiplier = 15;
                 break;
@@ -181,7 +181,7 @@ public class CardController : MonoBehaviour
             // Update data from the cache :)
             Debug.Log("Updating the card for timerange " + range + " from the cache!");
             List<GraphPoint> points = nasdaqCache[currKey];
-            setChange(points, card);
+            card.SetChange(points.Last().Value - points.First().Value);
             card.SetGraphPoints(points);
 
             // Card is done working
@@ -203,7 +203,8 @@ public class CardController : MonoBehaviour
             Debug.Log("Collecting data every " + hourMultiplier + " hours.");
             form.AddField("TradePrecision", "Hour");
             form.AddField("TradePeriod", hourMultiplier);
-        } else
+        }
+        else
         {
             Debug.Log("Collecting data every " + minuteMultiplier + " minutes.");
             form.AddField("TradePrecision", "Minute");
@@ -259,6 +260,7 @@ public class CardController : MonoBehaviour
         else
         {
             card.SetElementText("Ticker", "Error: Could not detect a logo");
+            card.SetElementText("Date", "");
         }
 
         card.Busy--;
@@ -279,7 +281,19 @@ public class CardController : MonoBehaviour
         string outcome = SummarizedTradeCollection.ChildNodes[1].InnerText;
 
         // Error checking while parsing
-        if (!outcome.Contains("No Trades found for") && !outcome.Contains("Maximum time range"))
+        if (outcome.Contains("No Trades found for"))
+        {
+            Debug.Log(card.Ticker + " did not trade in this time period!");
+            card.SetElementText("Ticker", "Error: No trades found");
+            card.SetElementText("Date", "");
+        }
+        else if (outcome.Contains("Maximum time range"))
+        {
+            Debug.Log("Time period is greater than 1 month!");
+            card.SetElementText("Ticker", "Error: Maximum time range exceeded");
+            card.SetElementText("Date", "");
+        }
+        else
         {
             float lastClose = 0f;
 
@@ -294,38 +308,36 @@ public class CardController : MonoBehaviour
                 if (open == 0)
                 {
                     points.Add(new GraphPoint(time, lastClose));
-                } else if (lastClose == 0)
+                }
+                else if (lastClose == 0)
                 {
                     points.Add(new GraphPoint(time, open));
-                } else
+                }
+                else
                 {
                     points.Add(new GraphPoint(time, (open + lastClose) / 2f));
                 }
 
                 lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }
-        }
-        else
-        {
-            Debug.Log(card.Ticker + " did not trade in this time period or is > 1 month time period!");
-            // TODO error message on card or fix...
-        }
 
-        // Set the change text
-        setChange(points, card);
+            // Set the change text
+            card.SetChange(points.Last().Value - points.First().Value);
 
-        // Add data to cache
-        CacheKey currKey = new CacheKey(card.Ticker, card.Range);
-        if (nasdaqCache.ContainsKey(currKey))
-        {
-            nasdaqCache[currKey] = points;
-        } else
-        {
-            nasdaqCache.Add(currKey, points);
+            // Add data to cache
+            CacheKey currKey = new CacheKey(card.Ticker, card.Range);
+            if(nasdaqCache.ContainsKey(currKey))
+            {
+                nasdaqCache[currKey] = points;
+            }
+            else
+            {
+                nasdaqCache.Add(currKey, points);
+            }
+
+            // Update graph
+            card.SetGraphPoints(points);
         }
-
-        // Update graph
-        card.SetGraphPoints(points);
 
         // Card is done working
         card.Busy--;
@@ -345,33 +357,9 @@ public class CardController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Error: " + www.error + "\n" + www.text);
+            Debug.Log("ERROR: " + www.error + "\n" + www.text);
         }
     }
 
     #endregion
-
-    private void setChange(List<GraphPoint> points, Card card)
-    {
-        // Update the ticket with the change
-        if (points.Count >= 2)
-        {
-            GraphPoint first = points.First();
-            GraphPoint last = points.Last();
-            float change = last.Value - first.Value;
-            string changeStr = change.ToString("0.00");
-            if (change > 0)
-            {
-                card.SetElementText("Ticker", card.Ticker + ": + $" + changeStr);
-                card.SetElementColor("Ticker", Color.green);
-            }
-            else
-            {
-                changeStr = changeStr.Substring(1);
-                card.SetElementText("Ticker", card.Ticker + ": - $" + changeStr);
-                card.SetElementColor("Ticker", Color.red);
-            }
-
-        }
-    }
 }

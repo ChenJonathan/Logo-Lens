@@ -159,15 +159,34 @@ public class Card : MonoBehaviour
         Bottom.transform.FindChild(element).GetComponent<Text>().color = value;
     }
 
+    public void SetChange(float change)
+    {
+        // Update the card with the change
+        string changeStr = change.ToString("0.00");
+        if(change > 0)
+        {
+            SetElementText("Ticker", Ticker + ": + $" + changeStr);
+            SetElementColor("Ticker", Color.green);
+        }
+        else
+        {
+            changeStr = changeStr.Substring(1);
+            SetElementText("Ticker", Ticker + ": - $" + changeStr);
+            SetElementColor("Ticker", Color.red);
+        }
+    }
+
     public void SetTimeRange(TimeRange range)
     {
         Range = range;
+        Center.transform.FindChild("Loading").gameObject.SetActive(true);
         CardController.Instance.UpdateCard(this, Ticker, range);
     }
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
         // Destroy previous graph
+        Center.transform.FindChild("Loading").gameObject.SetActive(false);
         foreach(LineRenderer oldGraphLine in Center.GetComponentsInChildren<LineRenderer>())
         {
             Destroy(oldGraphLine.gameObject);
