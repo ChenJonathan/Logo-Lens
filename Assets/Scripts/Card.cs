@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Card : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class Card : MonoBehaviour
 
     public LineRenderer GraphLinePrefab;
 
-    public enum TimeRange { Today = 0, Day = 1, ThreeDay = 2, Week = 3, TwoWeek = 4, Month = 5}
+    public enum TimeRange { Day = 0, ThreeDay = 1, Week = 2, TwoWeek = 3, Month = 4}
+    private Dictionary<TimeRange, List<GraphPoint>> nasdaqData = new Dictionary<TimeRange, List<GraphPoint>>();
 
     [HideInInspector]
     public string Ticker;
@@ -176,17 +178,83 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void SetTimeRange(TimeRange range)
+    public void viewTimeRange(TimeRange range)
     {
-        Range = range;
-        Center.transform.FindChild("Loading").gameObject.SetActive(true);
-        CardController.Instance.UpdateCard(this, Ticker, range);
+        if (nasdaqData.ContainsKey(range))
+        {
+            Center.transform.FindChild("Loading").gameObject.SetActive(false);
+
+            // Set up all the text   
+            DateTime endDate = DateTime.Now;
+            DateTime startDate = endDate;
+            int hourMultiplier = -1;
+            int minuteMultiplier = -1;
+
+            // Determine values for display variables based on the passed in time range
+            Debug.Log("Calling API for TimeRange = " + range);
+            switch (range)
+            {
+                case Card.TimeRange.Day:
+                    startDate = endDate.AddDays(-1);
+                    hourMultiplier = 1;
+                    break;
+                case Card.TimeRange.ThreeDay:
+                    startDate = endDate.AddDays(-3);
+                    hourMultiplier = 3;
+                    break;
+                case Card.TimeRange.Week:
+                    startDate = endDate.AddDays(-7);
+                    hourMultiplier = 12;
+                    break;
+                case Card.TimeRange.TwoWeek:
+                    startDate = endDate.AddDays(-14);
+                    hourMultiplier = 24;
+                    break;
+                case Card.TimeRange.Month:
+                    startDate = endDate.AddDays(-30);
+                    hourMultiplier = 24;
+                    break;
+                default:
+                    Debug.Log("WARNING: Default TimeRange");
+                    startDate = endDate;
+                    minuteMultiplier = 15;
+                    break;
+            }
+
+            // Error checking on the switch statement
+            if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
+            {
+                Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
+            }
+
+            // Set basic card elements
+            this.SetElementColor("Ticker", Color.white);
+            if (hourMultiplier != -1)
+            {
+                this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+            }
+            else
+            {
+                this.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
+            }
+
+            List<GraphPoint> points = nasdaqData[range];
+
+            // Set the change text
+            this.SetChange(points.Last().Value - points.First().Value);
+
+            this.SetGraphPoints(points);
+        }
+        else
+        {
+            // TODO
+            Center.transform.FindChild("Loading").gameObject.SetActive(true);
+        }
     }
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
         // Destroy previous graph
-        Center.transform.FindChild("Loading").gameObject.SetActive(false);
         foreach(LineRenderer oldGraphLine in Center.GetComponentsInChildren<LineRenderer>())
         {
             Destroy(oldGraphLine.gameObject);
