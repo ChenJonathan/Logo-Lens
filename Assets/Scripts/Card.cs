@@ -11,7 +11,7 @@ public class Card : MonoBehaviour
     public GameObject Right;
     public GameObject Bottom;
 
-    public LineRenderer GraphLinePrefab;
+    public Text Label;
 
     public enum TimeRange { Today = 0, Day = 1, ThreeDay = 2, Week = 3, TwoWeek = 4, Month = 5}
 
@@ -24,10 +24,10 @@ public class Card : MonoBehaviour
     
     private Vector3 offset;
 
-    private readonly float graphMinX = -4.2f;
-    private readonly float graphMaxX = 4.2f;
-    private readonly float graphMinY = -2.6f;
-    private readonly float graphMaxY = 2.6f;
+    private readonly float graphMinX = -3f;
+    private readonly float graphMaxX = 4f;
+    private readonly float graphMinY = -1.5f;
+    private readonly float graphMaxY = 2.5f;
 
     public void Start()
     {
@@ -185,14 +185,10 @@ public class Card : MonoBehaviour
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
-        // Destroy previous graph
         Center.transform.FindChild("Loading").gameObject.SetActive(false);
-        foreach(LineRenderer oldGraphLine in Center.GetComponentsInChildren<LineRenderer>())
-        {
-            Destroy(oldGraphLine.gameObject);
-        }
-
-        if (points.Count == 0)
+        foreach(Text text in Center.transform.GetComponentsInChildren<Text>())
+            Destroy(text.gameObject);
+        if(points.Count == 0)
         {
             // TODO error message
             Debug.Log("No points to graph!");
@@ -202,13 +198,13 @@ public class Card : MonoBehaviour
         // Determine min and max value for Y scale
         float minVal = float.MaxValue;
         float maxVal = 0;
-        foreach (GraphPoint point in points)
+        foreach(GraphPoint point in points)
         {
-            if (point.Value > maxVal)
+            if(point.Value > maxVal)
             {
                 maxVal = point.Value;
             }
-            if (point.Value < minVal)
+            if(point.Value < minVal)
             {
                 minVal = point.Value;
             }
@@ -219,19 +215,36 @@ public class Card : MonoBehaviour
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
         Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
 
-        // Plot the opening -> closing points by instaniating lines
-        int i = 0;
-        LineRenderer graphLine = Instantiate(GraphLinePrefab);
-        graphLine.transform.parent = Center.transform;
-        graphLine.numPositions = points.Count;
-        while(i < points.Count)
+        // Plot the opening -> closing points
+        LineRenderer graph = Center.transform.FindChild("Graph").GetComponent<LineRenderer>();
+        graph.numPositions = points.Count;
+        string lastLabel = "";
+        for(int i = 0; i < points.Count; i++)
         {
             // Opening point at the initial time slice
             float x = graphMinX + i * xScale;
             float y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(i, transform.localPosition + new Vector3(x, y, 0));
+            graph.SetPosition(i, new Vector3(x, y, 0));
 
-            i++;
+            // Spawn x-axis labels
+            Text text = Instantiate(Label);
+            text.transform.SetParent(Center.transform);
+            text.transform.localPosition = new Vector3(x, text.transform.position.y, text.transform.position.z);
+            string temp = "<b>" + points[i].DateTime.Substring(0, 5) + "</b>";
+            if(!lastLabel.Equals(temp))
+                text.text = lastLabel = temp;
+        }
+
+        for(int i = 0; i < 5; i++)
+        {
+            float y = graphMinY + (graphMaxY - graphMinY) * (i / 4f);
+
+            // Spawn y-axis labels
+            Text text = Instantiate(Label);
+            text.transform.SetParent(Center.transform);
+            text.transform.localPosition = new Vector3(text.transform.position.x, y, text.transform.position.z);
+            text.text = "<b>$" + points[i].Value.ToString("F2") + "</b>";
+            text.transform.localScale = new Vector3(0.001f, 0.001f, 1);
         }
     }
 }

@@ -166,13 +166,9 @@ public class CardController : MonoBehaviour
         card.SetElementColor("Ticker", Color.white);
         card.Range = range;
         if (hourMultiplier != -1)
-        {
             card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
-        }
         else
-        {
             card.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
-        }
 
         // Check the cache for the data
         CacheKey currKey = new CacheKey(ticker, range);
@@ -306,17 +302,11 @@ public class CardController : MonoBehaviour
                 float open = float.Parse(SummarizedTrades.ChildNodes[1].InnerText);
 
                 if (open == 0)
-                {
                     points.Add(new GraphPoint(time, lastClose));
-                }
                 else if (lastClose == 0)
-                {
                     points.Add(new GraphPoint(time, open));
-                }
                 else
-                {
                     points.Add(new GraphPoint(time, (open + lastClose) / 2f));
-                }
 
                 lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }
