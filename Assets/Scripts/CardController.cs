@@ -204,14 +204,10 @@ public class CardController : MonoBehaviour
         if (outcome.Contains("No Trades found for"))
         {
             Debug.Log(card.Ticker + " did not trade in this time period!");
-            card.SetBottomElementText("Ticker", "Error: No trades found");
-            card.SetBottomElementText("Date", "");
         }
         else if (outcome.Contains("Maximum time range"))
         {
             Debug.Log("Time period is greater than 1 month!");
-            card.SetBottomElementText("Ticker", "Error: Maximum time range exceeded");
-            card.SetBottomElementText("Date", "");
         }
         else
         {
