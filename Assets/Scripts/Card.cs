@@ -273,8 +273,8 @@ public class Card : MonoBehaviour
         }
         else
         {
-            SetBottomElementText("Ticker", "Error: No trades found");
-            SetBottomElementText("Date", "");
+            this.SetBottomElementText("Ticker", Ticker + ": No trades found");
+            this.SetBottomElementText("Date", "");
         }
 
         SetGraphPoints(points);
@@ -292,12 +292,6 @@ public class Card : MonoBehaviour
             Destroy(label.gameObject);
         foreach (Collider point in Points.GetComponentsInChildren<Collider>())
             Destroy(point.gameObject);
-        if (points.Count == 0)
-        {
-            // TODO error message
-            Debug.Log("No points to graph!");
-            return;
-        }
 
         // Determine min and max value for Y scale
         float minVal = float.MaxValue;
@@ -306,7 +300,7 @@ public class Card : MonoBehaviour
         {
             if(point.Value > maxVal)
                 maxVal = point.Value;
-            else if(point.Value < minVal)
+            if(point.Value < minVal)
                 minVal = point.Value;
         }
 

@@ -21,7 +21,7 @@ public class GestureDetector : MonoBehaviour
             GraphPoint gp = col.GetComponent<GraphPoint>();
             Card card = col.transform.parent.parent.parent.GetComponent<Card>();
             card.SetTopElementText("Price", "Price: $" + gp.Value);
-            card.SetTopElementText("Date", gp.DateTime);
+            card.SetTopElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
         }
 
         // Check if HoloLens cursor is on a card
@@ -32,6 +32,7 @@ public class GestureDetector : MonoBehaviour
             if (col.name == "Center" || col.name == "Top" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
             {
                 col.GetComponent<SmoothHover>().Hover();
+                Card card = col.GetComponentInParent<Card>();
             }
         }
 
@@ -44,7 +45,7 @@ public class GestureDetector : MonoBehaviour
             GraphPoint gp = col.GetComponent<GraphPoint>();
             Card card = col.transform.parent.parent.parent.GetComponent<Card>();
             card.SetTopElementText("Price", "Price: $" + gp.Value);
-            card.SetTopElementText("Date", gp.DateTime);
+            card.SetTopElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
         }
 
         // Check if mouse is on a card
