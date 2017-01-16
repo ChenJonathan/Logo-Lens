@@ -8,12 +8,18 @@ using System.Linq;
 public class Card : MonoBehaviour
 {
     public GameObject Center;
+    public GameObject Top;
+    public GameObject Bottom;
     public GameObject Left;
     public GameObject Right;
-    public GameObject Bottom;
-    public GameObject Top;
 
-    public LineRenderer GraphLinePrefab;
+    public GameObject Loading;
+    public GameObject Graph;
+    public GameObject Labels;
+    public GameObject Points;
+
+    public Text Label;
+    public Collider Point;
 
     public enum TimeRange { Day = 0, ThreeDay = 1, Week = 2, TwoWeek = 3, Month = 4}
     private Dictionary<TimeRange, List<GraphPoint>> nasdaqData = new Dictionary<TimeRange, List<GraphPoint>>();
@@ -27,10 +33,10 @@ public class Card : MonoBehaviour
     
     private Vector3 offset;
 
-    private readonly float graphMinX = -4.2f;
-    private readonly float graphMaxX = 4.2f;
-    private readonly float graphMinY = -2.6f;
-    private readonly float graphMaxY = 2.6f;
+    private readonly float graphMinX = -3f;
+    private readonly float graphMaxX = 4f;
+    private readonly float graphMinY = -1.5f;
+    private readonly float graphMaxY = 2.5f;
 
     public void Start()
     {
@@ -157,16 +163,6 @@ public class Card : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SetBottomElementText(string element, string value)
-    {
-        Bottom.transform.FindChild(element).GetComponent<Text>().text = value;
-    }
-
-    public void SetBottomElementColor(string element, Color value)
-    {
-        Bottom.transform.FindChild(element).GetComponent<Text>().color = value;
-    }
-
     public void SetTopElementText(string element, string value)
     {
         Top.transform.FindChild(element).GetComponent<Text>().text = value;
@@ -175,6 +171,16 @@ public class Card : MonoBehaviour
     public void SetTopElementColor(string element, Color value)
     {
         Top.transform.FindChild(element).GetComponent<Text>().color = value;
+    }
+
+    public void SetBottomElementText(string element, string value)
+    {
+        Bottom.transform.FindChild(element).GetComponent<Text>().text = value;
+    }
+
+    public void SetBottomElementColor(string element, Color value)
+    {
+        Bottom.transform.FindChild(element).GetComponent<Text>().color = value;
     }
 
     public void SetChange(float change)
@@ -194,6 +200,11 @@ public class Card : MonoBehaviour
         }
     }
 
+    public void SetLoading(bool active)
+    {
+        Loading.gameObject.SetActive(active);
+    }
+
     public void ViewTimeRange(TimeRange range)
     {
         Debug.Log("Viewing timerange " + range);
@@ -201,7 +212,7 @@ public class Card : MonoBehaviour
 
         if (!nasdaqData.ContainsKey(range))
         {
-            Center.transform.FindChild("Loading").gameObject.SetActive(true);
+            SetLoading(true);
             StartCoroutine(WaitForData(range));
         }
         else
@@ -220,8 +231,7 @@ public class Card : MonoBehaviour
 
     private void DisplayData(TimeRange range)
     {
-        Center.transform.FindChild("Loading").gameObject.SetActive(false);
-
+        SetLoading(false);
         List<GraphPoint> points = nasdaqData[range];
 
         // Set up all the text   
@@ -231,19 +241,19 @@ public class Card : MonoBehaviour
         // Determine values for display variables based on the passed in time range
         switch (range)
         {
-            case Card.TimeRange.Day:
+            case TimeRange.Day:
                 startDate = endDate.AddDays(-1);
                 break;
-            case Card.TimeRange.ThreeDay:
+            case TimeRange.ThreeDay:
                 startDate = endDate.AddDays(-3);
                 break;
-            case Card.TimeRange.Week:
+            case TimeRange.Week:
                 startDate = endDate.AddDays(-7);
                 break;
-            case Card.TimeRange.TwoWeek:
+            case TimeRange.TwoWeek:
                 startDate = endDate.AddDays(-14);
                 break;
-            case Card.TimeRange.Month:
+            case TimeRange.Month:
                 startDate = endDate.AddDays(-30);
                 break;
             default:
@@ -253,8 +263,8 @@ public class Card : MonoBehaviour
         }
 
         // Set basic card elements
-        this.SetBottomElementColor("Ticker", Color.white);
-        this.SetBottomElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+        SetBottomElementColor("Ticker", Color.white);
+        SetBottomElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
 
         if (points.Count > 0)
         {
@@ -267,7 +277,7 @@ public class Card : MonoBehaviour
             this.SetBottomElementText("Date", "");
         }
 
-        this.SetGraphPoints(points);
+        SetGraphPoints(points);
     }
 
     public void UpdateNasdaqData(List<GraphPoint> points, TimeRange range)
@@ -277,16 +287,11 @@ public class Card : MonoBehaviour
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
-        // Destroy previous graph and points
-        foreach(LineRenderer oldGraphLine in Center.GetComponentsInChildren<LineRenderer>())
-        {
-            Destroy(oldGraphLine.gameObject);
-        }
-        for(int j = 0; j < Center.transform.GetChild(1).childCount; j++)
-        {
-            Destroy(Center.transform.GetChild(1).GetChild(j).gameObject);
-        }
-
+        // Destroy previous graph labels and points
+        foreach (Text label in Labels.GetComponentsInChildren<Text>())
+            Destroy(label.gameObject);
+        foreach (Collider point in Points.GetComponentsInChildren<Collider>())
+            Destroy(point.gameObject);
         if (points.Count == 0)
         {
             // TODO error message
@@ -297,57 +302,57 @@ public class Card : MonoBehaviour
         // Determine min and max value for Y scale
         float minVal = float.MaxValue;
         float maxVal = 0;
-        foreach (GraphPoint point in points)
+        foreach(GraphPoint point in points)
         {
-            if (point.Value > maxVal)
-            {
+            if(point.Value > maxVal)
                 maxVal = point.Value;
-            }
-            if (point.Value < minVal)
-            {
+            else if(point.Value < minVal)
                 minVal = point.Value;
-            }
         }
 
         // Calculate scale multipliers
         float xScale = (graphMaxX - graphMinX) / (points.Count - 1);
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
-        //Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
-
+        
         // Plot the points
-        int i = 0;
-        LineRenderer graphLine = Instantiate(GraphLinePrefab);
-        graphLine.transform.parent = Center.transform;
-        graphLine.numPositions = points.Count;
-        while(i < points.Count)
+        LineRenderer graph = Graph.GetComponent<LineRenderer>();
+        graph.numPositions = points.Count;
+        string lastLabel = "";
+        for(int i = 0; i < points.Count; i++)
         {
             // Opening point at the initial time slice
             float x = graphMinX + i * xScale;
             float y = graphMinY + (points[i].Value - minVal) * yScale;
-            graphLine.SetPosition(i, transform.localPosition + new Vector3(x, y, 0));
+            graph.SetPosition(i, new Vector3(x, y, 0));
+
+            // Spawn x-axis labels
+            Text text = Instantiate(Label);
+            text.transform.SetParent(Labels.transform);
+            text.transform.localPosition = new Vector3(x, text.transform.position.y, text.transform.position.z);
+            string temp = "<b>" + points[i].DateTime.Substring(0, 5) + "</b>";
+            if(!lastLabel.Equals(temp))
+                text.text = lastLabel = temp;
 
             // Create the sphere for raycasting
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.parent = Center.transform.GetChild(1);
-            sphere.transform.localPosition = new Vector3(x, y, 0);
-            
-            sphere.name = "Point";
-
-            // Set the scale
-            float scale = xScale;
-            sphere.transform.localScale = new Vector3(scale, scale, scale);
-
-            // Store the information in the sphere
-            GraphPoint gp = sphere.AddComponent<GraphPoint>();
+            GameObject sphere = Instantiate(Point).gameObject;
+            sphere.transform.position = new Vector3(x, y, Center.transform.position.z);
+            sphere.transform.SetParent(Points.transform);
+            sphere.transform.localScale = new Vector3(xScale, xScale, xScale);
+            GraphPoint gp = sphere.GetComponent<GraphPoint>();
             gp.DateTime = points[i].DateTime;
             gp.Value = points[i].Value;
-
-            i++;
         }
-    }
+        
+        for(int i = 0; i < 5; i++)
+        {
+            float y = graphMinY + (graphMaxY - graphMinY) * (i / 4f);
 
-    public void DisableLoading()
-    {
-        Center.transform.FindChild("Loading").gameObject.SetActive(false);
+            // Spawn y-axis labels
+            Text text = Instantiate(Label);
+            text.transform.SetParent(Labels.transform);
+            text.transform.localPosition = new Vector3(text.transform.position.x, y, text.transform.position.z);
+            text.text = "<b>$" + points[i].Value.ToString("F2") + "</b>";
+            text.transform.localScale = new Vector3(0.001f, 0.001f, 1);
+        }
     }
 }

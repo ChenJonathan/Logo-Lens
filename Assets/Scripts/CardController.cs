@@ -60,7 +60,7 @@ public class CardController : MonoBehaviour
 
     public void AddCard(string image)
     {
-        Card card = ((GameObject)Instantiate(cardPrefab, transform.position + transform.forward * 60, Quaternion.identity)).GetComponent<Card>();
+        Card card = Instantiate(cardPrefab, transform.position + transform.forward * 60, Quaternion.identity).GetComponent<Card>();
         card.transform.SetParent(Cards.transform);
 
         // Google Vision API request
@@ -109,7 +109,7 @@ public class CardController : MonoBehaviour
                 startDate = endDate;
                 break;
         }
-
+        
         // Call the NASDAQ API
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
@@ -179,7 +179,7 @@ public class CardController : MonoBehaviour
         {
             card.SetBottomElementText("Ticker", "Error: Could not detect a logo");
             card.SetBottomElementText("Date", "");
-            card.DisableLoading();
+            card.SetLoading(false);
         }
 
         card.Busy--;
@@ -221,17 +221,11 @@ public class CardController : MonoBehaviour
                 float open = float.Parse(SummarizedTrades.ChildNodes[1].InnerText);
 
                 if (open == 0)
-                {
                     points.Add(new GraphPoint(time, lastClose));
-                }
                 else if (lastClose == 0)
-                {
                     points.Add(new GraphPoint(time, open));
-                }
                 else
-                {
                     points.Add(new GraphPoint(time, (open + lastClose) / 2f));
-                }
 
                 lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }

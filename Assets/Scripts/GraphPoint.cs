@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class GraphPoint : MonoBehaviour {
-
+public class GraphPoint : MonoBehaviour
+{
     public string DateTime;
     public float Value;
 

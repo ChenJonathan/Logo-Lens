@@ -16,12 +16,12 @@ public class GestureDetector : MonoBehaviour
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
         {
             Collider col = hitInfo.collider;
-            if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
+            if (col.name == "Center" || col.name == "Top" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
             {
                 col.GetComponent<SmoothHover>().Hover();
                 Card card = col.GetComponentInParent<Card>();
             }
-            else if (col.name == "Point")
+            else if (col.GetComponent<GraphPoint>())
             {
                 // Checks if a point is hit
                 GraphPoint gp = col.GetComponent<GraphPoint>();
