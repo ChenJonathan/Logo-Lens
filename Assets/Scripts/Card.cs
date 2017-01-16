@@ -263,7 +263,7 @@ public class Card : MonoBehaviour
         }
         else
         {
-            this.SetBottomElementText("Ticker", "Error: No trades found");
+            this.SetBottomElementText("Ticker", Ticker + ": No trades found");
             this.SetBottomElementText("Date", "");
         }
 
@@ -328,8 +328,9 @@ public class Card : MonoBehaviour
 
             // Create the sphere for raycasting
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.position = new Vector3(x, y, Center.transform.position.z);
             sphere.transform.parent = Center.transform.GetChild(1);
+            sphere.transform.localPosition = new Vector3(x, y, 0);
+            
             sphere.name = "Point";
 
             // Set the scale

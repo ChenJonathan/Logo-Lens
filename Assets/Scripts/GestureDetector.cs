@@ -20,8 +20,6 @@ public class GestureDetector : MonoBehaviour
             {
                 col.GetComponent<SmoothHover>().Hover();
                 Card card = col.GetComponentInParent<Card>();
-                //card.SetTopElementText("Price", "");
-                //card.SetTopElementText("Date", "");
             }
             else if (col.name == "Point")
             {
@@ -29,7 +27,7 @@ public class GestureDetector : MonoBehaviour
                 GraphPoint gp = col.GetComponent<GraphPoint>();
                 Card card = col.transform.parent.parent.parent.GetComponent<Card>();
                 card.SetTopElementText("Price", "Price: $" + gp.Value);
-                card.SetTopElementText("Date", gp.DateTime);
+                card.SetTopElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
             }
         }
 
@@ -50,8 +48,6 @@ public class GestureDetector : MonoBehaviour
             {
                 col.GetComponent<SmoothHover>().Hover();
                 Card card = col.GetComponentInParent<Card>();
-                card.SetTopElementText("Price", "");
-                card.SetTopElementText("Date", "");
             }
         }
     }
