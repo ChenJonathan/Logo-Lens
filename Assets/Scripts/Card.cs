@@ -306,7 +306,7 @@ public class Card : MonoBehaviour
         {
             if(point.Value > maxVal)
                 maxVal = point.Value;
-            else if(point.Value < minVal)
+            if(point.Value < minVal)
                 minVal = point.Value;
         }
 
@@ -326,12 +326,17 @@ public class Card : MonoBehaviour
             graph.SetPosition(i, new Vector3(x, y, 0));
 
             // Spawn x-axis labels
-            Text text = Instantiate(Label);
-            text.transform.SetParent(Labels.transform);
-            text.transform.localPosition = new Vector3(x, text.transform.position.y, text.transform.position.z);
             string temp = "<b>" + points[i].DateTime.Substring(0, 5) + "</b>";
             if(!lastLabel.Equals(temp))
-                text.text = lastLabel = temp;
+            {
+                if ((int)Range < 3 || (Range == TimeRange.TwoWeek && i % 2 == 0) || (Range == TimeRange.Month && i % 4 == 0))
+                {
+                    Text text = Instantiate(Label);
+                    text.transform.SetParent(Labels.transform);
+                    text.transform.localPosition = new Vector3(x, text.transform.position.y, text.transform.position.z);
+                    text.text = lastLabel = temp;
+                }
+            }
 
             // Create the sphere for raycasting
             GameObject sphere = Instantiate(Point).gameObject;
@@ -343,15 +348,15 @@ public class Card : MonoBehaviour
             gp.Value = points[i].Value;
         }
         
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 7; i++)
         {
-            float y = graphMinY + (graphMaxY - graphMinY) * (i / 4f);
+            float y = graphMinY + (graphMaxY - graphMinY) * (i / 6f);
 
             // Spawn y-axis labels
             Text text = Instantiate(Label);
             text.transform.SetParent(Labels.transform);
             text.transform.localPosition = new Vector3(text.transform.position.x, y, text.transform.position.z);
-            text.text = "<b>$" + points[i].Value.ToString("F2") + "</b>";
+            text.text = "<b>$" + y.ToString("F2") + "</b>";
             text.transform.localScale = new Vector3(0.001f, 0.001f, 1);
         }
     }
