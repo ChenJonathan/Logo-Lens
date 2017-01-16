@@ -11,6 +11,7 @@ public class Card : MonoBehaviour
     public GameObject Left;
     public GameObject Right;
     public GameObject Bottom;
+    public GameObject Top;
 
     public LineRenderer GraphLinePrefab;
 
@@ -51,7 +52,7 @@ public class Card : MonoBehaviour
         Vector3 tempScale = Vector3.one;
         Color tempColor = Color.white;
 
-        Center.transform.localScale = Left.transform.localScale = Right.transform.localScale = Bottom.transform.localScale = Vector3.zero;
+        Center.transform.localScale = Left.transform.localScale = Right.transform.localScale = Bottom.transform.localScale = Top.transform.localScale = Vector3.zero;
 
         for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.15f))
         {
@@ -86,11 +87,13 @@ public class Card : MonoBehaviour
             tempScale.y = i;
             tempColor.a = i;
 
-            Bottom.transform.localScale = tempScale;
-            Bottom.GetComponent<Image>().color = tempColor;
+            Bottom.transform.localScale = Top.transform.localScale = tempScale;
+            Bottom.GetComponent<Image>().color = Top.GetComponent<Image>().color = tempColor;
 
             tempPosition.y = -3.73f - 1.47f / 2 * (i - 1);
             Bottom.transform.localPosition = tempPosition;
+            tempPosition.y = +3.73f + 1.47f / 2 * (i - 1);
+            Top.transform.localPosition = tempPosition;
 
             yield return new WaitForSeconds(0.005f);
         }
@@ -112,14 +115,17 @@ public class Card : MonoBehaviour
             tempScale.y = i;
             tempColor.a = i;
 
-            Bottom.transform.localScale = tempScale;
-            Bottom.GetComponent<Image>().color = tempColor;
+            Bottom.transform.localScale = Top.transform.localScale = tempScale;
+            Bottom.GetComponent<Image>().color = Top.GetComponent<Image>().color = tempColor;
 
             tempPosition.y = -3.73f - 1.47f / 2 * (i - 1);
             Bottom.transform.localPosition = tempPosition;
+            tempPosition.y = 3.73f + 1.47f / 2 * (i - 1);
+            Top.transform.localPosition = tempPosition;
 
             yield return new WaitForSeconds(0.005f);
         }
+
         tempPosition.y = 0;
         tempScale.y = 1;
         for(float i = 1f; i >= 0f; i = Mathf.Lerp(i, -0.01f, 0.15f))
