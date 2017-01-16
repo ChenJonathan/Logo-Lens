@@ -240,10 +240,10 @@ public class CardController : MonoBehaviour
 
                 lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }
-
-            // Update the data in the card
-            card.UpdateNasdaqData(points, range);
         }
+
+        // Update the data in the card
+        card.UpdateNasdaqData(points, range);
     }
 
     #endregion

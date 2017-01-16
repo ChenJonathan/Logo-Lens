@@ -206,44 +206,47 @@ public class Card : MonoBehaviour
     {
         Center.transform.FindChild("Loading").gameObject.SetActive(false);
 
-        // Set up all the text   
-        DateTime endDate = DateTime.Now;
-        DateTime startDate = endDate;
-
-        // Determine values for display variables based on the passed in time range
-        switch (range)
-        {
-            case Card.TimeRange.Day:
-                startDate = endDate.AddDays(-1);
-                break;
-            case Card.TimeRange.ThreeDay:
-                startDate = endDate.AddDays(-3);
-                break;
-            case Card.TimeRange.Week:
-                startDate = endDate.AddDays(-7);
-                break;
-            case Card.TimeRange.TwoWeek:
-                startDate = endDate.AddDays(-14);
-                break;
-            case Card.TimeRange.Month:
-                startDate = endDate.AddDays(-30);
-                break;
-            default:
-                Debug.Log("WARNING: Default TimeRange");
-                startDate = endDate;
-                break;
-        }
-
-        // Set basic card elements
-        this.SetElementColor("Ticker", Color.white);
-        this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
-
         List<GraphPoint> points = nasdaqData[range];
+        if (points.Count > 0)
+        {
 
-        // Set the change text
-        this.SetChange(points.Last().Value - points.First().Value);
+            // Set up all the text   
+            DateTime endDate = DateTime.Now;
+            DateTime startDate = endDate;
 
-        this.SetGraphPoints(points);
+            // Determine values for display variables based on the passed in time range
+            switch (range)
+            {
+                case Card.TimeRange.Day:
+                    startDate = endDate.AddDays(-1);
+                    break;
+                case Card.TimeRange.ThreeDay:
+                    startDate = endDate.AddDays(-3);
+                    break;
+                case Card.TimeRange.Week:
+                    startDate = endDate.AddDays(-7);
+                    break;
+                case Card.TimeRange.TwoWeek:
+                    startDate = endDate.AddDays(-14);
+                    break;
+                case Card.TimeRange.Month:
+                    startDate = endDate.AddDays(-30);
+                    break;
+                default:
+                    Debug.Log("WARNING: Default TimeRange");
+                    startDate = endDate;
+                    break;
+            }
+
+            // Set basic card elements
+            this.SetElementColor("Ticker", Color.white);
+            this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+
+            // Set the change text
+            this.SetChange(points.Last().Value - points.First().Value);
+
+            this.SetGraphPoints(points);
+        }
     }
 
     public void UpdateNasdaqData(List<GraphPoint> points, TimeRange range)
