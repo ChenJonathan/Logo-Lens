@@ -31,24 +31,22 @@ public class CardController : MonoBehaviour
         if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
             Collider col = hitInfo.collider;
-            if (col.gameObject.transform.GetComponentInParent<Card>().Busy == 0)
+            if (Input.GetMouseButtonDown(0))
             {
-                if (col.name == "Center" || col.name == "Bottom")
+                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
                 {
-                    col.GetComponent<SmoothHover>().Hover();
-                    if (Input.GetMouseButtonDown(0))
+                    if (col.GetComponentInParent<Card>().Busy == 0)
                     {
-                        // Close card if in line of sight
-                        RemoveCard(col.transform.parent.GetComponent<Card>());
-                    }
-                }
-                else if (col.name == "Left" || col.name == "Right")
-                {
-                    col.GetComponent<SmoothHover>().Hover();
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        // Change button range if in line of sight
-                        col.GetComponent<CardButton>().ModifyRange();
+                        if (col.name == "Center" || col.name == "Bottom")
+                        {
+                            // Close card if in line of sight
+                            CardController.Instance.RemoveCard(col.transform.parent.GetComponent<Card>());
+                        }
+                        else if (col.name == "Left" || col.name == "Right")
+                        {
+                            // Change button range if in line of sight
+                            col.GetComponent<CardButton>().ModifyRange();
+                        }
                     }
                 }
             }
