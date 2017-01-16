@@ -33,11 +33,11 @@ public class CardController : MonoBehaviour
             Collider col = hitInfo.collider;
             if (Input.GetMouseButtonDown(0))
             {
-                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
+                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
                 {
                     if (col.GetComponentInParent<Card>().Busy == 0)
                     {
-                        if (col.name == "Center" || col.name == "Bottom")
+                        if (col.name == "Center" || col.name == "Bottom" || col.name == "Top")
                         {
                             // Close card if in line of sight
                             CardController.Instance.RemoveCard(col.transform.parent.GetComponent<Card>());
