@@ -157,14 +157,24 @@ public class Card : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SetElementText(string element, string value)
+    public void SetBottomElementText(string element, string value)
     {
         Bottom.transform.FindChild(element).GetComponent<Text>().text = value;
     }
 
-    public void SetElementColor(string element, Color value)
+    public void SetBottomElementColor(string element, Color value)
     {
         Bottom.transform.FindChild(element).GetComponent<Text>().color = value;
+    }
+
+    public void SetTopElementText(string element, string value)
+    {
+        Top.transform.FindChild(element).GetComponent<Text>().text = value;
+    }
+
+    public void SetTopElementColor(string element, Color value)
+    {
+        Top.transform.FindChild(element).GetComponent<Text>().color = value;
     }
 
     public void SetChange(float change)
@@ -173,14 +183,14 @@ public class Card : MonoBehaviour
         string changeStr = change.ToString("0.00");
         if(change > 0)
         {
-            SetElementText("Ticker", Ticker + ": + $" + changeStr);
-            SetElementColor("Ticker", Color.green);
+            SetBottomElementText("Ticker", Ticker + ": + $" + changeStr);
+            SetBottomElementColor("Ticker", Color.green);
         }
         else
         {
             changeStr = changeStr.Substring(1);
-            SetElementText("Ticker", Ticker + ": - $" + changeStr);
-            SetElementColor("Ticker", Color.red);
+            SetBottomElementText("Ticker", Ticker + ": - $" + changeStr);
+            SetBottomElementColor("Ticker", Color.red);
         }
     }
 
@@ -245,8 +255,8 @@ public class Card : MonoBehaviour
             }
 
             // Set basic card elements
-            this.SetElementColor("Ticker", Color.white);
-            this.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+            this.SetBottomElementColor("Ticker", Color.white);
+            this.SetBottomElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
 
             // Set the change text
             this.SetChange(points.Last().Value - points.First().Value);
@@ -262,10 +272,14 @@ public class Card : MonoBehaviour
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
-        // Destroy previous graph
+        // Destroy previous graph and points
         foreach(LineRenderer oldGraphLine in Center.GetComponentsInChildren<LineRenderer>())
         {
             Destroy(oldGraphLine.gameObject);
+        }
+        for(int j = 0; j < Center.transform.GetChild(1).childCount; j++)
+        {
+            Destroy(Center.transform.GetChild(1).GetChild(j).gameObject);
         }
 
         if (points.Count == 0)
@@ -295,7 +309,7 @@ public class Card : MonoBehaviour
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
         //Debug.Log("Plotting " + points.Count + " points with xScale " + xScale);
 
-        // Plot the opening -> closing points by instaniating lines
+        // Plot the points
         int i = 0;
         LineRenderer graphLine = Instantiate(GraphLinePrefab);
         graphLine.transform.parent = Center.transform;
@@ -306,6 +320,11 @@ public class Card : MonoBehaviour
             float x = graphMinX + i * xScale;
             float y = graphMinY + (points[i].Value - minVal) * yScale;
             graphLine.SetPosition(i, transform.localPosition + new Vector3(x, y, 0));
+
+            // Create the sphere for raycasting
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.transform.position = new Vector3(x, y, Center.transform.position.z);
+            sphere.transform.parent = Center.transform.GetChild(1);
 
             i++;
         }

@@ -179,8 +179,8 @@ public class CardController : MonoBehaviour
         }
         else
         {
-            card.SetElementText("Ticker", "Error: Could not detect a logo");
-            card.SetElementText("Date", "");
+            card.SetBottomElementText("Ticker", "Error: Could not detect a logo");
+            card.SetBottomElementText("Date", "");
         }
 
         card.Busy--;
@@ -204,14 +204,14 @@ public class CardController : MonoBehaviour
         if (outcome.Contains("No Trades found for"))
         {
             Debug.Log(card.Ticker + " did not trade in this time period!");
-            card.SetElementText("Ticker", "Error: No trades found");
-            card.SetElementText("Date", "");
+            card.SetBottomElementText("Ticker", "Error: No trades found");
+            card.SetBottomElementText("Date", "");
         }
         else if (outcome.Contains("Maximum time range"))
         {
             Debug.Log("Time period is greater than 1 month!");
-            card.SetElementText("Ticker", "Error: Maximum time range exceeded");
-            card.SetElementText("Date", "");
+            card.SetBottomElementText("Ticker", "Error: Maximum time range exceeded");
+            card.SetBottomElementText("Date", "");
         }
         else
         {
