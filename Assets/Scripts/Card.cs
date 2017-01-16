@@ -287,11 +287,20 @@ public class Card : MonoBehaviour
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
+        // Plot the points
+        LineRenderer graph = Graph.GetComponent<LineRenderer>();
+        graph.numPositions = points.Count;
+
         // Destroy previous graph labels and points
         foreach (Text label in Labels.GetComponentsInChildren<Text>())
             Destroy(label.gameObject);
         foreach (Collider point in Points.GetComponentsInChildren<Collider>())
             Destroy(point.gameObject);
+
+        if (points.Count == 0)
+        {
+            return;
+        }
 
         // Determine min and max value for Y scale
         float minVal = float.MaxValue;
@@ -308,9 +317,7 @@ public class Card : MonoBehaviour
         float xScale = (graphMaxX - graphMinX) / (points.Count - 1);
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
         
-        // Plot the points
-        LineRenderer graph = Graph.GetComponent<LineRenderer>();
-        graph.numPositions = points.Count;
+        
         string lastLabel = "";
         for(int i = 0; i < points.Count; i++)
         {
@@ -340,12 +347,13 @@ public class Card : MonoBehaviour
         for(int i = 0; i < 5; i++)
         {
             float y = graphMinY + (graphMaxY - graphMinY) * (i / 4f);
+            float val = minVal + (maxVal - minVal) * (i / 4f);
 
             // Spawn y-axis labels
             Text text = Instantiate(Label);
             text.transform.SetParent(Labels.transform);
             text.transform.localPosition = new Vector3(text.transform.position.x, y, text.transform.position.z);
-            text.text = "<b>$" + points[i].Value.ToString("F2") + "</b>";
+            text.text = "<b>" + val.ToString("F2") + "</b>";
             text.transform.localScale = new Vector3(0.001f, 0.001f, 1);
         }
     }
