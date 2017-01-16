@@ -17,42 +17,6 @@ public class CardController : MonoBehaviour
 
     [SerializeField]
     private GameObject cardPrefab;
-
-    private Dictionary<CacheKey, List<GraphPoint>> nasdaqCache = new Dictionary<CacheKey, List<GraphPoint>>();
-
-    private class CacheKey: object
-    {
-        public string ticker;
-        public Card.TimeRange range;
-
-        public CacheKey(string ticker, Card.TimeRange range)
-        {
-            this.ticker = ticker;
-            this.range = range;
-        }
-
-        public override bool Equals(System.Object obj)
-        {
-            if (obj == null)
-                return false;
-            CacheKey c = obj as CacheKey;
-            if ((System.Object)c == null)
-                return false;
-            return c.range.Equals(this.range) && c.ticker.Equals(this.ticker);
-        }
-
-        public bool Equals(CacheKey c)
-        {
-            if ((object)c == null)
-                return false;
-            return c.range.Equals(this.range) && c.ticker.Equals(this.ticker);
-        }
-
-        public override int GetHashCode()
-        {
-            return ticker.GetHashCode() + 5 * range.GetHashCode();
-        }
-    }
     
     public void Awake()
     {
@@ -67,22 +31,23 @@ public class CardController : MonoBehaviour
         if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
             Collider col = hitInfo.collider;
-            if(col.name == "Center" || col.name == "Bottom")
+            if (Input.GetMouseButtonDown(0))
             {
-                col.GetComponent<SmoothHover>().Hover();
-                if(Input.GetMouseButtonDown(0))
+                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
                 {
-                    // Close card if in line of sight
-                    RemoveCard(col.transform.parent.GetComponent<Card>());
-                }
-            }
-            else if(col.name == "Left" || col.name == "Right")
-            {
-                col.GetComponent<SmoothHover>().Hover();
-                if(Input.GetMouseButtonDown(0))
-                {
-                    // Change button range if in line of sight
-                    col.GetComponent<CardButton>().ModifyRange();
+                    if (col.GetComponentInParent<Card>().Busy == 0)
+                    {
+                        if (col.name == "Center" || col.name == "Bottom" || col.name == "Top")
+                        {
+                            // Close card if in line of sight
+                            CardController.Instance.RemoveCard(col.transform.parent.GetComponent<Card>());
+                        }
+                        else if (col.name == "Left" || col.name == "Right")
+                        {
+                            // Change button range if in line of sight
+                            col.GetComponent<CardButton>().ModifyRange();
+                        }
+                    }
                 }
             }
         }
@@ -95,7 +60,7 @@ public class CardController : MonoBehaviour
 
     public void AddCard(string image)
     {
-        Card card = ((GameObject)Instantiate(cardPrefab, transform.position + transform.forward * 60, Quaternion.identity)).GetComponent<Card>();
+        Card card = Instantiate(cardPrefab, transform.position + transform.forward * 60, Quaternion.identity).GetComponent<Card>();
         card.transform.SetParent(Cards.transform);
 
         // Google Vision API request
@@ -106,28 +71,19 @@ public class CardController : MonoBehaviour
         WWW www = new WWW(url, Encoding.ASCII.GetBytes(json.ToCharArray()), headers);
 
         card.Busy++;
-        StartCoroutine(WaitForRequest(www, card, HandleGoogleVisionResponse));
+        StartCoroutine(WaitForRequest(www, card, Card.TimeRange.Day, HandleGoogleVisionResponse));
     }
 
-    public void UpdateCard(Card card, string ticker, Card.TimeRange range)
-    {
-        // Set card to busy
-        card.Busy++;
-
+    public void UpdateData(Card card, Card.TimeRange range)
+    {     
         // Set up variables for the card       
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
         int hourMultiplier = -1;
-        int minuteMultiplier = -1;
 
         // Determine values for important variables based on the passed in time range
-        Debug.Log("Calling API for TimeRange = " + range);
         switch (range)
         {
-            case Card.TimeRange.Today:
-                startDate = endDate;
-                minuteMultiplier = 15;
-                break;
             case Card.TimeRange.Day:
                 startDate = endDate.AddDays(-1);
                 hourMultiplier = 1;
@@ -151,65 +107,25 @@ public class CardController : MonoBehaviour
             default:
                 Debug.Log("WARNING: Default TimeRange");
                 startDate = endDate;
-                minuteMultiplier = 15;
                 break;
         }
-
-        // Error checking on the switch statement
-        if ((hourMultiplier == -1 && minuteMultiplier == -1) || (hourMultiplier != -1 && minuteMultiplier != -1))
-        {
-            Debug.Log("ERROR: Hour or minute multiplier not set or both set!");
-        }
-
-        // Set basic card elements
-        card.SetElementText("Ticker", ticker);
-        card.SetElementColor("Ticker", Color.white);
-        card.Range = range;
-        if (hourMultiplier != -1)
-            card.SetElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
-        else
-            card.SetElementText("Date", Util.FormatDate(endDate) + ": " + "09:30 to " + Util.FormatTime(endDate));
-
-        // Check the cache for the data
-        CacheKey currKey = new CacheKey(ticker, range);
-        if (nasdaqCache.ContainsKey(currKey))
-        {
-            // Update data from the cache :)
-            Debug.Log("Updating the card for timerange " + range + " from the cache!");
-            List<GraphPoint> points = nasdaqCache[currKey];
-            card.SetChange(points.Last().Value - points.First().Value);
-            card.SetGraphPoints(points);
-
-            // Card is done working
-            card.Busy--;
-            return;
-        }
-
-        // If the data is not cached, we have to call the NASDAQ API
+        
+        // Call the NASDAQ API
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
         WWWForm form = new WWWForm();
         form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
-        form.AddField("Symbols", ticker);
+        form.AddField("Symbols", card.Ticker);
         form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
         form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
         form.AddField("MarketCenters", "");
-        if (hourMultiplier != -1)
-        {
-            Debug.Log("Collecting data every " + hourMultiplier + " hours.");
-            form.AddField("TradePrecision", "Hour");
-            form.AddField("TradePeriod", hourMultiplier);
-        }
-        else
-        {
-            Debug.Log("Collecting data every " + minuteMultiplier + " minutes.");
-            form.AddField("TradePrecision", "Minute");
-            form.AddField("TradePeriod", minuteMultiplier);
-        }
+        form.AddField("TradePrecision", "Hour");
+        form.AddField("TradePeriod", hourMultiplier);
+
         WWW www = new WWW(url, form);
 
         // Make the API request
-        StartCoroutine(WaitForRequest(www, card, HandleNASDAQResponse));
+        StartCoroutine(WaitForRequest(www, card, range, HandleNASDAQResponse));
     }
 
     public void RemoveCard(Card card)
@@ -219,7 +135,7 @@ public class CardController : MonoBehaviour
 
     #region API response handlers
 
-    private void HandleGoogleVisionResponse(Card card, string json)
+    private void HandleGoogleVisionResponse(Card card, Card.TimeRange noUseRange, string json)
     {
         List<string> possibleCompanies = new List<string>();
 
@@ -247,25 +163,32 @@ public class CardController : MonoBehaviour
                 break;
             }
         }
-        
-        if(!ticker.Equals(""))
+
+        if (!ticker.Equals(""))
         {
             card.Ticker = ticker;
-            card.SetTimeRange(Card.TimeRange.Week);
+
+            for (Card.TimeRange range = Card.TimeRange.Day; range != Card.TimeRange.Month + 1; range++)
+            {
+                StartCoroutine(WaitForData(card, range));
+            }
+
+            card.ViewTimeRange(Card.TimeRange.Day);
         }
         else
         {
-            card.SetElementText("Ticker", "Error: Could not detect a logo");
-            card.SetElementText("Date", "");
+            card.SetBottomElementText("Ticker", "Error: Could not detect a logo");
+            card.SetBottomElementText("Date", "");
+            card.SetLoading(false);
         }
 
         card.Busy--;
     }
 
-    private void HandleNASDAQResponse(Card card, string xml)
+    private void HandleNASDAQResponse(Card card, Card.TimeRange range, string xml)
     {
         // DEBUG
-        Debug.Log(xml);
+        //Debug.Log(xml);
 
         // New list to store the points in
         List<GraphPoint> points = new List<GraphPoint>();
@@ -280,14 +203,10 @@ public class CardController : MonoBehaviour
         if (outcome.Contains("No Trades found for"))
         {
             Debug.Log(card.Ticker + " did not trade in this time period!");
-            card.SetElementText("Ticker", "Error: No trades found");
-            card.SetElementText("Date", "");
         }
         else if (outcome.Contains("Maximum time range"))
         {
             Debug.Log("Time period is greater than 1 month!");
-            card.SetElementText("Ticker", "Error: Maximum time range exceeded");
-            card.SetElementText("Date", "");
         }
         else
         {
@@ -310,45 +229,34 @@ public class CardController : MonoBehaviour
 
                 lastClose = float.Parse(SummarizedTrades.ChildNodes[2].InnerText);
             }
-
-            // Set the change text
-            card.SetChange(points.Last().Value - points.First().Value);
-
-            // Add data to cache
-            CacheKey currKey = new CacheKey(card.Ticker, card.Range);
-            if(nasdaqCache.ContainsKey(currKey))
-            {
-                nasdaqCache[currKey] = points;
-            }
-            else
-            {
-                nasdaqCache.Add(currKey, points);
-            }
-
-            // Update graph
-            card.SetGraphPoints(points);
         }
 
-        // Card is done working
-        card.Busy--;
+        // Update the data in the card
+        card.UpdateNasdaqData(points, range);
     }
 
     #endregion
 
     #region API request coroutine
 
-    private IEnumerator WaitForRequest(WWW www, Card card, Action<Card, string> callback)
+    private IEnumerator WaitForRequest(WWW www, Card card, Card.TimeRange range, Action<Card, Card.TimeRange, string> callback)
     {
         yield return www;
 
         if(www.error == null)
         {
-            callback(card, www.text);
+            callback(card, range, www.text);
         }
         else
         {
             Debug.Log("ERROR: " + www.error + "\n" + www.text);
         }
+    }
+
+    private IEnumerator WaitForData(Card card, Card.TimeRange range)
+    {
+        UpdateData(card, range);
+        yield return null;
     }
 
     #endregion

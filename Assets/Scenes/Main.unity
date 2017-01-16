@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cards: {fileID: 191310509}
-  cardPrefab: {fileID: 1000010923279608, guid: 6ac0ffdb85c048848a16e9a0488b7a70, type: 2}
+  cardPrefab: {fileID: 1000010923279608, guid: 8041feff52522304080e551e44b347e4, type: 2}
 --- !u!114 &419533007
 MonoBehaviour:
   m_ObjectHideFlags: 0
