@@ -549,7 +549,7 @@ PlayerSettings:
     Game_Performance: 0
     Hub: 0
     Purchasing: 0
-    UNet: 0
+    UNet: 1
     Unity_Ads: 0
   cloudProjectId: 95b7b1a6-db75-4523-a584-ad22425bfe2b
   projectName: Logo-Lens

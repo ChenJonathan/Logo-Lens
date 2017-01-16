@@ -325,6 +325,7 @@ public class Card : MonoBehaviour
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.position = new Vector3(x, y, Center.transform.position.z);
             sphere.transform.parent = Center.transform.GetChild(1);
+            sphere.name = "Point";
 
             // Set the scale
             float scale = xScale;
@@ -332,7 +333,8 @@ public class Card : MonoBehaviour
 
             // Store the information in the sphere
             GraphPoint gp = sphere.AddComponent<GraphPoint>();
-            gp = points[i];
+            gp.DateTime = points[i].DateTime;
+            gp.Value = points[i].Value;
 
             i++;
         }
