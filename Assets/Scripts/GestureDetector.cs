@@ -16,7 +16,7 @@ public class GestureDetector : MonoBehaviour
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
         {
             Collider col = hitInfo.collider;
-            if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
+            if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
             {
                 col.GetComponent<SmoothHover>().Hover();
                 Card card = col.GetComponentInParent<Card>();
@@ -46,7 +46,7 @@ public class GestureDetector : MonoBehaviour
                 card.SetTopElementText("Price", "Price: $" + gp.Value);
                 card.SetTopElementText("Date", gp.DateTime);
             }
-            else if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
+            else if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
             {
                 col.GetComponent<SmoothHover>().Hover();
                 Card card = col.GetComponentInParent<Card>();
@@ -71,11 +71,11 @@ public class GestureDetector : MonoBehaviour
             if(Physics.Raycast(headPosition, gazeDirection, out hitInfo))
             {
                 Collider col = hitInfo.collider;
-                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
+                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
                 {
                     if (col.GetComponentInParent<Card>().Busy == 0)
                     {
-                        if (col.name == "Center" || col.name == "Bottom")
+                        if (col.name == "Center" || col.name == "Bottom" || col.name == "Top")
                         {
                             // Close card if in line of sight
                             CardController.Instance.RemoveCard(col.GetComponentInParent<Card>());
