@@ -326,6 +326,14 @@ public class Card : MonoBehaviour
             sphere.transform.position = new Vector3(x, y, Center.transform.position.z);
             sphere.transform.parent = Center.transform.GetChild(1);
 
+            // Set the scale
+            float scale = xScale;
+            sphere.transform.localScale = new Vector3(scale, scale, scale);
+
+            // Store the information in the sphere
+            GraphPoint gp = sphere.AddComponent<GraphPoint>();
+            gp = points[i];
+
             i++;
         }
     }
