@@ -44,7 +44,7 @@ public class GestureDetector : MonoBehaviour
                 Debug.Log(col.transform.parent.parent.parent.name);
                 Card card = col.transform.parent.parent.parent.GetComponent<Card>();
                 card.SetTopElementText("Price", "Price: $" + gp.Value);
-                card.SetTopElementText("Date", gp.DateTime);
+                card.SetTopElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
             }
             else if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
             {
