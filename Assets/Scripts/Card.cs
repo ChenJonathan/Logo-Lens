@@ -342,4 +342,9 @@ public class Card : MonoBehaviour
             i++;
         }
     }
+
+    public void DisableLoading()
+    {
+        Center.transform.FindChild("Loading").gameObject.SetActive(false);
+    }
 }

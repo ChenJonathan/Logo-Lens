@@ -181,6 +181,7 @@ public class CardController : MonoBehaviour
         {
             card.SetBottomElementText("Ticker", "Error: Could not detect a logo");
             card.SetBottomElementText("Date", "");
+            card.DisableLoading();
         }
 
         card.Busy--;
