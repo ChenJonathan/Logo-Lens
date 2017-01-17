@@ -33,7 +33,7 @@ public class Card : MonoBehaviour
     
     private Vector3 offset;
 
-    private readonly float graphMinX = -3f;
+    private readonly float graphMinX = -3.2f;
     private readonly float graphMaxX = 4f;
     private readonly float graphMinY = -1.5f;
     private readonly float graphMaxY = 2.5f;
@@ -58,7 +58,7 @@ public class Card : MonoBehaviour
         Vector3 tempScale = Vector3.one;
         Color tempColor = Color.white;
 
-        Center.transform.localScale = Left.transform.localScale = Right.transform.localScale = Bottom.transform.localScale = Top.transform.localScale = Vector3.zero;
+        Center.transform.localScale = Top.transform.localScale = Bottom.transform.localScale = Left.transform.localScale = Right.transform.localScale =  Vector3.zero;
 
         for(float i = 0f; i <= 1f; i = Mathf.Lerp(i, 1.01f, 0.15f))
         {
@@ -93,13 +93,12 @@ public class Card : MonoBehaviour
             tempScale.y = i;
             tempColor.a = i;
 
-            Bottom.transform.localScale = Top.transform.localScale = tempScale;
-            Bottom.GetComponent<Image>().color = Top.GetComponent<Image>().color = tempColor;
+            Top.transform.localScale = Bottom.transform.localScale = tempScale;
+            Top.GetComponent<Image>().color = Bottom.GetComponent<Image>().color = tempColor;
 
-            tempPosition.y = -3.73f - 1.47f / 2 * (i - 1);
-            Bottom.transform.localPosition = tempPosition;
-            tempPosition.y = +3.73f + 1.47f / 2 * (i - 1);
+            tempPosition.y = 3.73f + 1.47f / 2 * (i - 1);
             Top.transform.localPosition = tempPosition;
+            Bottom.transform.localPosition = -tempPosition;
 
             yield return new WaitForSeconds(0.005f);
         }
@@ -121,13 +120,12 @@ public class Card : MonoBehaviour
             tempScale.y = i;
             tempColor.a = i;
 
-            Bottom.transform.localScale = Top.transform.localScale = tempScale;
-            Bottom.GetComponent<Image>().color = Top.GetComponent<Image>().color = tempColor;
+            Top.transform.localScale = Bottom.transform.localScale = tempScale;
+            Top.GetComponent<Image>().color = Bottom.GetComponent<Image>().color = tempColor;
 
-            tempPosition.y = -3.73f - 1.47f / 2 * (i - 1);
-            Bottom.transform.localPosition = tempPosition;
             tempPosition.y = 3.73f + 1.47f / 2 * (i - 1);
             Top.transform.localPosition = tempPosition;
+            Bottom.transform.localPosition = -tempPosition;
 
             yield return new WaitForSeconds(0.005f);
         }
@@ -189,14 +187,14 @@ public class Card : MonoBehaviour
         string changeStr = change.ToString("0.00");
         if(change > 0)
         {
-            SetBottomElementText("Ticker", Ticker + ": + $" + changeStr);
-            SetBottomElementColor("Ticker", Color.green);
+            SetTopElementText("Ticker", Ticker + ": + $" + changeStr);
+            SetTopElementColor("Ticker", Color.green);
         }
         else
         {
             changeStr = changeStr.Substring(1);
-            SetBottomElementText("Ticker", Ticker + ": - $" + changeStr);
-            SetBottomElementColor("Ticker", Color.red);
+            SetTopElementText("Ticker", Ticker + ": - $" + changeStr);
+            SetTopElementColor("Ticker", Color.red);
         }
     }
 
@@ -263,18 +261,18 @@ public class Card : MonoBehaviour
         }
 
         // Set basic card elements
-        SetBottomElementColor("Ticker", Color.white);
-        SetBottomElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
+        SetTopElementColor("Ticker", Color.white);
+        SetTopElementText("Date", Util.FormatDate(startDate) + " to " + Util.FormatDate(endDate));
 
         if (points.Count > 0)
         {
             // Set the change text
-            this.SetChange(points.Last().Value - points.First().Value);
+            SetChange(points.Last().Value - points.First().Value);
         }
         else
         {
-            SetBottomElementText("Ticker", "Error: No trades found");
-            SetBottomElementText("Date", "");
+            SetTopElementText("Ticker", Ticker + ": No trades found");
+            SetTopElementText("Date", "");
         }
 
         SetGraphPoints(points);
@@ -287,15 +285,18 @@ public class Card : MonoBehaviour
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
+        // Plot the points
+        LineRenderer graph = Graph.GetComponent<LineRenderer>();
+        graph.numPositions = points.Count;
+
         // Destroy previous graph labels and points
         foreach (Text label in Labels.GetComponentsInChildren<Text>())
             Destroy(label.gameObject);
         foreach (Collider point in Points.GetComponentsInChildren<Collider>())
             Destroy(point.gameObject);
+
         if (points.Count == 0)
         {
-            // TODO error message
-            Debug.Log("No points to graph!");
             return;
         }
 
@@ -314,9 +315,7 @@ public class Card : MonoBehaviour
         float xScale = (graphMaxX - graphMinX) / (points.Count - 1);
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
         
-        // Plot the points
-        LineRenderer graph = Graph.GetComponent<LineRenderer>();
-        graph.numPositions = points.Count;
+        
         string lastLabel = "";
         for(int i = 0; i < points.Count; i++)
         {
@@ -333,15 +332,16 @@ public class Card : MonoBehaviour
                 {
                     Text text = Instantiate(Label);
                     text.transform.SetParent(Labels.transform);
-                    text.transform.localPosition = new Vector3(x, text.transform.position.y, text.transform.position.z);
+                    text.transform.localPosition = new Vector3(x, -2.4f, 0);
+                    text.transform.localRotation = Quaternion.identity;
                     text.text = lastLabel = temp;
                 }
             }
 
             // Create the sphere for raycasting
             GameObject sphere = Instantiate(Point).gameObject;
-            sphere.transform.position = new Vector3(x, y, Center.transform.position.z);
             sphere.transform.SetParent(Points.transform);
+            sphere.transform.localPosition = new Vector3(x, y, 0);
             sphere.transform.localScale = new Vector3(xScale, xScale, xScale);
             GraphPoint gp = sphere.GetComponent<GraphPoint>();
             gp.DateTime = points[i].DateTime;
@@ -351,13 +351,15 @@ public class Card : MonoBehaviour
         for(int i = 0; i < 7; i++)
         {
             float y = graphMinY + (graphMaxY - graphMinY) * (i / 6f);
+            float val = minVal + (maxVal - minVal) * (i / 6f);
 
             // Spawn y-axis labels
             Text text = Instantiate(Label);
             text.transform.SetParent(Labels.transform);
-            text.transform.localPosition = new Vector3(text.transform.position.x, y, text.transform.position.z);
-            text.text = "<b>$" + y.ToString("F2") + "</b>";
+            text.transform.localPosition = new Vector3(-3.9f, y, 0);
+            text.transform.localRotation = Quaternion.identity;
             text.transform.localScale = new Vector3(0.001f, 0.001f, 1);
+            text.text = "<b>" + val.ToString("F2") + "</b>";
         }
     }
 }

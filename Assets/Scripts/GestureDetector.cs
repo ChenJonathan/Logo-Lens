@@ -12,43 +12,61 @@ public class GestureDetector : MonoBehaviour
         var gazeDirection = Camera.main.transform.forward;
         RaycastHit hitInfo;
 
-        // Check HoloLens cursor
-        if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
+        // Check if HoloLens cursor is on a card
+        int layer_mask = LayerMask.GetMask("Default", "UI");
+        if (Physics.Raycast(headPosition, gazeDirection, out hitInfo, Mathf.Infinity, layer_mask))
         {
             Collider col = hitInfo.collider;
             if (col.name == "Center" || col.name == "Top" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
             {
                 col.GetComponent<SmoothHover>().Hover();
-            }
-            else if (col.GetComponent<GraphPoint>())
-            {
-                // Checks if a point is hit
-                GraphPoint gp = col.GetComponent<GraphPoint>();
-                Card card = col.transform.parent.parent.parent.GetComponent<Card>();
-                card.SetTopElementText("Price", "Price: $" + gp.Value);
-                card.SetTopElementText("Date", gp.DateTime);
+                Card card = col.GetComponentInParent<Card>();
+
+                // Check if HoloLens cursor is on a point
+                if(col.name == "Center")
+                {
+                    layer_mask = LayerMask.GetMask("Points");
+                    if(Physics.Raycast(headPosition, gazeDirection, out hitInfo, Mathf.Infinity, layer_mask))
+                    {
+                        col = hitInfo.collider;
+                        // Checks if a point is hit
+                        if(card == col.transform.parent.parent.parent.GetComponent<Card>())
+                        {
+                            GraphPoint gp = col.GetComponent<GraphPoint>();
+                            card.SetBottomElementText("Price", "Price: $" + gp.Value);
+                            card.SetBottomElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
+                        }
+                    }
+                }
             }
         }
 
-        // Check mouse cursor
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
+        // Check if mouse is on a card
+        layer_mask = LayerMask.GetMask("Default", "UI");
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity, layer_mask))
         {
             Collider col = hitInfo.collider;
-            if (col.name == "Point")
-            {
-                // Checks if a point is hit
-                GraphPoint gp = col.GetComponent<GraphPoint>();
-                Debug.Log(col.transform.parent.parent.parent.name);
-                Card card = col.transform.parent.parent.parent.GetComponent<Card>();
-                card.SetTopElementText("Price", "Price: $" + gp.Value);
-                card.SetTopElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
-            }
-            else if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
+            if (col.name == "Center" || col.name == "Top" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
             {
                 col.GetComponent<SmoothHover>().Hover();
                 Card card = col.GetComponentInParent<Card>();
-                card.SetTopElementText("Price", "");
-                card.SetTopElementText("Date", "");
+
+                // Check if mouse is on a point
+                if(col.name == "Center")
+                {
+                    layer_mask = LayerMask.GetMask("Points");
+                    if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity, layer_mask))
+                    {
+                        col = hitInfo.collider;
+                        // Checks if a point is hit
+                        if(card == col.transform.parent.parent.parent.GetComponent<Card>())
+                        {
+                            GraphPoint gp = col.GetComponent<GraphPoint>();
+                            card.SetBottomElementText("Price", "Price: $" + gp.Value);
+                            card.SetBottomElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
+                        }
+                    }
+                }
             }
         }
     }

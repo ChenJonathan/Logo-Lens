@@ -33,11 +33,11 @@ public class CardController : MonoBehaviour
             Collider col = hitInfo.collider;
             if (Input.GetMouseButtonDown(0))
             {
-                if (col.name == "Center" || col.name == "Bottom" || col.name == "Left" || col.name == "Right" || col.name == "Top")
+                if (col.name == "Center" || col.name == "Top" || col.name == "Bottom" || col.name == "Left" || col.name == "Right")
                 {
                     if (col.GetComponentInParent<Card>().Busy == 0)
                     {
-                        if (col.name == "Center" || col.name == "Bottom" || col.name == "Top")
+                        if (col.name == "Center" || col.name == "Top" || col.name == "Bottom")
                         {
                             // Close card if in line of sight
                             CardController.Instance.RemoveCard(col.transform.parent.GetComponent<Card>());
@@ -177,8 +177,8 @@ public class CardController : MonoBehaviour
         }
         else
         {
-            card.SetBottomElementText("Ticker", "Error: Could not detect a logo");
-            card.SetBottomElementText("Date", "");
+            card.SetTopElementText("Ticker", "Error: Could not detect a logo");
+            card.SetTopElementText("Date", "");
             card.SetLoading(false);
         }
 
@@ -187,9 +187,6 @@ public class CardController : MonoBehaviour
 
     private void HandleNASDAQResponse(Card card, Card.TimeRange range, string xml)
     {
-        // DEBUG
-        //Debug.Log(xml);
-
         // New list to store the points in
         List<GraphPoint> points = new List<GraphPoint>();
 
