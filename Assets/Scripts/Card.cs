@@ -206,7 +206,7 @@ public class Card : MonoBehaviour
     public void ViewTimeRange(TimeRange range)
     {
         Debug.Log("Viewing timerange " + range);
-        this.Range = range;
+        Range = range;
 
         if (!nasdaqData.ContainsKey(range))
         {

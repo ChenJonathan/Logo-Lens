@@ -4,6 +4,8 @@ using System.Collections;
 public class CardButton : MonoBehaviour
 {
     public Card Card;
+    public GameObject LeftArrow;
+    public GameObject RightArrow;
     public bool IncreaseTimeRange;
 
     public void ModifyRange()
@@ -21,5 +23,8 @@ public class CardButton : MonoBehaviour
                     Card.ViewTimeRange(Card.Range - 1);
             }
         }
+
+        LeftArrow.SetActive(Card.Range != Card.TimeRange.Month);
+        RightArrow.SetActive(Card.Range != Card.TimeRange.Day);
     }
 }
