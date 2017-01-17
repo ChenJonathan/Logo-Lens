@@ -114,7 +114,7 @@ public class CardController : MonoBehaviour
         // NASDAQ API request
         string url = "http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetSummarizedTrades";
         WWWForm form = new WWWForm();
-        form.AddField("_Token", "D37747623D414496860789A99B4F28BA");
+        form.AddField("_Token", "6334875CF51946F3B165DD2D33073DA1");
         form.AddField("Symbols", card.Ticker);
         form.AddField("StartDateTime", Util.FormatDate(startDate) + " 00:00:00.000");
         form.AddField("EndDateTime", Util.FormatDate(endDate) + " 20:00:00.000");
