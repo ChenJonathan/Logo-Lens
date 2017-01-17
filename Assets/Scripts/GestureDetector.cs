@@ -31,7 +31,7 @@ public class GestureDetector : MonoBehaviour
                     {
                         col = hitInfo.collider;
                         // Checks if a point is hit
-                        if(card == col.transform.parent.parent.parent.GetComponent<Card>())
+                        if(card == col.transform.parent.parent.parent.GetComponent<Card>() && card.Busy == 0)
                         {
                             if (card.prevPoint)
                             {
@@ -66,7 +66,7 @@ public class GestureDetector : MonoBehaviour
                     {
                         col = hitInfo.collider;
                         // Checks if a point is hit
-                        if(card == col.transform.parent.parent.parent.GetComponent<Card>())
+                        if(card == col.transform.parent.parent.parent.GetComponent<Card>() && card.Busy == 0)
                         {
                             if (card.prevPoint)
                             {
