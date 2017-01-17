@@ -168,7 +168,21 @@ public class Card : MonoBehaviour
 
     public void SetTopElementColor(string element, Color value)
     {
-        Top.transform.FindChild(element).GetComponent<Text>().color = value;
+        if (value == Color.red)
+        {
+            Top.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("Red Text.mat") as Material;
+            Top.transform.FindChild(element).GetComponent<Text>().material.color = Color.red;
+        }
+        else if (value == Color.green)
+        {
+            Top.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("Green Text.mat") as Material;
+            Top.transform.FindChild(element).GetComponent<Text>().material.color = Color.green;
+        }
+        else if (value == Color.white)
+        {
+            Top.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("White Text.mat") as Material;
+            Top.transform.FindChild(element).GetComponent<Text>().material.color = Color.white;
+        }
     }
 
     public void SetBottomElementText(string element, string value)
@@ -178,7 +192,21 @@ public class Card : MonoBehaviour
 
     public void SetBottomElementColor(string element, Color value)
     {
-        Bottom.transform.FindChild(element).GetComponent<Text>().color = value;
+        if (value == Color.red)
+        {
+            Bottom.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("Red Text.mat") as Material;
+            Bottom.transform.FindChild(element).GetComponent<Text>().material.color = Color.red;
+        }
+        else if (value == Color.green)
+        {
+            Bottom.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("Green Text.mat") as Material;
+            Bottom.transform.FindChild(element).GetComponent<Text>().material.color = Color.green;
+        }
+        else if (value == Color.white)
+        {
+            Bottom.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("White Text.mat") as Material;
+            Bottom.transform.FindChild(element).GetComponent<Text>().material.color = Color.white;
+        }
     }
 
     public void SetChange(float change)
