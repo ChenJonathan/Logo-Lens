@@ -168,21 +168,7 @@ public class Card : MonoBehaviour
 
     public void SetTopElementColor(string element, Color value)
     {
-        if (value == Color.red)
-        {
-            Top.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("Red Text.mat") as Material;
-            Top.transform.FindChild(element).GetComponent<Text>().material.color = Color.red;
-        }
-        else if (value == Color.green)
-        {
-            Top.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("Green Text.mat") as Material;
-            Top.transform.FindChild(element).GetComponent<Text>().material.color = Color.green;
-        }
-        else if (value == Color.white)
-        {
-            Top.transform.FindChild(element).GetComponent<Text>().material = Resources.Load("White Text.mat") as Material;
-            Top.transform.FindChild(element).GetComponent<Text>().material.color = Color.white;
-        }
+        Top.transform.FindChild(element).GetComponent<Text>().material.color = value;
     }
 
     public void SetBottomElementText(string element, string value)
@@ -312,6 +298,7 @@ public class Card : MonoBehaviour
     public void SetGraphPoints(List<GraphPoint> points)
     {
         // Destroy previous graph labels and points
+        Graph.GetComponent<LineRenderer>().numPositions = 0;
         foreach (Text label in Labels.GetComponentsInChildren<Text>())
             Destroy(label.gameObject);
         foreach (Collider point in Points.GetComponentsInChildren<Collider>())
