@@ -18,17 +18,12 @@ We continued working on it until we demoed the application to NASDAQ's executive
 
 ## Usage
 
-1) Wearing the Microsoft Hololens, stare directly at a well-known logo and perform the [Air Tap Gesture](https://developer.microsoft.com/en-us/windows/holographic/gestures)
-
-2) A **card** should open up. You should see a **Graph** of stock prices and other information relevant to the logo. If logo detection fails, the card should contain a message saying so. Tap on the middle of the card to close it, then try again. Note: If the stock did not trade on that day, you will not see a graph. That is ok, just continue.
-
-3) You can perform Air Tap Gestures on the **Left** and **Right Buttons** in order to change the date range for the displayed stock informartion.
-
-4) If the **Loading Animation** appears, wait for stock prices to be retrieved from NASDAQ's API in the background. The card will change as soon as it's done.
-
-5) You can **Hover** over certain points on the graph to view more detailed information about that **Point**.
-
-6) Tap on the **Middle** of the card to close it.
+1. Wearing the Microsoft Hololens, stare directly at a well-known logo and perform the [Air Tap Gesture](https://developer.microsoft.com/en-us/windows/holographic/gestures)
+2. A **card** should open up. You should see a **Graph** of stock prices and other information relevant to the logo. If logo detection fails, the card should contain a message saying so. Tap on the middle of the card to close it, then try again. Note: If the stock did not trade on that day, you will not see a graph. That is ok, just continue.
+3. You can perform Air Tap Gestures on the **Left** and **Right Buttons** in order to change the date range for the displayed stock informartion.
+4. If the **Loading Animation** appears, wait for stock prices to be retrieved from NASDAQ's API in the background. The card will change as soon as it's done.
+5. You can **Hover** over certain points on the graph to view more detailed information about that **Point**.
+6. Tap on the **Middle** of the card to close it.
 
 ## Technologies Used
 
