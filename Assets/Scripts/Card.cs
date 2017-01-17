@@ -263,8 +263,6 @@ public class Card : MonoBehaviour
         // Set up all the text   
         DateTime endDate = DateTime.Now;
         DateTime startDate = endDate;
-
-        // Determine values for display variables based on the passed in time range
         switch (range)
         {
             case TimeRange.Day:
@@ -313,10 +311,6 @@ public class Card : MonoBehaviour
 
     public void SetGraphPoints(List<GraphPoint> points)
     {
-        // Plot the points
-        LineRenderer graph = Graph.GetComponent<LineRenderer>();
-        graph.numPositions = points.Count;
-
         // Destroy previous graph labels and points
         foreach (Text label in Labels.GetComponentsInChildren<Text>())
             Destroy(label.gameObject);
@@ -324,9 +318,7 @@ public class Card : MonoBehaviour
             Destroy(point.gameObject);
 
         if (points.Count == 0)
-        {
             return;
-        }
 
         // Determine min and max value for Y scale
         float minVal = float.MaxValue;
@@ -342,21 +334,25 @@ public class Card : MonoBehaviour
         // Calculate scale multipliers
         float xScale = (graphMaxX - graphMinX) / (points.Count - 1);
         float yScale = (graphMaxY - graphMinY) / (maxVal - minVal);
-        
-        
+
+        StartCoroutine(SpawnXLabels(points, xScale, yScale));
+        StartCoroutine(SpawnYLabels(points, minVal, maxVal));
+        StartCoroutine(SpawnPoints(points, xScale, yScale, minVal, maxVal));
+    }
+
+    private IEnumerator SpawnXLabels(List<GraphPoint> points, float xScale, float yScale)
+    {
         string lastLabel = "";
         for(int i = 0; i < points.Count; i++)
         {
-            // Opening point at the initial time slice
             float x = graphMinX + i * xScale;
-            float y = graphMinY + (points[i].Value - minVal) * yScale;
-            graph.SetPosition(i, new Vector3(x, y, 0));
 
-            // Spawn x-axis labels
             string temp = "<b>" + points[i].DateTime.Substring(0, 5) + "</b>";
+            if((int)Range < 2)
+                temp = "<b>" + points[i].DateTime.Substring(11, 5) + "</b>";
             if(!lastLabel.Equals(temp))
             {
-                if ((int)Range < 3 || (Range == TimeRange.TwoWeek && i % 2 == 0) || (Range == TimeRange.Month && i % 4 == 0))
+                if((int)Range < 3 || (Range == TimeRange.TwoWeek && i % 2 == 0) || (Range == TimeRange.Month && i % 4 == 0))
                 {
                     Text text = Instantiate(Label);
                     text.transform.SetParent(Labels.transform);
@@ -366,16 +362,12 @@ public class Card : MonoBehaviour
                 }
             }
 
-            // Create the sphere for raycasting
-            GameObject sphere = Instantiate(Point).gameObject;
-            sphere.transform.SetParent(Points.transform);
-            sphere.transform.localPosition = new Vector3(x, y, 0);
-            sphere.transform.localScale = new Vector3(xScale, xScale, xScale);
-            GraphPoint gp = sphere.GetComponent<GraphPoint>();
-            gp.DateTime = points[i].DateTime;
-            gp.Value = points[i].Value;
+            yield return new WaitForSeconds(1f / points.Count);
         }
-        
+    }
+
+    private IEnumerator SpawnYLabels(List<GraphPoint> points, float minVal, float maxVal)
+    {
         for(int i = 0; i < 7; i++)
         {
             float y = graphMinY + (graphMaxY - graphMinY) * (i / 6f);
@@ -388,6 +380,33 @@ public class Card : MonoBehaviour
             text.transform.localRotation = Quaternion.identity;
             text.transform.localScale = new Vector3(0.001f, 0.001f, 1);
             text.text = "<b>" + val.ToString("F2") + "</b>";
+
+            yield return new WaitForSeconds(1f / 7);
+        }
+    }
+
+    private IEnumerator SpawnPoints(List<GraphPoint> points, float xScale, float yScale, float minVal, float maxVal)
+    {
+        LineRenderer graph = Graph.GetComponent<LineRenderer>();
+
+        for(int i = 0; i < points.Count; i++)
+        {
+            // Opening point at the initial time slice
+            float x = graphMinX + i * xScale;
+            float y = graphMinY + (points[i].Value - minVal) * yScale;
+            graph.numPositions = i + 1;
+            graph.SetPosition(i, new Vector3(x, y, 0));
+
+            // Create the sphere for raycasting
+            GameObject sphere = Instantiate(Point).gameObject;
+            sphere.transform.SetParent(Points.transform);
+            sphere.transform.localPosition = new Vector3(x, y, 0);
+            sphere.transform.localScale = new Vector3(xScale, xScale, xScale);
+            GraphPoint gp = sphere.GetComponent<GraphPoint>();
+            gp.DateTime = points[i].DateTime;
+            gp.Value = points[i].Value;
+
+            yield return new WaitForSeconds(1f / points.Count);
         }
     }
 }
