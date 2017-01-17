@@ -1,4 +1,6 @@
 Symbol,Name,LastSale,MarketCap,ADR TSO,IPOyear,Sector,Industry,Summary Quote
+MCD,McDonalds,69.46,11492414974,n/a,n/a,Technology,Investment Bankers/Brokers/Service,http://www.nasdaq.com/symbol/crm
+DIS,Disney,69.46,11492414974,n/a,n/a,Technology,Investment Bankers/Brokers/Service,http://www.nasdaq.com/symbol/crm
 CRM,Salesforce,69.46,11492414974,n/a,n/a,Technology,Investment Bankers/Brokers/Service,http://www.nasdaq.com/symbol/crm
 NDAQ,"Nasdaq, Inc.",69.46,11492414974,n/a,n/a,Finance,Investment Bankers/Brokers/Service,http://www.nasdaq.com/symbol/ndaq
 PIH,"1347 Property Insurance Holdings, Inc.",6.03,36338890.5,n/a,2014,Finance,Property-Casualty Insurers,http://www.nasdaq.com/symbol/pih
@@ -116,9 +118,9 @@ MDRX,"Allscripts Healthcare Solutions, Inc.",13.03,2430867640,n/a,n/a,Technology
 AFAM,Almost Family Inc,35.78,371658846.3,n/a,n/a,Health Care,Medical/Nursing Services,http://www.nasdaq.com/symbol/afam
 ALNY,"Alnylam Pharmaceuticals, Inc.",75.65,6485068789,n/a,2004,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/alny
 AOSL,Alpha and Omega Semiconductor Limited,21.51,489480183.4,n/a,2010,Technology,Semiconductors,http://www.nasdaq.com/symbol/aosl
-GOOG,Alphabet Inc.,768.88,5.28431E+11,n/a,2004,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/goog
-GOOG,Alphabet Inc.,797.97,5.48424E+11,n/a,n/a,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/googl
-GOOG,"Google""",797.97,5.48424E+11,n/a,n/a,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/googl
+GOOG,Alphabet Inc.,768.88,5.28E+11,n/a,2004,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/goog
+GOOG,Alphabet Inc.,797.97,5.48E+11,n/a,n/a,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/googl
+GOOG,"Google""",797.97,5.48E+11,n/a,n/a,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/googl
 SMCP,AlphaMark Actively Managed Small Cap ETF,22.2579,24483133.55,n/a,n/a,n/a,n/a,http://www.nasdaq.com/symbol/smcp
 ATEC,"Alphatec Holdings, Inc.",6.32,4498380.08,n/a,2006,Health Care,Medical/Dental Instruments,http://www.nasdaq.com/symbol/atec
 ASPS,Altisource Portfolio Solutions S.A.,32.46,595623179.5,n/a,n/a,Consumer Services,Other Consumer Services,http://www.nasdaq.com/symbol/asps
@@ -127,7 +129,7 @@ AMAG,"AMAG Pharmaceuticals, Inc.",24.63,841214103.7,n/a,n/a,Health Care,Major Ph
 AMRN,Amarin Corporation plc,2.67,474657808.2,177774460,n/a,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/amrn
 AMRK,"A-Mark Precious Metals, Inc.",16.29,113980543.6,n/a,n/a,Basic Industries,Other Specialty Stores,http://www.nasdaq.com/symbol/amrk
 AYA,Amaya Inc.,15.66,2268749187,n/a,n/a,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/aya
-AMZN,"Amazon.com, Inc.",778.52,3.69076E+11,n/a,1997,Consumer Services,Catalog/Specialty Distribution,http://www.nasdaq.com/symbol/amzn
+AMZN,"Amazon.com, Inc.",778.52,3.69E+11,n/a,1997,Consumer Services,Catalog/Specialty Distribution,http://www.nasdaq.com/symbol/amzn
 AMBC,"Ambac Financial Group, Inc.",17.89,807228787.3,n/a,n/a,Finance,Property-Casualty Insurers,http://www.nasdaq.com/symbol/ambc
 AMBCW,"Ambac Financial Group, Inc.",8.5,0,n/a,n/a,Finance,Property-Casualty Insurers,http://www.nasdaq.com/symbol/ambcw
 AMBA,"Ambarella, Inc.",68.2,2230125269,n/a,2012,Technology,Semiconductors,http://www.nasdaq.com/symbol/amba
@@ -161,7 +163,7 @@ AMSF,"AMERISAFE, Inc.",57.14,1097147426,n/a,2005,Finance,Property-Casualty Insur
 ASRV,AmeriServ Financial Inc.,3.33,62926597.08,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/asrv
 ASRVP,AmeriServ Financial Inc.,27.2,0,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/asrvp
 ATLO,Ames National Corporation,26.98,251208432.7,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/atlo
-AMGN,Amgen Inc.,172.96,1.29437E+11,n/a,1983,Health Care,Biotechnology: Biological Products (No Diagnostic Substances),http://www.nasdaq.com/symbol/amgn
+AMGN,Amgen Inc.,172.96,1.29E+11,n/a,1983,Health Care,Biotechnology: Biological Products (No Diagnostic Substances),http://www.nasdaq.com/symbol/amgn
 FOLD,"Amicus Therapeutics, Inc.",7.28,1034775203,n/a,2007,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/fold
 AMKR,"Amkor Technology, Inc.",8.8,2089190206,n/a,1998,Technology,Semiconductors,http://www.nasdaq.com/symbol/amkr
 AMPH,"Amphastar Pharmaceuticals, Inc.",19.16,864521387.3,n/a,2014,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/amph
@@ -192,7 +194,7 @@ APOG,"Apogee Enterprises, Inc.",44.32,1276251706,n/a,n/a,Capital Goods,Auto Part
 APOL,"Apollo Education Group, Inc.",7.95,864803393,n/a,1994,Consumer Services,Other Consumer Services,http://www.nasdaq.com/symbol/apol
 AINV,Apollo Investment Corporation,6,1350109326,n/a,2004,n/a,n/a,http://www.nasdaq.com/symbol/ainv
 APPF,"AppFolio, Inc.",19.19,645671614.3,n/a,2015,Technology,Computer Software: Prepackaged Software,http://www.nasdaq.com/symbol/appf
-AAPL,Apple Inc.,114.92,6.1924E+11,n/a,1980,Technology,Computer Manufacturing,http://www.nasdaq.com/symbol/aapl
+AAPL,Apple Inc.,114.92,6.19E+11,n/a,1980,Technology,Computer Manufacturing,http://www.nasdaq.com/symbol/aapl
 ARCI,"Appliance Recycling Centers of America, Inc.",1,5950818,n/a,n/a,Consumer Services,Home Furnishings,http://www.nasdaq.com/symbol/arci
 APDN,Applied DNA Sciences Inc,3,72235908,n/a,n/a,Consumer Services,Other Consumer Services,http://www.nasdaq.com/symbol/apdn
 APDNW,Applied DNA Sciences Inc,1.1,0,n/a,n/a,Consumer Services,Other Consumer Services,http://www.nasdaq.com/symbol/apdnw
@@ -608,7 +610,7 @@ CIDM,Cinedigm Corp,1.76,14856057.92,n/a,n/a,Consumer Services,Consumer Electroni
 CTAS,Cintas Corporation,113.32,11808792880,n/a,1983,Consumer Non-Durables,Apparel,http://www.nasdaq.com/symbol/ctas
 CPHR,Cipher Pharmaceuticals Inc.,4.0001,104785247.6,n/a,n/a,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/cphr
 CRUS,"Cirrus Logic, Inc.",54.82,3425189726,n/a,1989,Technology,Semiconductors,http://www.nasdaq.com/symbol/crus
-CSCO,"Cisco Systems, Inc.",30.84,1.54643E+11,n/a,1990,Technology,Computer Communications Equipment,http://www.nasdaq.com/symbol/csco
+CSCO,"Cisco Systems, Inc.",30.84,1.55E+11,n/a,1990,Technology,Computer Communications Equipment,http://www.nasdaq.com/symbol/csco
 CTRN,"Citi Trends, Inc.",20.06,298792897.6,n/a,2005,Consumer Services,Clothing/Shoe/Accessory Stores,http://www.nasdaq.com/symbol/ctrn
 CZNC,Citizens & Northern Corp,21.1,254647101.3,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/cznc
 CZWI,"Citizens Community Bancorp, Inc.",11.1,58297177.8,n/a,n/a,Finance,Savings Institutions,http://www.nasdaq.com/symbol/czwi
@@ -656,7 +658,7 @@ COLM,Columbia Sportswear Company,53.77,3750128589,n/a,1998,Consumer Non-Durables
 CMCO,Columbus McKinnon Corporation,17.14,346151967,n/a,1996,Capital Goods,Construction/Ag Equipment/Trucks,http://www.nasdaq.com/symbol/cmco
 CBMX,CombiMatrix Corporation,2.82,6704913.78,n/a,n/a,Health Care,Hospital/Nursing Management,http://www.nasdaq.com/symbol/cbmx
 CBMXW,CombiMatrix Corporation,0.55,0,n/a,n/a,Health Care,Hospital/Nursing Management,http://www.nasdaq.com/symbol/cbmxw
-CMCSA,Comcast Corporation,65.92,1.58988E+11,n/a,n/a,Consumer Services,Television Services,http://www.nasdaq.com/symbol/cmcsa
+CMCSA,Comcast Corporation,65.92,1.59E+11,n/a,n/a,Consumer Services,Television Services,http://www.nasdaq.com/symbol/cmcsa
 CBSH,"Commerce Bancshares, Inc.",48.7,4702653164,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/cbsh
 CBSHP,"Commerce Bancshares, Inc.",27.98,2564098504,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/cbshp
 CUBN,"Commerce Union Bancshares, Inc.",21.12,162646598.4,n/a,n/a,n/a,n/a,http://www.nasdaq.com/symbol/cubn
@@ -969,7 +971,7 @@ EYEG,"Eyegate Pharmaceuticals, Inc.",1.46,13069749.18,n/a,n/a,Health Care,Major 
 EYEGW,"Eyegate Pharmaceuticals, Inc.",0.35,0,n/a,n/a,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/eyegw
 EZPW,"EZCORP, Inc.",10.06,543049775.5,n/a,1991,Consumer Services,Other Specialty Stores,http://www.nasdaq.com/symbol/ezpw
 FFIV,"F5 Networks, Inc.",118.55,7848559835,n/a,1999,Technology,Computer Communications Equipment,http://www.nasdaq.com/symbol/ffiv
-FB,"Facebook, Inc.",129.07,3.70646E+11,n/a,2012,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/fb
+FB,"Facebook, Inc.",129.07,3.71E+11,n/a,2012,Technology,"Computer Software: Programming, Data Processing",http://www.nasdaq.com/symbol/fb
 FCS,"Fairchild Semiconductor International, Inc.",19.86,2280535398,n/a,1999,Technology,Semiconductors,http://www.nasdaq.com/symbol/fcs
 FRP,"FairPoint Communications, Inc.",13.56,366811180.3,n/a,n/a,Public Utilities,Telecommunications Equipment,http://www.nasdaq.com/symbol/frp
 FALC,"FalconStor Software, Inc.",1.01,43803307.11,n/a,n/a,Technology,Computer Software: Prepackaged Software,http://www.nasdaq.com/symbol/falc
@@ -1205,7 +1207,7 @@ GIGM,GigaMedia Limited,2.51,27741109.85,n/a,n/a,Technology,"Computer Software: P
 GIGA,Giga-tronics Incorporated,0.93,8881223.79,n/a,1983,Capital Goods,Electrical Products,http://www.nasdaq.com/symbol/giga
 GIII,"G-III Apparel Group, LTD.",29.47,1348452572,n/a,1989,Consumer Non-Durables,Apparel,http://www.nasdaq.com/symbol/giii
 GILT,Gilat Satellite Networks Ltd.,4.95,222577695.5,n/a,n/a,Technology,Radio And Television Broadcasting And Communications Equipment,http://www.nasdaq.com/symbol/gilt
-GILD,"Gilead Sciences, Inc.",78.8,1.03989E+11,n/a,1992,Health Care,Biotechnology: Biological Products (No Diagnostic Substances),http://www.nasdaq.com/symbol/gild
+GILD,"Gilead Sciences, Inc.",78.8,1.04E+11,n/a,1992,Health Care,Biotechnology: Biological Products (No Diagnostic Substances),http://www.nasdaq.com/symbol/gild
 GBCI,"Glacier Bancorp, Inc.",28.49,2170148799,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/gbci
 GLAD,Gladstone Capital Corporation,8.14,190023595.1,n/a,2001,n/a,n/a,http://www.nasdaq.com/symbol/glad
 GLADO,Gladstone Capital Corporation,25.619,56361800,n/a,n/a,n/a,n/a,http://www.nasdaq.com/symbol/glado
@@ -1463,7 +1465,7 @@ INSY,"Insys Therapeutics, Inc.",13.84,990876959,n/a,2013,Health Care,Major Pharm
 NTEC,Intec Pharma Ltd.,6.0099,68802483.09,n/a,2015,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/ntec
 IART,Integra LifeSciences Holdings Corporation,86.13,3217861071,n/a,n/a,Capital Goods,Biotechnology: Laboratory Analytical Instruments,http://www.nasdaq.com/symbol/iart
 IDTI,"Integrated Device Technology, Inc.",21,2820819624,n/a,1984,Technology,Semiconductors,http://www.nasdaq.com/symbol/idti
-INTC,Intel Corporation,37.67,1.78217E+11,n/a,n/a,Technology,Semiconductors,http://www.nasdaq.com/symbol/intc
+INTC,Intel Corporation,37.67,1.78E+11,n/a,n/a,Technology,Semiconductors,http://www.nasdaq.com/symbol/intc
 IQNT,"Inteliquent, Inc.",16.64,569640431.4,n/a,n/a,Public Utilities,Telecommunications Equipment,http://www.nasdaq.com/symbol/iqnt
 NTLA,"Intellia Therapeutics, Inc.",19.72,709822859.3,n/a,2016,Health Care,Biotechnology: In Vitro & In Vivo Diagnostic Substances,http://www.nasdaq.com/symbol/ntla
 IPCI,Intellipharmaceutics International Inc.,1.83,53005527.27,n/a,n/a,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/ipci
@@ -1852,7 +1854,7 @@ MU,"Micron Technology, Inc.",17.48,18151066692,n/a,n/a,Technology,Semiconductors
 MICT,"Micronet Enertec Technologies, Inc.",1.74,10228974.54,n/a,n/a,Capital Goods,Electrical Products,http://www.nasdaq.com/symbol/mict
 MICTW,"Micronet Enertec Technologies, Inc.",0.1254,0,n/a,n/a,Capital Goods,Electrical Products,http://www.nasdaq.com/symbol/mictw
 MSCC,Microsemi Corporation,41.06,4647501703,n/a,n/a,Technology,Semiconductors,http://www.nasdaq.com/symbol/mscc
-MSFT,Microsoft Corporation,57.25,4.46122E+11,n/a,1986,Technology,Computer Software: Prepackaged Software,http://www.nasdaq.com/symbol/msft
+MSFT,Microsoft Corporation,57.25,4.46E+11,n/a,1986,Technology,Computer Software: Prepackaged Software,http://www.nasdaq.com/symbol/msft
 MSTR,MicroStrategy Incorporated,164.84,1884306975,n/a,1998,Technology,Computer Software: Prepackaged Software,http://www.nasdaq.com/symbol/mstr
 MVIS,"Microvision, Inc.",1.5,77638500,n/a,1996,Capital Goods,Industrial Machinery/Components,http://www.nasdaq.com/symbol/mvis
 MPB,Mid Penn Bancorp,18.48,78176147.28,n/a,n/a,Finance,Major Banks,http://www.nasdaq.com/symbol/mpb
@@ -2756,7 +2758,7 @@ CUBA,"The Herzfeld Caribbean Basin Fund, Inc.",6.2455,38307767.28,n/a,n/a,n/a,n/
 INTG,The Intergroup Corporation,24.82,59163160.98,n/a,n/a,Consumer Services,Building operators,http://www.nasdaq.com/symbol/intg
 JYNT,The Joint Corp.,2.3,29283588.5,n/a,2014,Miscellaneous,Multi-Sector Companies,http://www.nasdaq.com/symbol/jynt
 KEYW,The KEYW Holding Corporation,9.9,405456905.7,n/a,2010,Technology,EDP Services,http://www.nasdaq.com/symbol/keyw
-KHC,The Kraft Heinz Company,88.94,1.08298E+11,n/a,n/a,Consumer Non-Durables,Packaged Foods,http://www.nasdaq.com/symbol/khc
+KHC,The Kraft Heinz Company,88.94,1.08E+11,n/a,n/a,Consumer Non-Durables,Packaged Foods,http://www.nasdaq.com/symbol/khc
 OLD,The Long-Term Care ETF,25.78,2578025.78,n/a,n/a,n/a,n/a,http://www.nasdaq.com/symbol/old
 MDCO,The Medicines Company,38.75,2734295015,n/a,2000,Health Care,Major Pharmaceuticals,http://www.nasdaq.com/symbol/mdco
 MIK,"The Michaels Companies, Inc.",24.01,4941514907,n/a,2014,Consumer Services,Recreational Products/Toys,http://www.nasdaq.com/symbol/mik
