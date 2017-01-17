@@ -30,6 +30,8 @@ public class Card : MonoBehaviour
     public TimeRange Range;
     [HideInInspector]
     public int Busy; // 0 if not busy
+    [HideInInspector]
+    public GameObject prevPoint;
     
     private Vector3 offset;
 
@@ -110,6 +112,11 @@ public class Card : MonoBehaviour
     {
         yield return new WaitUntil(() => Busy == 0);
         Busy++;
+
+        if (prevPoint)
+        {
+            prevPoint.GetComponent<Image>().enabled = false;
+        }
 
         Vector3 tempPosition = Vector3.zero;
         Vector3 tempScale = Vector3.one;
@@ -382,10 +389,12 @@ public class Card : MonoBehaviour
             float x = graphMinX + i * xScale;
             float y = graphMinY + (points[i].Value - minVal) * yScale;
             graph.numPositions = i + 1;
-            graph.SetPosition(i, new Vector3(x, y, 0));
+            graph.SetPosition(i, new Vector3(x, y, 0.1f));
 
             // Create the sphere for raycasting
+            
             GameObject sphere = Instantiate(Point).gameObject;
+            sphere.GetComponent<RectTransform>().sizeDelta = new Vector2(0.25f * 1.8f/xScale, 0.25f * 1.8f/xScale);
             sphere.transform.SetParent(Points.transform);
             sphere.transform.localPosition = new Vector3(x, y, 0);
             sphere.transform.localScale = new Vector3(xScale, xScale, xScale);

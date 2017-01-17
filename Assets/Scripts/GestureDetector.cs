@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.VR.WSA.Input;
 
 public class GestureDetector : MonoBehaviour
@@ -32,6 +33,12 @@ public class GestureDetector : MonoBehaviour
                         // Checks if a point is hit
                         if(card == col.transform.parent.parent.parent.GetComponent<Card>())
                         {
+                            if (card.prevPoint)
+                            {
+                                card.prevPoint.GetComponent<Image>().enabled = false;
+                            }
+                            col.gameObject.GetComponent<Image>().enabled = true;
+                            card.prevPoint = col.gameObject;
                             GraphPoint gp = col.GetComponent<GraphPoint>();
                             card.SetBottomElementText("Price", "Price: $" + gp.Value);
                             card.SetBottomElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
@@ -61,6 +68,12 @@ public class GestureDetector : MonoBehaviour
                         // Checks if a point is hit
                         if(card == col.transform.parent.parent.parent.GetComponent<Card>())
                         {
+                            if (card.prevPoint)
+                            {
+                                card.prevPoint.GetComponent<Image>().enabled = false;
+                            }
+                            col.gameObject.GetComponent<Image>().enabled = true;
+                            card.prevPoint = col.gameObject;
                             GraphPoint gp = col.GetComponent<GraphPoint>();
                             card.SetBottomElementText("Price", "Price: $" + gp.Value);
                             card.SetBottomElementText("Date", gp.DateTime.Substring(0, gp.DateTime.Length - 7));
