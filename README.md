@@ -6,6 +6,8 @@ This application was originally developed at HackMIT in September 2016, winning 
 
 We continued working on it until we demoed the application to NASDAQ's executives in January 2017.
 
+For more information about the project, view our [Devpost page](https://devpost.com/software/logo-locator).
+
 ## Build & Installation
 
 1. Clone this repo into a empty folder
@@ -38,4 +40,5 @@ Note that Unity 5.50f3 is the last version of Unity that this project was built 
 ## Contact
 
 Contact any of the contributers of this project for any additional information!
+
 
