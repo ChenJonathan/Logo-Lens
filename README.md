@@ -1,4 +1,4 @@
-# LogoLens
+![Alt text](LogoLens.png?raw=true "Title")
 
 A Microsoft Hololens augmented reality application that displays stock information about companies in the surrounding environment.
 
