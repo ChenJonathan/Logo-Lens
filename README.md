@@ -1,6 +1,6 @@
 ![Alt text](LogoLens.png?raw=true "Title")
 
-A Microsoft Hololens augmented reality application that displays stock information about companies in the surrounding environment.
+A Microsoft Hololens proof-of-concept application that displays stock information about companies in the surrounding environment.
 
 This application was originally developed at HackMIT in September 2016, winning the "Best use of NASDAQ's Data On Demand API".
 
