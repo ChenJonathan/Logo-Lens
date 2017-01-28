@@ -10,6 +10,8 @@ For more information about the project, view our [Devpost page](https://devpost.
 
 ## Build & Installation
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4c923a28f8714cf6a6bca849360f472f)](https://www.codacy.com/app/nareddyt/Logo-Lens?utm_source=github.com&utm_medium=referral&utm_content=ChenJonathan/Logo-Lens&utm_campaign=badger)
+
 1. Clone this repo into a empty folder
 2. Create a folder name "Build"
 2. Open up the project in Unity 5.50f3
